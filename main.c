@@ -2,38 +2,8 @@
 
 void    init_minishell(t_minishell *minishell, char **env)
 {
-    int i;
-
-    minishell->env = malloc(sizeof(t_env) * (MAX_CMD + 1));
-    minishell->cmd = malloc(sizeof(t_cmd));
-    minishell->cmd->cmd = NULL;
-    minishell->cmd->pipe = 0;
-    minishell->cmd->redirect = 0;
-    minishell->cmd->file = NULL;
-    minishell->cmd->append = 0;
-    minishell->cmd->next = NULL;
-    i = 0;
-    while (env[i])
-    {
-        minishell->env[i].envp_var = strdup(env[i]);
-        i++;
-    }
-    minishell->env[i].envp_var = NULL;
-}
-
-void    lex_line(t_minishell *minishell, char *line)
-{
-    int i;
-
-    while  (*line)
-    {
-        if (isspase(*line))
-            line++;
-        if (isdigit_or_alpha(*line))
-        {
-            find_cmd(*line);
-        }
-    }
+    minishell->env = NULL; // Initialize as needed
+    minishell->comms = (t_command *)malloc(sizeof(t_command) * 2);
 }
 
 int main(int ac, char **av, char **env) 
@@ -45,15 +15,14 @@ int main(int ac, char **av, char **env)
     {
         while (1)
         {
+            init_minishell(&minishell, env);
             line = readline(PROMPT);
             if (!line)
                 break;
             if (line[0] != '\0')
             {
                 add_history(line);
-                printf("line: %s\n", line);
                 lex_line(&minishell, line);
-                init_minishell(&minishell, env);
             }
             free(line);
         }
