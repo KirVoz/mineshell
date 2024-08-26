@@ -17,6 +17,14 @@
 
 typedef void (*action)(void);
 
+typedef enum s_redirect
+{
+    REDIR_IN,
+    REDIR_OUT,
+    APPEND_IN,
+    APPEND_OUT,
+}           t_redir;
+
 typedef struct  s_env
 {
     char    *envp_var;
@@ -32,6 +40,14 @@ typedef struct  s_env
     struct s_cmd   *next;
 }               t_cmd;*/
 
+typedef struct s_cmd
+{
+    char    **m_av;
+    int     m_ac;
+    int     pipes;
+    int     semicoloumns;
+}               t_cmd;
+
 typedef struct s_command
 {
     const char* name;
@@ -41,7 +57,6 @@ typedef struct s_command
 typedef struct  s_minishell
 {
     t_env *env;
-    //t_cmd *cmd;
     t_command *comms;
 }               t_minishell;
 
