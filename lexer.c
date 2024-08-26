@@ -36,7 +36,7 @@ void execute_env(void)
 
 void execute_exit(void)
 {
-    printf("Executing 'exit' command\n");
+    printf("Executing 'exit' command\n"); // EXIT надо делать прирывающим цикл в мэйне иначе не выходит !!!
 }
 
 void execute_command(char *cmd)

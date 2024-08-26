@@ -10,20 +10,12 @@
 # include <sys/types.h>
 # include <stdbool.h>
 # include <ctype.h>
+# include <signal.h>
 
 # define PROMPT "minishell$ "
 # define MAX_CMD 1024
 
 typedef void (*action)(void);
-
-void execute_ls(void);
-void execute_cd(void);
-void execute_echo(void);
-void execute_pwd(void);
-void execute_export(void);
-void execute_unset(void);
-void execute_env(void);
-void execute_exit(void);
 
 typedef struct  s_env
 {
@@ -53,6 +45,17 @@ typedef struct  s_minishell
     t_command *comms;
 }               t_minishell;
 
+/*emulated comms*/
+void execute_ls(void);
+void execute_cd(void);
+void execute_echo(void);
+void execute_pwd(void);
+void execute_export(void);
+void execute_unset(void);
+void execute_env(void);
+void execute_exit(void);
+/*signals*/
+void    ft_signals(void);
 // utils.c
 bool    is_space(char c);
 bool    is_digit_or_alpha(char c);

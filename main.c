@@ -11,6 +11,7 @@ int main(int ac, char **av, char **env)
     t_minishell minishell;
     char *line;
 
+    ft_signals();
     if (ac == 1)
     {
         while (1)
@@ -31,4 +32,3 @@ int main(int ac, char **av, char **env)
         printf("Minishell requires no arguments\n");
     return 0;
 }
-
