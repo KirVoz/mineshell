@@ -1,9 +1,19 @@
 #include "minishell.h"
 
-void    init_minishell(t_minishell *minishell, char **env)
+void init_minishell(t_minishell *minishell, char **env)
 {
     minishell->env = NULL; // Initialize as needed
-    minishell->comms = (t_command *)malloc(sizeof(t_command) * 2);
+    minishell->exit_code = 0;
+    minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
+    if (minishell->cmd == NULL)
+    {
+        perror("Failed to allocate memory for cmd");
+        exit(EXIT_FAILURE);
+    }
+    minishell->cmd->m_av = NULL;
+    minishell->cmd->m_ac = 0;
+    minishell->cmd->pipes = 0;
+    minishell->cmd->semicoloumns = 0;
 }
 
 int main(int ac, char **av, char **env) 
@@ -23,7 +33,7 @@ int main(int ac, char **av, char **env)
             if (line[0] != '\0')
             {
                 add_history(line);
-                lex_line(&minishell, line);
+                execute(&minishell, line);
             }
             free(line);
         }
