@@ -20,3 +20,33 @@ cat -e | echo "  Hi ", hi"     'a' someone"
 
 Problems:
 - Tokenisation doesn't truncate leading whitespaces and could lost tokens if any present.
+
+
+
+
+### 29.08
+
+General:
+- School PC have readlinelib issues, need to improve MAKEFILE
+- Add conections in minishell.h <-> lexer.h
+- lexer_main "tokenss" must be in struct?
+- char **envp can be divided to char * and added in t_list format struct
+- add t_minishell to lexer_main()
+
+Problems:
+- readline lib
+- tokinization logic
+
+Sugestions:
+- tokinization may be 2lvl
+ - ls | ls ; cd ; echo 123 
+       /      |      \
+	  /       |       \
+	ls | ls   |        \
+	|    	 cd       echo 123
+   / \					/   \
+ls    ls              echo   123
+and so on
+
+- maybe realization with lists will be great in all cases. that will improve accessability for growing amount of data
+

@@ -1,10 +1,12 @@
 #ifndef LEXER_H
 # define LEXER_H
 
+# include "minishell.h" 
+
 # define DELIMS "<>|"
 # define QUOTES "'\""
 
-void	lexer_main(char *line);
+void	lexer_main(t_minishell *minishell, char *line);
 int		quote_counter(char *line);
 char	**tokenisator(const char *line);
 

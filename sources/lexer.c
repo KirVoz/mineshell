@@ -49,7 +49,7 @@ char	**tokenisator(const char *line)
 	return (result);
 }
 
-void	lexer_main(char *line)
+void	lexer_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
 	char	**tokenss;
@@ -66,6 +66,6 @@ void	lexer_main(char *line)
 	while (*tokenss)
 	{
 		printf("%s\n", *tokenss); // printf to see tokenisation
-		tokenss++;
+		tokenss++; // добавить в структуру cmd->m_av
 	}
 }
