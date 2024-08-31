@@ -49,7 +49,7 @@ char	**tokenisator(const char *line)
 	return (result);
 }
 
-void	lexer_main(t_minishell *minishell, char *line)
+void	lexer_main(char *line)
 {
 	char	**tokens;
 	char	**tokenss;

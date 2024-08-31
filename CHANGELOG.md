@@ -50,3 +50,11 @@ and so on
 
 - maybe realization with lists will be great in all cases. that will improve accessability for growing amount of data
 
+
+
+### 31.08
+
+General:
+- Add envp initialization (add some sort of env comand in comands.c)
+- modify .h to optimize blin struct
+

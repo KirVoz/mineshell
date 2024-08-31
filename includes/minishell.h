@@ -18,8 +18,8 @@
 # define PROMPT_HEREDOC "heredoc> "
 # define MAX_CMD 1024
 
-
-typedef void	(*action)(void);
+typedef struct	s_minishell t_minishell;
+typedef void	(*func)(t_minishell *s_minishell);
 
 typedef enum s_redirect
 {
@@ -31,7 +31,7 @@ typedef enum s_redirect
 
 typedef struct s_env
 {
-	char		**envp_var; // если реализовывать через списки то не надо будет волноватся о перевыделение памяти
+	t_list		*envp_var; // если реализовывать через списки то не надо будет волноватся о перевыделение памяти
 }				t_env;
 
 // typedef struct  s_list
@@ -50,7 +50,7 @@ typedef struct 	s_cmd
 typedef struct 	s_blin // сокращение от билдина
 {
 	char *name;
-	void (*func)(void);
+	void (*func)(t_minishell *minishell);
 }				t_blin;
 
 typedef struct 	s_minishell
@@ -61,16 +61,16 @@ typedef struct 	s_minishell
 	int			exit_code;
 }				t_minishell;
 
+
 /*emulated comms*/
-void			execute_ls(void);
-void			execute_cd(void);
-void			execute_echo(void);
-void			execute_pwd(void);
-void			execute_export(void);
-void			execute_unset(void);
-void			execute_env(void);
-void			execute_exit(void);
-void			execute_command(char *cmd);
+void			execute_cd(t_minishell *minishell);
+void			execute_echo(t_minishell *minishell);
+void			execute_pwd(t_minishell *minishell);
+void			execute_export(t_minishell *minishell);
+void			execute_unset(t_minishell *minishell);
+void			execute_env(t_minishell *minishell);
+void			execute_exit(t_minishell *minishell);
+void			execute_command(char *cmd, t_minishell *minishell);
 /*exe*/
 void			execute(t_minishell *minishell, char *line);
 /*signals*/
@@ -79,8 +79,6 @@ void			ft_signals(void);
 bool			is_space(char c);
 bool			is_digit_or_alpha(char c);
 
-void			execute_ls(void);
-void			execute_cd(void);
 // main.c
 void			init_minishell(t_minishell *minishell, char **env);
 

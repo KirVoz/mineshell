@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: ykiso <ykiso@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 03:03:22 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/02/22 19:51:46 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/08/29 20:50:31 by ykiso            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdint.h>
 # include "../libraries/libft/printf/ft_printf.h"
 # include "../libraries/libft/GNL/get_next_line.h"
 
