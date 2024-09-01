@@ -10,7 +10,7 @@ static void exe_solo(t_minishell *minishell, char *line)
 
 void    execute(t_minishell *minishell, char *line)
 {
-    lexer_main(line); // t_minishell; 29.08
+    lexer_main(minishell, line);
     if (minishell->cmd->pipes != 0)
         //exe_many(minishell);
         printf("Not implemented yet\n");

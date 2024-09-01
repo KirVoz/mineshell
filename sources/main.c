@@ -47,8 +47,6 @@ int main(int ac, char **av, char **env)
 
 	(void)av; 
 	(void)env;
-	(void)av;
-	(void)env; // зачем ? 29.08
 	ft_signals();
 	if (ac == 1)
 	{
