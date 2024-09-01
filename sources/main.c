@@ -1,38 +1,63 @@
 #include "minishell.h"
 
-void	init_minishell(t_minishell *minishell, char **env)
+static void init_envp(t_minishell *minishell, char **env)
 {
-	(void)env;
-	minishell->env = NULL; // Initialize as needed
-	minishell->exit_code = 0;
-	minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (minishell->cmd == NULL)
-	{
-		perror("Failed to allocate memory for cmd");
-		exit(EXIT_FAILURE);
-	}
-	// minishell->env->envp_var = env;
-	minishell->cmd->m_av = NULL;
-	minishell->cmd->m_ac = 0;
-	minishell->cmd->pipes = 0;
+    int i;
+
+    i = 0;
+    if (env[0] == NULL)
+    {
+        ft_lstadd_back(&minishell->env->envp_var, ft_lstnew("SHLVL=1"));
+        return;
+    }
+    while (env[i] != NULL)
+    {
+        ft_lstadd_back(&minishell->env->envp_var, ft_lstnew(env[i]));
+        i++;
+    }
 }
 
-int	main(int ac, char **av, char **env)
+void init_minishell(t_minishell *minishell, char **env)
 {
-	t_minishell	minishell;
-	char		*line;
+    minishell->env = (t_env *)malloc(sizeof(t_env)); // Инициализация структуры t_env
+    if (minishell->env == NULL)
+    {
+        perror("Failed to allocate memory for env");
+        exit(EXIT_FAILURE);
+    }
+    minishell->env->envp_var = NULL; // Инициализация списка переменных окружения
+    minishell->exit_code = 0;
+    minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
+    if (minishell->cmd == NULL)
+    {
+        perror("Failed to allocate memory for cmd");
+        exit(EXIT_FAILURE);
+    }
+    init_envp(minishell, env);
+    
+    minishell->cmd->m_av = NULL;
+    minishell->cmd->m_ac = 0;
+    minishell->cmd->pipes = 0;
+}
+
+int main(int ac, char **av, char **env)
+{
+	t_minishell minishell;
+	char *line;
 
 	(void)av; 
 	(void)env;
+	(void)av;
+	(void)env; // зачем ? 29.08
 	ft_signals();
 	if (ac == 1)
 	{
+		init_minishell(&minishell, env);
 		while (1)
 		{
-			init_minishell(&minishell, env);
 			line = readline(PROMPT);
 			if (!line)
-				break ;
+				break;
 			if (line[0] != '\0')
 			{
 				add_history(line);

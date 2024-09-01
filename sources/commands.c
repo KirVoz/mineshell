@@ -1,7 +1,7 @@
 # include "minishell.h"
 # include <string.h>
 
-t_blin commands[8] = {
+t_blin commands[7] = {
     { "echo", execute_echo },
     { "cd", execute_cd },
     { "pwd", execute_pwd },
@@ -9,55 +9,62 @@ t_blin commands[8] = {
     { "unset", execute_unset },
     { "env", execute_env },
     { "exit", execute_exit },
-    { "ls", execute_ls },
 };
 
-// Function to execute the 'ls' command
-void execute_ls(void)
-{
-    printf("Executing 'ls' command\n");
-}
-
 // Function to execute the 'cd' command
-void execute_cd(void)
+void execute_cd(t_minishell *minishell)
 {
+    (void)minishell;
     printf("Executing 'cd' command\n");
 }
 
-void execute_echo(void)
+void execute_echo(t_minishell *minishell)
 {
+    (void)minishell;
     printf("Executing 'echo' command\n");
 }
 
-void execute_pwd(void)
+void execute_pwd(t_minishell *minishell)
 {
+    (void)minishell;
     printf("Executing 'pwd' command\n");
 }
-void execute_export(void)
+
+void execute_export(t_minishell *minishell)
 {
+    (void)minishell;
     printf("Executing 'export' command\n");
 }
-void execute_unset(void)
+
+void execute_unset(t_minishell *minishell)
 {
+    (void)minishell;
     printf("Executing 'unset' command\n");
 }
-void execute_env(void)
+
+void execute_env(t_minishell *minishell)
 {
-    printf("Executing 'env' command\n");
+    t_list *current = minishell->env->envp_var;
+    while (current != NULL)
+    {
+        printf("%s\n", (char *)current->content);
+        current = current->next;
+    }
 }
 
-void execute_exit(void)
+void execute_exit(t_minishell *minishell)
 {
+    (void)minishell;
     printf("Executing 'exit' command\n"); // EXIT надо делать прирывающим цикл в мэйне иначе не выходит !!!
 }
 
-void execute_command(char *cmd)
+void execute_command(char *cmd, t_minishell *minishell)
 {
-    for (int i = 0; i < 8; i++)
+    for (int i = 0; i < 7; i++)
     {
         if (strcmp(cmd, commands[i].name) == 0)
         {
-            commands[i].func();
+            commands[i].func(minishell);
             return;
         }
     }

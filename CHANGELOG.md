@@ -48,3 +48,11 @@ Functions:
 - Changed count\_tokens function so it's correctly counts all tokens  
 Now every function is under 25 lines. Wo-ho!
 
+
+
+### 31.08
+
+General:
+- Add envp initialization (add some sort of env comand in comands.c)
+- modify .h to optimize blin struct
+

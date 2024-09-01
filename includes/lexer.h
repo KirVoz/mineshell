@@ -6,7 +6,7 @@
 # define DELIMS "<>|"
 # define QUOTES "'\""
 
-void	lexer_main(t_minishell *minishell, char *line);
+void	lexer_main(char *line);
 int		quote_counter(char *line);
 char	**tokenizator(char *line);
 
