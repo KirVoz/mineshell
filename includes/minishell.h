@@ -2,7 +2,6 @@
 # define MINISHELL_H
 
 # include "libft.h"
-# include "lexer.h"
 # include <ctype.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -17,7 +16,6 @@
 # define PROMPT "minishell$ "
 # define PROMPT_HEREDOC "heredoc> "
 # define MAX_CMD 1024
-
 
 typedef void	(*action)(void);
 

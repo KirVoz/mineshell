@@ -7,7 +7,7 @@
       "request": "launch",
       "args": [],
       "cwd": "/Users/aleks/Developer/42/minishell",
-      "program": "/Users/aleks/Developer/42/minishell/build/Debug/outDebug"
+      "program": "/Users/aleks/Developer/42/minishell/minishell"
     }
   ]
 }

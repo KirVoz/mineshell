@@ -51,10 +51,10 @@ bonus: $(OSRC) $(OBSRC)
 	ar -r $(NAME) $?
 
 clean:
-	rm -f $(OBJS) $(PRINTF_OBJS) $(GNL_OBJS)
+	@rm -f $(OBJS) $(PRINTF_OBJS) $(GNL_OBJS)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 

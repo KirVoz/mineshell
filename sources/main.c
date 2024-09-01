@@ -2,7 +2,7 @@
 
 void	init_minishell(t_minishell *minishell, char **env)
 {
-	(void)env; // зачем ?
+	(void)env;
 	minishell->env = NULL; // Initialize as needed
 	minishell->exit_code = 0;
 	minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
@@ -11,7 +11,7 @@ void	init_minishell(t_minishell *minishell, char **env)
 		perror("Failed to allocate memory for cmd");
 		exit(EXIT_FAILURE);
 	}
-	minishell->env->envp_var = env;
+	// minishell->env->envp_var = env;
 	minishell->cmd->m_av = NULL;
 	minishell->cmd->m_ac = 0;
 	minishell->cmd->pipes = 0;
@@ -23,7 +23,7 @@ int	main(int ac, char **av, char **env)
 	char		*line;
 
 	(void)av; 
-	(void)env; // зачем ? 29.08
+	(void)env;
 	ft_signals();
 	if (ac == 1)
 	{

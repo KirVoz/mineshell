@@ -63,6 +63,8 @@
     "wait.h": "c",
     "rlstdc.h": "c",
     "history.h": "c",
-    "ctype.h": "c"
+    "ctype.h": "c",
+    "minishell.h": "c",
+    "libft.h": "c"
   }
 }

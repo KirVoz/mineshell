@@ -1,12 +1,12 @@
 ## CHANGELOG
 
-### 29.08
+### 29.08 Alex
 General:
 - Added **libft**.
-- Added subdirectories.
-- Added header for lexer and tokenisator - lexer.h.
-- Added tokenisator.c file with the helper functions for tokenisator.
-- Added Makefile. Working on compilation readline with our makefile.  
+- Added sub-directories.
+- Added header for lexer and tokenizator - lexer.h.
+- Added tokenizator.c file with the helper functions for tokenizator.
+- Added Makefile. Working on compilation readline with our Makefile.  
 For now here're two variables: INCFLAGS and LDFLAGS for your own path.
 - Excluded pipes.c from Makefile since it doesn't work.
 - Voided av, env in main and env in init_minishell.
@@ -14,17 +14,17 @@ For now here're two variables: INCFLAGS and LDFLAGS for your own path.
 Functions:
 - Renamed lex\_line to lexer\_main.
 - Added int	quote_counter(char *line) for checking if there's a syntax error on the stage of tokenisation.
-- Added char \*\*tokenisator(const char \*line) and helper functions. It results in array of strings where every token takes single string except for quoted:  
-cat -e | echo "  Hi ", hi"     'a' someone"  
+- Added char \*\*tokenizator(const char \*line) and helper functions. It results in array of strings where every token takes single string except for quoted:  
+cat -e | echo "  Hi ", hi"     'a' someone" > b.txt  < a.txt
 {"cat", "-e", "|", "echo", "  Hi ", hi"     'a' someone", NULL}
 
 Problems:
-- Tokenisation doesn't truncate leading whitespaces and could lost tokens if any present.
+- Tokenisation doesn't truncate leading white-spaces and could lost tokens if any present.
 
 
 
 
-### 29.08
+### 29.08 Kirill
 
 General:
 - School PC have readlinelib issues, need to improve MAKEFILE
@@ -35,18 +35,16 @@ General:
 
 Problems:
 - readline lib
-- tokinization logic
+- tokenization logic
 
-Sugestions:
-- tokinization may be 2lvl
- - ls | ls ; cd ; echo 123 
-       /      |      \
-	  /       |       \
-	ls | ls   |        \
-	|    	 cd       echo 123
-   / \					/   \
-ls    ls              echo   123
-and so on
+Suggestions:
+- maybe realization with lists will be great in all cases. that will improve accessibility for growing amount of data
 
-- maybe realization with lists will be great in all cases. that will improve accessability for growing amount of data
+### 31.08 Alex
+Functions:
+- Fixed	quote_counter, now it correctly counts amount of quotation marks
+- Fixed incorrect tokenizator's behavior with leading white-spaces
+- Added char	*find\_end\_quote(char *line, int *count) function for correct search of end-quotes and made it take into account if nested quotation marks are separate arguments or part of the outer quotes
+- Changed count\_tokens function so it's correctly counts all tokens  
+Now every function is under 25 lines. Wo-ho!
 

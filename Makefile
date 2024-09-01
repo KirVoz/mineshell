@@ -1,16 +1,18 @@
 NAME = minishell
 
 SRC_PATH = sources
+LXR_PATH = sources/lexer
 LIBFT_PATH = libraries/libft
 READLINE_PATH = libraries/readline
 
 SRC =	$(SRC_PATH)/main.c \
 		$(SRC_PATH)/commands.c \
 		$(SRC_PATH)/execute.c \
-		$(SRC_PATH)/lexer.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
-		$(SRC_PATH)/tokenisator.c
+		$(LXR_PATH)/lexer.c \
+		$(LXR_PATH)/tokenizator.c \
+		$(LXR_PATH)/tokenizator_utils.c
 
 OSRC = 	$(SRC:.c=.o)
 
@@ -38,12 +40,12 @@ $(LIBFT):
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OSRC)
-	make clean -C $(LIBFT_PATH)
+	@rm -f $(OSRC)
+	@make clean -C $(LIBFT_PATH)
 
 fclean: clean
-	rm -rf $(NAME)
-	make fclean -C $(LIBFT_PATH)
+	@rm -rf $(NAME)
+	@make fclean -C $(LIBFT_PATH)
 
 re: fclean all
 
