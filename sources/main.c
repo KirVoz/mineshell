@@ -5,16 +5,12 @@ static void init_envp(t_minishell *minishell, char **env)
     int i;
 
     i = 0;
-    if (env[0] == NULL)
-    {
-        ft_lstadd_back(&minishell->env->envp_var, ft_lstnew("SHLVL=1"));
-        return;
-    }
     while (env[i] != NULL)
     {
         ft_lstadd_back(&minishell->env->envp_var, ft_lstnew(env[i]));
         i++;
     }
+    ft_lstadd_back(&minishell->env->envp_var, ft_lstnew("SHLVL=1"));
 }
 
 void init_minishell(t_minishell *minishell, char **env)
@@ -55,6 +51,6 @@ int main(int ac, char **av, char **env)
 		}
 	}
 	else
-		printf("Minishell requires no arguments\n");
+		printf("Invalid number of arguments\n");
 	return (0);
 }

@@ -26,8 +26,24 @@ void execute_echo(t_minishell *minishell)
 
 void execute_pwd(t_minishell *minishell)
 {
+    char *cwd;
+    size_t size = 1024;
+
     (void)minishell;
-    printf("Executing 'pwd' command\n");
+    cwd = (char *)malloc(size * sizeof(char));
+    if (cwd == NULL)
+    {
+        perror("Failed to allocate memory");
+        exit(EXIT_FAILURE);
+    }
+    if (getcwd(cwd, size) == NULL)
+    {
+        perror("getcwd() error");
+        free(cwd);
+        exit(EXIT_FAILURE);
+    }
+    printf("%s\n", cwd);
+    free(cwd);
 }
 
 void execute_export(t_minishell *minishell)
