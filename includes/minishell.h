@@ -31,7 +31,6 @@ typedef enum s_redirect
 typedef struct s_env
 {
 	t_list					*envp_var;
-	// если реализовывать через списки то не надо будет волноватся о перевыделение памяти
 }							t_env;
 
 // typedef struct  s_list
@@ -78,5 +77,8 @@ void						ft_signals(void);
 
 // main.c
 void						init_minishell(t_minishell *minishell, char **env);
+
+/*error*/
+void						error_handler(char *error, t_minishell *minishell);
 
 #endif
