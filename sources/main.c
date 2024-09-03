@@ -21,23 +21,13 @@ void init_minishell(t_minishell *minishell, char **env)
 {
     minishell->env = (t_env *)malloc(sizeof(t_env)); // Инициализация структуры t_env
     if (minishell->env == NULL)
-    {
-        perror("Failed to allocate memory for env");
-        exit(EXIT_FAILURE);
-    }
+        exit_fail("Failed to allocate memory for env");
     minishell->env->envp_var = NULL; // Инициализация списка переменных окружения
     minishell->exit_code = 0;
     minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
     if (minishell->cmd == NULL)
-    {
-        perror("Failed to allocate memory for cmd");
-        exit(EXIT_FAILURE);
-    }
+        exit_fail("Failed to allocate memory for cmd");
     init_envp(minishell, env);
-    
-    minishell->cmd->m_av = NULL;
-    minishell->cmd->m_ac = 0;
-    minishell->cmd->pipes = 0;
 }
 
 int main(int ac, char **av, char **env)

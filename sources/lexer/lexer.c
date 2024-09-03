@@ -62,14 +62,20 @@ void	lexer_main(t_minishell *minishell, char *line)
 		printf("exit code 258\n"); // for easy findable syntax error
 	tokens = tokenizator(line);
 	if (!tokens)
-	{
-		perror("Failed to allocate memory tokens");
-		exit(EXIT_FAILURE);
-	}
+		exit_fail("Failed to allocate memory for tokens");
 	tokenss = tokens;
-	while (*tokenss)
+	tokens = expander(minishell, tokens);
+	parser(minishell, tokenss);
+
+	t_list 	*a = minishell->cmd->cmd;
+	while (a != NULL)
 	{
-		printf("%s\n", *tokenss); // printf to see tokenisation
-		tokenss++; // добавить в структуру cmd->m_av
+		printf("%s\n", (char *)a->content);
+		a = a->next;
 	}
+	// while (*tokenss)
+	// {
+	// 	printf("tokenss %s\n", *tokenss); // printf to see tokenisation
+	// 	tokenss++; // добавить в структуру cmd->m_av
+	// }
 }

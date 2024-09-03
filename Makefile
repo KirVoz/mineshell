@@ -12,7 +12,9 @@ SRC =	$(SRC_PATH)/main.c \
 		$(SRC_PATH)/utils.c \
 		$(LXR_PATH)/lexer.c \
 		$(LXR_PATH)/tokenizator.c \
-		$(LXR_PATH)/tokenizator_utils.c
+		$(LXR_PATH)/tokenizator_utils.c \
+		$(LXR_PATH)/expander.c \
+		$(LXR_PATH)/parser.c
 
 OSRC = 	$(SRC:.c=.o)
 

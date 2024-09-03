@@ -12,16 +12,10 @@ void pipex(t_minishell *minishell)
     else // Если переданы две команды
     {
         if (pipe(fd) == -1)
-        {
-            perror("pipe");
-            exit(EXIT_FAILURE);
-        }
+            exit_fail("pipe");
         pid = fork();
         if (pid == -1)
-        {
-            perror("fork");
-            exit(EXIT_FAILURE);
-        }
+            exit_fail("fork");
         if (pid == 0)
         {
             close(fd[0]);
