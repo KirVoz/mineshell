@@ -7,6 +7,8 @@ static void	init_envp(t_minishell *minishell, char **env)
 	i = 0;
 	while (env[i] != NULL)
 	{
+		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
+			i++;
 		ft_lstadd_back(&minishell->env->envp_var, ft_lstnew(env[i]));
 		i++;
 	}

@@ -14,6 +14,19 @@ static void exe_solo(t_minishell *minishell, char *line)
 		waitpid(pid, &minishell->exit_code, 0);
 }
 
+static void	exe_from_env(t_minishell *minishell, char *path, char **res, char **env)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		exit_fail("Failed to fork");
+	if (pid == 0)
+		execve(path, res, env);
+	else
+		waitpid(pid, &minishell->exit_code, 0);
+}
+
 int     is_builtin(char *cmd)
 {
 	size_t	cmd_len;
@@ -41,22 +54,22 @@ void	execute(t_minishell *minishell, char *line, char **env)
 	lexer_main(minishell, line);
 	current = minishell->cmd;
 	while (current != NULL)
-	{
-		*res = ft_strdup(current->cmd[0]);
+    {
+        *res = ft_strdup(current->cmd[0]);
         if (!res)
-		    exit_fail("Failed to allocate memory for result in execute");
+            exit_fail("Failed to allocate memory for result in execute");
         if (is_builtin(*res))
-		{
-			exe_solo(minishell, *res);
-            break ;
-		}
-		current = current->next;
-		path = get_path(minishell, *res);
-		if (!path)
-		{
-			not_found(minishell, *res);
-			break ;
-		}
-		execve(get_path(minishell, *res), res, env);
-	}
+            exe_solo(minishell, *res);
+        else
+        {
+            path = get_path(minishell, *res);
+            if (!path)
+            {
+                not_found(minishell, *res);
+                break;
+            }
+            exe_from_env(minishell, path, res, env);
+        }
+        current = current->next;
+    }
 }
