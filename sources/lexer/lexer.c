@@ -62,7 +62,7 @@ void	print_list_state(t_minishell *minishell)
 
 	current = minishell->cmd;
 	cmd_index = 0;
-	printf("*LIST STATE:\n");
+	printf("\n*LIST STATE:\n");
 	while (current != NULL)
 	{
 		printf("Command %d:\n", cmd_index);
