@@ -1,66 +1,85 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	init_command(t_minishell *minishell)
+int	process_command(t_minishell *minishell, char **tokens, int start, int end)
 {
-	minishell->cmd->cmd = 0;
-	minishell->cmd->in_file = 0;
-	minishell->cmd->out_file = 0;
+	char	**cmd_tokens;
+	t_cmd	*new_cmd;
+
+	cmd_tokens = copy_tokens(tokens, start, end);
+	if (!cmd_tokens)
+		return (0);
+	new_cmd = ft_mini_lstnew(cmd_tokens);
+	if (!new_cmd)
+	{
+		free_tokens(cmd_tokens);
+		return (0);
+	}
+	ft_lstadd_mini_back(&(minishell->cmd), new_cmd);
+	return (1);
 }
 
-char	*ft_strjoin_parser(char const *s1, char const *s2)
+void	process_tokens(t_minishell *minishell, char **tokens)
 {
-	int		join_i;
-	int		source_i;
-	int		len_s1;
-	int		len_s2;
-	char	*joined_str;
+	int	start;
+	int	i;
 
-	if (!s1 || !s2)
-		return (NULL);
-	join_i = 0;
-	source_i = 0;
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	joined_str = (char *)malloc(len_s1 + len_s2 + 2);
-	if (!joined_str)
-		return (NULL);
-	while (join_i < len_s1)
-		joined_str[join_i++] = s1[source_i++];
-	joined_str[join_i++] = ' ';
-	source_i = 0;
-	while (join_i < len_s1 + len_s2 + 1)
-		joined_str[join_i++] = s2[source_i++];
-	joined_str[join_i] = '\0';
-	return (joined_str);
+	start = 0;
+	i = 0;
+	while (tokens[i])
+	{
+		if (is_delimiter_parser(tokens[i]) || tokens[i + 1] == NULL)
+		{
+			if (!process_command(minishell, tokens, start, i))
+				exit_fail("Failed to process commands");
+			start = i + 1;
+		}
+		i++;
+	}
 }
 
-void	parser(t_minishell *minishell, char **tokens)
+void	delimiter_parser(t_minishell *minishell)
 {
-	char *res;
-	char *temp;
+	t_cmd	*current;
+	char	**cmd_ptr;
+	char	*delimiter;
+
+	current = minishell->cmd;
+	while (current != NULL)
+	{
+		cmd_ptr = current->cmd;
+		while (*cmd_ptr)
+		{
+			if (is_delimiter_parser(*cmd_ptr))
+			{
+				delimiter = ft_strdup(*cmd_ptr);
+				free(*cmd_ptr);
+				*cmd_ptr = NULL;
+				assign_pipes(minishell, delimiter);
+				free(delimiter);
+			}
+			cmd_ptr++;
+		}
+		current = current->next;
+	}
+}
+
+void	parser_main(t_minishell *minishell, char **tokens)
+{
+	char	**empty_cmd;
 
 	init_command(minishell);
-	while (*tokens)
+	process_tokens(minishell, tokens);
+	delimiter_parser(minishell);
+	if (minishell->cmd == NULL)
 	{
-		res = ft_strdup("");
-		if (!res)
-			exit(1);
-		while (*tokens && !ft_strchr(DELIMS, **tokens))
-		{
-			temp = ft_strjoin_parser(res, *tokens);
-			free(res);
-			res = temp;
-			tokens++;
-		}
-		if (*res)
-			ft_lstadd_back(&minishell->cmd->cmd, ft_lstnew(res));
-		else
-			free(res);
-		if (*tokens)
-		{
-			tokens++;
-			minishell->cmd->out_file = 1;
-		}
+		empty_cmd = (char **)malloc(2 * sizeof(char *));
+		if (!empty_cmd)
+			exit_fail("Failed to allocate memory for empty command");
+		empty_cmd[0] = ft_strdup("");
+		empty_cmd[1] = NULL;
+		minishell->cmd = ft_mini_lstnew(empty_cmd);
+		if (!minishell->cmd)
+			exit_fail("Failed to create empty command node");
 	}
 }

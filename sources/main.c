@@ -1,37 +1,39 @@
 #include "minishell.h"
 
-static void init_envp(t_minishell *minishell, char **env)
+static void	init_envp(t_minishell *minishell, char **env)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (env[i] != NULL)
-    {
-        ft_lstadd_back(&minishell->env->envp_var, ft_lstnew(env[i]));
-        i++;
-    }
-    ft_lstadd_back(&minishell->env->envp_var, ft_lstnew("SHLVL=1"));
+	i = 0;
+	while (env[i] != NULL)
+	{
+		ft_lstadd_back(&minishell->env->envp_var, ft_lstnew(env[i]));
+		i++;
+	}
+	ft_lstadd_back(&minishell->env->envp_var, ft_lstnew("SHLVL=1"));
 }
 
-void init_minishell(t_minishell *minishell, char **env)
+void	init_minishell(t_minishell *minishell, char **env)
 {
-    minishell->env = (t_env *)malloc(sizeof(t_env)); // Инициализация структуры t_env
-    if (minishell->env == NULL)
-        exit_fail("Failed to allocate memory for env");
-    minishell->env->envp_var = NULL; // Инициализация списка переменных окружения
-    minishell->exit_code = 0;
-    minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
-    if (minishell->cmd == NULL)
-        exit_fail("Failed to allocate memory for cmd");
-    init_envp(minishell, env);
+	minishell->env = (t_env *)malloc(sizeof(t_env));
+	// Инициализация структуры t_env
+	if (minishell->env == NULL)
+		exit_fail("Failed to allocate memory for env");
+	minishell->env->envp_var = NULL;
+	// Инициализация списка переменных окружения
+	minishell->exit_code = 0;
+	minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	if (minishell->cmd == NULL)
+		exit_fail("Failed to allocate memory for cmd");
+	init_envp(minishell, env);
 }
 
-int main(int ac, char **av, char **env)
+int	main(int ac, char **av, char **env)
 {
-	t_minishell minishell;
-	char *line;
+	t_minishell	minishell;
+	char		*line;
 
-	(void)av; 
+	(void)av;
 	(void)env;
 	ft_signals();
 	if (ac == 1)
@@ -41,11 +43,11 @@ int main(int ac, char **av, char **env)
 		{
 			line = readline(PROMPT);
 			if (!line)
-				break;
+				break ;
 			if (line[0] != '\0')
 			{
 				add_history(line);
-				execute(&minishell, line);
+				execute(&minishell, line, env);
 			}
 			free(line);
 		}

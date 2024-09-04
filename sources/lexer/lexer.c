@@ -52,30 +52,41 @@ char	**tokenizator(char *line)
 	return (result);
 }
 
+void	print_list_state(t_minishell *minishell)
+{
+	t_cmd	*current;
+	int		cmd_index;
+	int		arg_index;
+
+	current = minishell->cmd;
+	cmd_index = 0;
+	while (current != NULL)
+	{
+		printf("Command %d:\n", cmd_index);
+		arg_index = 0;
+		while (current->cmd[arg_index] != NULL)
+		{
+			printf("  Arg %d: %s, in %d out %d\n", arg_index,
+				current->cmd[arg_index], current->infile, current->outfile);
+			arg_index++;
+		}
+		current = current->next;
+		cmd_index++;
+	}
+}
+
 void	lexer_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
-	char	**tokenss;
+	char	**cp_tokens;
 
-	(void)minishell;
 	if (!quote_counter(line))
 		printf("exit code 258\n"); // for easy findable syntax error
 	tokens = tokenizator(line);
 	if (!tokens)
 		exit_fail("Failed to allocate memory for tokens");
-	tokenss = tokens;
-	tokens = expander(minishell, tokens);
-	parser(minishell, tokenss);
-
-	t_list 	*a = minishell->cmd->cmd;
-	while (a != NULL)
-	{
-		printf("%s\n", (char *)a->content);
-		a = a->next;
-	}
-	// while (*tokenss)
-	// {
-	// 	printf("tokenss %s\n", *tokenss); // printf to see tokenisation
-	// 	tokenss++; // добавить в структуру cmd->m_av
-	// }
+	cp_tokens = tokens;
+	tokens = expander_main(minishell, tokens);
+	parser_main(minishell, cp_tokens);
+	print_list_state(minishell);
 }

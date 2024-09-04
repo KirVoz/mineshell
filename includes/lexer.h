@@ -1,18 +1,8 @@
 #ifndef LEXER_H
 # define LEXER_H
-
 # include "minishell.h" 
-
 # define DELIMS "<>|"
 # define QUOTES "'\""
-
-typedef struct s_quotes
-{
-	char	outer_q;
-	char	other_q;
-	int		is_literal;
-	int		len;
-}			t_quotes;
 
 void	lexer_main(t_minishell *minishell, char *line);
 int		quote_counter(char *line);
@@ -27,7 +17,38 @@ int		find_quotation_len(char *line);
 int		count_tokens(char *line);
 int		is_delimiter(char *line);
 
-char	**expander(t_minishell *minishell, char **tokens);
+char	**expander_main(t_minishell *minishell, char **tokens);
+void	substitute_env(t_minishell *minishell, char **token, char **result,
+			int *i);
+char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len);
+char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len);
 
-void	parser(t_minishell *minishell, char **tokens);
+char	*env_var_copy(char **token);
+char	set_quote(char c, int *in_quote);
+size_t	expanded_env_var_len(char *line);
+size_t	expanded_line_len(t_minishell *minishell, char *token);
+
+char	*allocate_env_value(char *value);
+char	*find_env_value(t_list *env_list, char *var_name);
+char	*get_env_value(t_minishell *minishell, char **token);
+size_t	env_value_len(t_minishell *minishell, char **token);
+
+void	parser_main(t_minishell *minishell, char **tokens);
+int		process_command(t_minishell *minishell, char **tokens, int start,
+			int end);
+void	process_tokens(t_minishell *minishell, char **tokens);
+void	delimiter_parser(t_minishell *minishell);
+
+char	**copy_tokens(char **tokens, int start, int end);
+int		is_delimiter_parser(char *token);
+void	free_tokens(char **tokens);
+
+void	init_command(t_minishell *minishell);
+void	assign_pipes(t_minishell *minishell, char *delimiter);
+
+t_cmd	*ft_mini_lstnew(char **content);
+void	ft_lstadd_mini_back(t_cmd **lst, t_cmd *new);
+
+char	**array_init(void);
+
 #endif

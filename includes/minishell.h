@@ -32,18 +32,14 @@ typedef struct s_env
 	t_list					*envp_var;
 }							t_env;
 
-// typedef struct  s_list
-// {
-//     char    *content;
-//     struct s_list *next;
-// }               t_list;
-
 typedef struct s_cmd
 {
-	t_list	*cmd;
-	int		in_file;
-	int		out_file;
-}			t_cmd;
+	char			**cmd;
+	int				infile;
+	int				outfile;
+	struct s_cmd	*next;
+}					t_cmd;
+
 
 typedef struct s_blin // сокращение от билдина
 {
@@ -70,17 +66,21 @@ void		execute_exit(t_minishell *minishell);
 void		execute_command(char *cmd, t_minishell *minishell);
 
 /*exe*/
-void		execute(t_minishell *minishell, char *line);
+void		execute(t_minishell *minishell, char *line, char **env);
 /*signals*/
 void		ft_signals(void);
 
 // main.c
 void		init_minishell(t_minishell *minishell, char **env);
 
-// utilsc.
-void		exit_fail(const char *exit_message);
+// utils.c
 
 /*error*/
-void						error_handler(char *error, t_minishell *minishell);
+void		exit_fail(const char *exit_message);
+void    	error_handler(t_minishell *minishell, char *error);
+void    	not_found(t_minishell *minishell, char *error);
+
+// path.c
+char 		*get_path(t_minishell *minishell, char *cmd);
 
 #endif

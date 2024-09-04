@@ -2,19 +2,29 @@ NAME = minishell
 
 SRC_PATH = sources
 LXR_PATH = sources/lexer
+EXE_PATH = sources/executor
 LIBFT_PATH = libraries/libft
 READLINE_PATH = libraries/readline
 
 SRC =	$(SRC_PATH)/main.c \
-		$(SRC_PATH)/commands.c \
-		$(SRC_PATH)/execute.c \
+		$(EXE_PATH)/commands.c \
+		$(EXE_PATH)/execute.c \
+		$(EXE_PATH)/path.c \
+		$(EXE_PATH)/pipes.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
+		$(SRC_PATH)/error_handler.c \
 		$(LXR_PATH)/lexer.c \
 		$(LXR_PATH)/tokenizator.c \
 		$(LXR_PATH)/tokenizator_utils.c \
 		$(LXR_PATH)/expander.c \
-		$(LXR_PATH)/parser.c
+		$(LXR_PATH)/expander_utils.c \
+		$(LXR_PATH)/expander_env_utils.c \
+		$(LXR_PATH)/parser.c \
+		$(LXR_PATH)/parser_utils.c \
+		$(LXR_PATH)/parser_list_utils.c \
+		$(LXR_PATH)/parser_struct_utils.c \
+		$(LXR_PATH)/general_utils.c
 
 OSRC = 	$(SRC:.c=.o)
 
@@ -26,7 +36,7 @@ LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 # INCFLAGS = -I./includes -I/*your path to readline*/readline/include
 # LDFLAGS = -L/*your path to readline*/readline/lib -lreadline
 
-CFLAGS = -Wall -Wextra -Werror $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 

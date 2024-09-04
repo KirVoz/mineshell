@@ -5,9 +5,9 @@ void pipex(t_minishell *minishell)
     int fd[2];
     pid_t pid;
 
-    if (minishell->cmd->m_av->content[1] == NULL) // Если передана только одна команда
+    if (minishell->cmd->cmd[1] == NULL) // Если передана только одна команда
     {
-        execute_command(minishell->cmd->m_av->content[0]);
+        execute_command(minishell->cmd->cmd[0], minishell);
     }
     else // Если переданы две команды
     {
@@ -21,7 +21,7 @@ void pipex(t_minishell *minishell)
             close(fd[0]);
             dup2(fd[1], STDOUT_FILENO);
             close(fd[1]);
-            execute_command(minishell->cmd->m_av->content[0]);
+            execute_command(minishell->cmd->cmd[0], minishell);
             exit(EXIT_SUCCESS);
         }
         else
@@ -29,7 +29,7 @@ void pipex(t_minishell *minishell)
             close(fd[1]);
             dup2(fd[0], STDIN_FILENO);
             close(fd[0]);
-            execute_command(minishell->cmd->m_av->content[1]);
+            execute_command(minishell->cmd->cmd[1], minishell);
             exit(EXIT_SUCCESS);
         }
     }
