@@ -5,7 +5,7 @@
 # define QUOTES "'\""
 
 void	lexer_main(t_minishell *minishell, char *line);
-int		quote_counter(char *line);
+char	*quote_counter(char *line);
 char	**tokenizator(char *line);
 
 char	*extract_token(char **line);
@@ -50,5 +50,7 @@ t_cmd	*ft_mini_lstnew(char **content);
 void	ft_lstadd_mini_back(t_cmd **lst, t_cmd *new);
 
 char	**array_init(void);
+
+void	print_list_state(t_minishell *minishell);
 
 #endif

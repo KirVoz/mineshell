@@ -15,6 +15,7 @@
 
 # define PROMPT "minishell$ "
 # define PROMPT_HEREDOC "heredoc> "
+# define PROMPT_PIPE_HEREDOC "pipe heredoc>"
 
 typedef struct s_minishell	t_minishell;
 typedef void				(*func)(t_minishell *s_minishell);
@@ -66,7 +67,7 @@ void		execute_exit(t_minishell *minishell);
 void		execute_command(char *cmd, t_minishell *minishell);
 
 /*exe*/
-void		execute(t_minishell *minishell, char *line, char **env);
+void		execute(t_minishell *minishell, char **env);
 /*signals*/
 void		ft_signals(void);
 
@@ -78,7 +79,9 @@ void		init_minishell(t_minishell *minishell, char **env);
 /*error*/
 void		exit_fail(const char *exit_message);
 void    	error_handler(t_minishell *minishell, char *error);
-void    	not_found(t_minishell *minishell, char *error);
+void    	not_found(t_minishell *minishell, char *cmd);
+void    	syntax_error(t_minishell *minishell, char *token);
+void    	syntax_quote_error(t_minishell *minishell, char *token);
 
 // path.c
 char 		*get_path(t_minishell *minishell, char *cmd);

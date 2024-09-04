@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "lexer.h"
 
 static void	init_envp(t_minishell *minishell, char **env)
 {
@@ -47,7 +48,8 @@ int	main(int ac, char **av, char **env)
 			if (line[0] != '\0')
 			{
 				add_history(line);
-				execute(&minishell, line, env);
+            	lexer_main(&minishell, line);
+				execute(&minishell, env);
 			}
 			free(line);
 		}

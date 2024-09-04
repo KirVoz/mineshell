@@ -48,6 +48,9 @@ $(NAME): $(OSRC) $(LIBFT)
 $(LIBFT):
 	@make -C $(LIBFT_PATH)
 
+ex: re #to go into file after re 
+	./minishell
+
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 

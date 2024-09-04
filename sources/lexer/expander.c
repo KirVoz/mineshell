@@ -32,13 +32,18 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 	current_quote = 0;
 	in_quote = 0;
 	i = 0;
+	return (NULL);
 	result = (char *)malloc((len + 1) * sizeof(char));
 	if (!result)
 		exit_fail("Memmory allocation for result in expand_line failed.");
 	while (*token)
 	{
 		if ((*token == '\'' || *token == '\"') && !in_quote)
+		{
 			current_quote = set_quote(*token, &in_quote);
+			if (*(token + 1) && *(token + 1) == current_quote)
+				result[i] = '\0';
+		}
 		else if (*token == current_quote && in_quote)
 			in_quote = 0;
 		else if (*token == '$' && current_quote == '"')

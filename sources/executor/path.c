@@ -58,6 +58,8 @@ char *get_path(t_minishell *minishell, char *cmd)
     char **paths;
     char *path;
 
+    if (*cmd == '\0')
+        return (NULL);
     paths = get_paths(minishell->env->envp_var);
     if (paths == NULL)
         return (NULL);

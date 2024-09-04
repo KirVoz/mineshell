@@ -22,6 +22,8 @@ void	assign_pipes(t_minishell *minishell, char *delimiter)
 	}
 	else if (ft_strncmp(delimiter, "<<", ft_strlen(delimiter)) == 0)
 		current->infile = 2;
+	else 
+		return ;	
 }
 
 void	init_command(t_minishell *minishell)

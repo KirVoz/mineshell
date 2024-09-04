@@ -1,7 +1,7 @@
 #include "lexer.h"
 #include "minishell.h"
 
-int	quote_counter(char *line)
+char	*quote_counter(char *line)
 {
 	int		double_q;
 	int		single_q;
@@ -18,9 +18,11 @@ int	quote_counter(char *line)
 			single_q++;
 		line_cpy++;
 	}
-	if (double_q % 2 == 0 && single_q % 2 == 0)
-		return (1);
-	return (0);
+	if (double_q % 2 != 0)
+		return ("\"");
+	else if (single_q % 2 != 0)
+		return ("'");
+	return (NULL);
 }
 
 char	**tokenizator(char *line)
@@ -60,6 +62,7 @@ void	print_list_state(t_minishell *minishell)
 
 	current = minishell->cmd;
 	cmd_index = 0;
+	printf("*LIST STATE:\n");
 	while (current != NULL)
 	{
 		printf("Command %d:\n", cmd_index);
@@ -73,6 +76,7 @@ void	print_list_state(t_minishell *minishell)
 		current = current->next;
 		cmd_index++;
 	}
+	printf("\n");
 }
 
 void	lexer_main(t_minishell *minishell, char *line)
@@ -80,8 +84,8 @@ void	lexer_main(t_minishell *minishell, char *line)
 	char	**tokens;
 	char	**cp_tokens;
 
-	if (!quote_counter(line))
-		printf("exit code 258\n"); // for easy findable syntax error
+	if (quote_counter(line))
+		syntax_quote_error(minishell, quote_counter(line));
 	tokens = tokenizator(line);
 	if (!tokens)
 		exit_fail("Failed to allocate memory for tokens");
