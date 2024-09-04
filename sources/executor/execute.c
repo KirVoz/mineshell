@@ -3,8 +3,15 @@
 
 static void exe_solo(t_minishell *minishell, char *line)
 {
-    execute_command(line, minishell);
-// пока что тут просто строка которая подается без деления на что-то
+	pid_t 		pid;
+
+	pid = fork();
+	if (pid == -1)
+		exit_fail("Failed to fork");
+	if (pid == 0)
+		execute_command(line, minishell);
+	else
+		waitpid(pid, &minishell->exit_code, 0);
 }
 
 int     is_builtin(char *cmd)
