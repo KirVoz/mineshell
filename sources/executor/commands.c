@@ -42,7 +42,12 @@ void execute_pwd(t_minishell *minishell)
         free(cwd);
         exit(EXIT_FAILURE);
     }
-    printf("%s\n", cwd);
+    if (printf("%s\n", cwd) < 0)
+    {
+        perror("Failed to write to stdout");
+        free(cwd);
+        exit(EXIT_FAILURE);
+    }
     free(cwd);
 }
 
