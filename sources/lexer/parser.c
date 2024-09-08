@@ -55,7 +55,7 @@ void	delimiter_parser(t_minishell *minishell)
 				delimiter = ft_strdup(*cmd_ptr);
 				free(*cmd_ptr);
 				*cmd_ptr = NULL;
-				assign_pipes(minishell, delimiter);
+				assign_pipes(delimiter, current);
 				free(delimiter);
 			}
 			cmd_ptr++;

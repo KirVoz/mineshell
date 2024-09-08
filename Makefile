@@ -5,6 +5,7 @@ LXR_PATH = sources/lexer
 EXE_PATH = sources/executor
 LIBFT_PATH = libraries/libft
 READLINE_PATH = libraries/readline
+OBJ_DIR = objects
 
 SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/commands.c \
@@ -24,9 +25,11 @@ SRC =	$(SRC_PATH)/main.c \
 		$(LXR_PATH)/parser_utils.c \
 		$(LXR_PATH)/parser_list_utils.c \
 		$(LXR_PATH)/parser_struct_utils.c \
-		$(LXR_PATH)/general_utils.c
+		$(LXR_PATH)/validator.c \
+		$(LXR_PATH)/general_utils.c \
+		$(LXR_PATH)/debug_functions.c
 
-OSRC = 	$(SRC:.c=.o)
+OSRC = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
 
@@ -51,11 +54,12 @@ $(LIBFT):
 ex: re #to go into file after re 
 	./minishell
 
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(@D)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	@rm -f $(OSRC)
+	@rm -rf $(OBJ_DIR)
 	@make clean -C $(LIBFT_PATH)
 
 fclean: clean

@@ -32,7 +32,6 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 	current_quote = 0;
 	in_quote = 0;
 	i = 0;
-	return (NULL);
 	result = (char *)malloc((len + 1) * sizeof(char));
 	if (!result)
 		exit_fail("Memmory allocation for result in expand_line failed.");
@@ -41,8 +40,8 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 		if ((*token == '\'' || *token == '\"') && !in_quote)
 		{
 			current_quote = set_quote(*token, &in_quote);
-			if (*(token + 1) && *(token + 1) == current_quote)
-				result[i] = '\0';
+			if (len == 2 && *(token + 1) && *(token + 1) == current_quote)
+				result[i++] = '\n';
 		}
 		else if (*token == current_quote && in_quote)
 			in_quote = 0;
@@ -91,28 +90,25 @@ char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 	return (result);
 }
 
-char	**expander_main(t_minishell *minishell, char **tokens)
+void	expander_main(t_minishell *minishell, char **tokens)
 {
-	char	**result;
 	char	*cp_token;
 	size_t	new_line_len;
 
-	result = NULL;
-	cp_token = *tokens;
 	new_line_len = 0;
 	while (*tokens)
 	{
+		cp_token = *tokens;
 		if (ft_strchr(*tokens, '"') || ft_strchr(*tokens, '\''))
 		{
-			new_line_len = expanded_line_len(minishell, *tokens) + 1;
+			new_line_len = expanded_line_len(minishell, cp_token);
 			*tokens = expand_quoted_line(minishell, *tokens, new_line_len);
 		}
-		else if (ft_strchr(*tokens, '$'))
+		else if (!dollar_special_case(*tokens))
 		{
 			new_line_len += env_value_len(minishell, &cp_token);
 			*tokens = expand_dollar_line(minishell, *tokens, new_line_len);
 		}
 		tokens++;
 	}
-	return (result);
 }

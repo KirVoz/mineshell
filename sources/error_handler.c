@@ -24,20 +24,22 @@ void    not_found(t_minishell *minishell, char *cmd)
     minishell->exit_code = 127;
 }
 
-void    syntax_error(t_minishell *minishell, char *token)
+int    syntax_error(t_minishell *minishell, char *token)
 {
     ft_putstr_fd("minishell: ", 2);
     ft_putstr_fd("syntax error near unexpected token `", 2);
     ft_putstr_fd(token, 2);
     ft_putstr_fd("'\n", 2);
     minishell->exit_code = 258;
+    return (0);
 }
 
-void    syntax_quote_error(t_minishell *minishell, char *token)
+int    syntax_quote_error(t_minishell *minishell, char *token)
 {
     ft_putstr_fd("minishell: ", 2);
     ft_putstr_fd("syntax error near unexpected token `", 2);
     ft_putstr_fd(token, 2);
     ft_putstr_fd("'\n", 2);
     minishell->exit_code = 258;
+    return (0);
 }

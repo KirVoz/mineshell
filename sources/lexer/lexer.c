@@ -33,7 +33,7 @@ char	**tokenizator(char *line)
 
 	i = 0;
 	token_count = count_tokens(line);
-	result = malloc((token_count + 1) * sizeof(char *));
+	result = (char **)malloc((token_count + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
 	while (*line && *line == ' ')
@@ -54,43 +54,22 @@ char	**tokenizator(char *line)
 	return (result);
 }
 
-void	print_list_state(t_minishell *minishell)
-{
-	t_cmd	*current;
-	int		cmd_index;
-	int		arg_index;
-
-	current = minishell->cmd;
-	cmd_index = 0;
-	printf("\n*LIST STATE:\n");
-	while (current != NULL)
-	{
-		printf("Command %d:\n", cmd_index);
-		arg_index = 0;
-		while (current->cmd[arg_index] != NULL)
-		{
-			printf("  Arg %d: %s, in %d out %d\n", arg_index,
-				current->cmd[arg_index], current->infile, current->outfile);
-			arg_index++;
-		}
-		current = current->next;
-		cmd_index++;
-	}
-	printf("\n");
-}
-
-void	lexer_main(t_minishell *minishell, char *line)
+int	lexer_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
-	char	**cp_tokens;
 
 	if (quote_counter(line))
-		syntax_quote_error(minishell, quote_counter(line));
+		return(syntax_quote_error(minishell, quote_counter(line)));
 	tokens = tokenizator(line);
 	if (!tokens)
 		exit_fail("Failed to allocate memory for tokens");
-	cp_tokens = tokens;
-	tokens = expander_main(minishell, tokens);
-	parser_main(minishell, cp_tokens);
-	print_list_state(minishell);
+	// print_tokens_state(tokens, "after tokenisation");
+	expander_main(minishell, tokens);
+	print_tokens_state(tokens, "after expander");
+	// if (!validator_main(minishell, tokens))
+	// 	return (0);
+	print_tokens_state(tokens, "after validator");
+	parser_main(minishell, tokens);
+	print_list_state(minishell, "lexer end");
+	return (1);
 }

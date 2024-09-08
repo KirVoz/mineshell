@@ -1,29 +1,32 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	assign_pipes(t_minishell *minishell, char *delimiter)
+void	assign_pipes(char *delimiter, t_cmd *current)
 {
-	t_cmd	*current;
-
-	current = minishell->cmd;
 	if (ft_strncmp(delimiter, "|", ft_strlen(delimiter)) == 0)
 	{
 		current->outfile = 1;
-		current->next->infile = 1;
+		if (current->next)
+			current->next->infile = 1;
 	}
 	else if (ft_strncmp(delimiter, ">", ft_strlen(delimiter)) == 0)
-		current->next->outfile = 1;
-	else if (ft_strncmp(delimiter, ">>", ft_strlen(delimiter)) == 0)
-		current->outfile = 2;
-	else if (ft_strncmp(delimiter, "<", ft_strlen(delimiter)) == 0)
 	{
-		current->infile = 1;
-		// maybe there whould be fd ?
+		current->outfile = 2;
+		if (current->next)
+			current->next->infile = 2;
+	}
+	else if (ft_strncmp(delimiter, ">>", ft_strlen(delimiter)) == 0)
+		current->outfile = 3;
+	else if (ft_strncmp(delimiter, "<", ft_strlen(delimiter)) == 0)
+	
+	{
+		current->infile = 4;
+		// maybe there should be fd or pid?
 	}
 	else if (ft_strncmp(delimiter, "<<", ft_strlen(delimiter)) == 0)
-		current->infile = 2;
-	else 
-		return ;	
+		current->infile = 5;
+	else
+		return ;
 }
 
 void	init_command(t_minishell *minishell)

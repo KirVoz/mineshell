@@ -37,7 +37,7 @@ int	main(int ac, char **av, char **env)
 	char		*line;
 
 	(void)av;
-	(void)env;
+	// (void)env;
 	ft_signals();
 	if (ac == 1)
 	{
@@ -50,7 +50,8 @@ int	main(int ac, char **av, char **env)
 			if (line[0] != '\0')
 			{
 				add_history(line);
-            	lexer_main(&minishell, line);
+            	if (!lexer_main(&minishell, line))
+					continue ;
 				execute(&minishell, env);
 			}
 			free(line);
