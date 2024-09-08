@@ -54,7 +54,7 @@ void	add_command(t_cmd *current, char *token)
 			command_len++;
 	}
 	command = (char **)ft_realloc(current->cmd,
-		(command_len + 2) * sizeof(char *));
+	(command_len + 2) * sizeof(char *));
 	if (!command)
 		exit_fail("Failed to allocate memory for command");
 	current->cmd = command;
