@@ -1,85 +1,40 @@
 #include "lexer.h"
 #include "minishell.h"
 
-int	process_command(t_minishell *minishell, char **tokens, int start, int end)
+void	process_token(t_cmd *current, char *token, char *next_token, int *i)
 {
-	char	**cmd_tokens;
-	t_cmd	*new_cmd;
-
-	cmd_tokens = copy_tokens(tokens, start, end);
-	if (!cmd_tokens)
-		return (0);
-	new_cmd = ft_mini_lstnew(cmd_tokens);
-	if (!new_cmd)
+	if (is_redirection(token))
 	{
-		free_tokens(cmd_tokens);
-		return (0);
+		handle_redirections(current, token, next_token);
+		*i += 2;
 	}
-	ft_lstadd_mini_back(&(minishell->cmd), new_cmd);
-	return (1);
-}
-
-void	process_tokens(t_minishell *minishell, char **tokens)
-{
-	int	start;
-	int	i;
-
-	start = 0;
-	i = 0;
-	while (tokens[i])
+	else
 	{
-		if (is_delimiter_parser(tokens[i]) || tokens[i + 1] == NULL)
-		{
-			if (!process_command(minishell, tokens, start, i))
-				exit_fail("Failed to process commands");
-			start = i + 1;
-		}
-		i++;
+		add_command(current, token);
+		(*i)++;
 	}
 }
 
-void	delimiter_parser(t_minishell *minishell)
+void	parser_main(t_minishell **minishell, char ***tokens)
 {
 	t_cmd	*current;
-	char	**cmd_ptr;
-	char	*delimiter;
+	t_cmd	*cmd_list;
+	int		i;
 
-	current = minishell->cmd;
-	while (current != NULL)
+	current = NULL;
+	cmd_list = NULL;
+	i = 0;
+	while ((*tokens)[i])
 	{
-		cmd_ptr = current->cmd;
-		while (*cmd_ptr)
+		process_node(&current, &cmd_list, (*tokens)[i]);
+		if (if_pipe((*tokens)[i]))
 		{
-			if (is_delimiter_parser(*cmd_ptr))
-			{
-				delimiter = ft_strdup(*cmd_ptr);
-				free(*cmd_ptr);
-				*cmd_ptr = NULL;
-				assign_pipes(delimiter, current);
-				free(delimiter);
-			}
-			cmd_ptr++;
+			i++;
+			continue ;
 		}
-		current = current->next;
+		process_token(current, (*tokens)[i], (*tokens)[i + 1], &i);
 	}
-}
-
-void	parser_main(t_minishell *minishell, char **tokens)
-{
-	char	**empty_cmd;
-
-	init_command(minishell);
-	process_tokens(minishell, tokens);
-	delimiter_parser(minishell);
-	if (minishell->cmd == NULL)
-	{
-		empty_cmd = (char **)malloc(2 * sizeof(char *));
-		if (!empty_cmd)
-			exit_fail("Failed to allocate memory for empty command");
-		empty_cmd[0] = ft_strdup("");
-		empty_cmd[1] = NULL;
-		minishell->cmd = ft_mini_lstnew(empty_cmd);
-		if (!minishell->cmd)
-			exit_fail("Failed to create empty command node");
-	}
+	(*minishell)->cmd = cmd_list;
+	free_tokens(*tokens);
+	*tokens = NULL;
 }

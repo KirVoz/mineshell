@@ -24,8 +24,9 @@ SRC =	$(SRC_PATH)/main.c \
 		$(LXR_PATH)/parser.c \
 		$(LXR_PATH)/parser_utils.c \
 		$(LXR_PATH)/parser_list_utils.c \
-		$(LXR_PATH)/parser_struct_utils.c \
 		$(LXR_PATH)/validator.c \
+		$(LXR_PATH)/validator_utils.c \
+		$(LXR_PATH)/memory_managment.c \
 		$(LXR_PATH)/general_utils.c \
 		$(LXR_PATH)/debug_functions.c
 

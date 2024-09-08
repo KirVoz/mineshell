@@ -112,7 +112,6 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
         close(pipes[j][0]);
         close(pipes[j][1]);
     }
-    printf("hello pipe %s\n", current->cmd[0]);
     if (is_builtin(current->cmd[0]))
         execute_command(current->cmd[0], minishell);
     else
@@ -161,7 +160,6 @@ void exe_with_pipes(t_minishell *minishell, char **env)
     pid_t *pids;
     int exit_code = 0;
 
-    print_list_state(minishell, "!!!!!!!!!!!!state in exe_with_pipes");
     num_cmd = 0;
     current = minishell->cmd;
     while (current)
@@ -173,7 +171,6 @@ void exe_with_pipes(t_minishell *minishell, char **env)
     pids = malloc(num_cmd * sizeof(pid_t));
     if (!pids)
         exit_fail("Failed to allocate memory for pids");
-    printf("!!!!!!!!!!!!! pipes %d - %d\n", **pipes, num_cmd);
     current = minishell->cmd;
     i = 0;
     while (i < num_cmd)

@@ -1,31 +1,58 @@
 #include "lexer.h"
 #include "minishell.h"
 
-t_cmd	*ft_mini_lstnew(char **content)
+t_cmd	*create_empty_node(void)
 {
-	t_cmd	*node;
+	t_cmd	*empty_node;
 
-	node = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!node)
-		return (NULL);
-	node->cmd = content;
-	node->next = NULL;
-	return (node);
+	empty_node = (t_cmd *)malloc(sizeof(t_cmd));
+	if (!empty_node)
+		exit_fail("Failed to create new command node");
+	return (empty_node);
 }
 
-void	ft_lstadd_mini_back(t_cmd **lst, t_cmd *new)
+void	process_node(t_cmd **current, t_cmd **cmd_list, char *token)
 {
-	t_cmd	*current;
+	t_cmd	*command_node;
+	t_cmd	*last;
 
-	if (!new)
-		return ;
-	if (!*lst)
+	if (!*current || if_pipe(token))
 	{
-		*lst = new;
-		return ;
+		command_node = create_empty_node();
+		if (!*cmd_list)
+			*cmd_list = command_node;
+		else
+		{
+			last = *cmd_list;
+			while (last->next)
+				last = last->next;
+			last->next = command_node;
+			command_node->inpipe = 1;
+			last->outpipe = 1;
+		}
+		*current = command_node;
 	}
-	current = *lst;
-	while (current->next)
-		current = current->next;
-	current->next = new;
+}
+
+void	add_command(t_cmd *current, char *token)
+{
+	int		command_len;
+	char	**command;
+
+	if (!current)
+		exit_fail("Empty current node in add_command");
+	command_len = 0;
+	if (current->cmd)
+	{
+		while (current->cmd[command_len])
+			command_len++;
+	}
+	command = ft_realloc(current->cmd, (command_len + 2) * sizeof(char *));
+	if (!command)
+		exit_fail("Failed to allocate memory for command");
+	current->cmd = command;
+	current->cmd[command_len] = ft_strdup(token);
+	if (!current->cmd[command_len])
+		exit_fail("Failed to duplicate token in add_command");
+	current->cmd[command_len + 1] = NULL;
 }

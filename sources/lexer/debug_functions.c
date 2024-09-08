@@ -16,8 +16,8 @@ void	print_list_state(t_minishell *minishell, char *name)
 		arg_index = 0;
 		while (current->cmd[arg_index] != NULL)
 		{
-			printf("  Arg %d: %s, in %d out %d\n", arg_index,
-				current->cmd[arg_index], current->infile, current->outfile);
+			printf("  Arg %d: %s, infile %s outfile %s, inpipe %d outpipe %d\n", arg_index,
+				current->cmd[arg_index], current->infile, current->outfile, current->inpipe, current->outpipe);
 			arg_index++;
 		}
 		current = current->next;
@@ -28,7 +28,7 @@ void	print_list_state(t_minishell *minishell, char *name)
 
 void	print_tokens_state(char **tokens, char *name)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	printf("\n*TOKENS STATE %s:\n", name);

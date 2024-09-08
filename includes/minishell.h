@@ -30,14 +30,16 @@ typedef enum s_redirect
 
 typedef struct s_env
 {
-	t_list					*envp_var;
-}							t_env;
+	t_list			*envp_var;
+}					t_env;
 
 typedef struct s_cmd
 {
 	char			**cmd;
-	int				infile;
-	int				outfile;
+	char			*infile;
+	char			*outfile;
+	int				inpipe;
+	int				outpipe;
 	struct s_cmd	*next;
 }					t_cmd;
 

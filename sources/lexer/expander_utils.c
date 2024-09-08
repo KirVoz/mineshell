@@ -72,13 +72,13 @@ int	dollar_special_case(char *token)
 {
 	if (*token == '$')
 	{
-		if ((token + 1) && *(token + 1) == '?')
+		if (*(token + 1) && *(token + 1) == '?')
 		{
 			free(token);
 			token = ft_strdup("$?");
 			return (1);
 		}
-		if ((token + 1) && *(token + 1) == '$')
+		if (*(token + 1) && *(token + 1) == '$')
 			return (1);
 		if (!*(token + 1))
 			return (1);

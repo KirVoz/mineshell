@@ -1,39 +1,22 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	**copy_tokens(char **tokens, int start, int end)
-{
-	int		i;
-	int		j;
-	char	**result;
-
-	i = start;
-	j = 0;
-	result = malloc((end - start + 2) * sizeof(char *));
-	if (!result)
-		exit_fail("Failed to allocate memory for result in copy_tokens");
-	while (i <= end)
-	{
-		result[j] = ft_strdup(tokens[i]);
-		if (!result[j])
-		{
-			free_tokens(result);
-			return (NULL);
-		}
-		i++;
-		j++;
-	}
-	result[j] = NULL;
-	return (result);
-}
-
-int	is_delimiter_parser(char *token)
+int	if_pipe(char *token)
 {
 	size_t	token_len;
 
 	token_len = ft_strlen(token);
-	if (ft_strncmp(token, "|", token_len) == 0
-		|| ft_strncmp(token, "<", token_len) == 0
+	if (ft_strncmp(token, "|", token_len) == 0)
+		return (1);
+	return (0);
+}
+
+int	is_redirection(char *token)
+{
+	size_t	token_len;
+
+	token_len = ft_strlen(token);
+	if (ft_strncmp(token, "<", token_len) == 0
 		|| ft_strncmp(token, ">", token_len) == 0
 		|| ft_strncmp(token, "<<", token_len) == 0
 		|| ft_strncmp(token, ">>", token_len) == 0)
@@ -41,14 +24,21 @@ int	is_delimiter_parser(char *token)
 	return (0);
 }
 
-void	free_tokens(char **tokens)
+void	handle_redirections(t_cmd *current, char *delimiter, char *file)
 {
-	int	i;
+	size_t	delimiter_len;
 
-	i = 0;
-	if (!tokens)
-		return ;
-	while (tokens[i])
-		free(tokens[i++]);
-	free(tokens);
+	delimiter_len = ft_strlen(delimiter);
+	if (ft_strncmp(delimiter, "<", delimiter_len) == 0 || ft_strncmp(delimiter,
+			"<<", delimiter_len) == 0)
+	{
+		free(current->infile);
+		current->infile = ft_strdup(file);
+	}
+	else if (ft_strncmp(delimiter, ">", delimiter_len) == 0
+		|| ft_strncmp(delimiter, ">>", delimiter_len) == 0)
+	{
+		free(current->outfile);
+		current->outfile = ft_strdup(file);
+	}
 }

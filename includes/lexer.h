@@ -37,25 +37,29 @@ char	*find_env_value(t_list *env_list, char *var_name);
 char	*get_env_value(t_minishell *minishell, char **token);
 size_t	env_value_len(t_minishell *minishell, char **token);
 
-void	parser_main(t_minishell *minishell, char **tokens);
-int		process_command(t_minishell *minishell, char **tokens, int start,
-			int end);
-void	process_tokens(t_minishell *minishell, char **tokens);
-void	delimiter_parser(t_minishell *minishell);
+int		validator_main(t_minishell *minishell, char ***tokens);
+int		redirections_unification(char **tokens);
+int		pipe_redirections_mistake(t_minishell *minishell, char **tokens);
 
-char	**copy_tokens(char **tokens, int start, int end);
-int		is_delimiter_parser(char *token);
+void	delimiter_counter(char **token, int *pipes, int *right_redirs,
+		int *left_redirs);
+int		tokens_counter(char **tokens);
+char	**tokens_realloc(char **tokens);
+int		redirections_check(char ***tokens);
+
+void	parser_main(t_minishell **minishell, char ***tokens);
+void	process_token(t_cmd *current, char *token, char *next_token, int *i);
+
+t_cmd	*create_empty_node(void);
+void	process_node(t_cmd **current, t_cmd **cmd_list, char *token);
+void	add_command(t_cmd *current, char *token);
+
+int		if_pipe(char *token);
+int		is_redirection(char *token);
+void	handle_redirections(t_cmd *current, char *delimiter, char *file);
+
+void	*ft_realloc(void *ptr, size_t size);
 void	free_tokens(char **tokens);
-
-void	init_command(t_minishell *minishell);
-void	assign_pipes(char *delimiter, t_cmd *current);
-
-t_cmd	*ft_mini_lstnew(char **content);
-void	ft_lstadd_mini_back(t_cmd **lst, t_cmd *new);
-
 char	**array_init(void);
-
-int		validator_main(t_minishell *minishell, char **tokens);
-int		pipe_redirections_unification(t_minishell *minishell, char **tokens);
 
 #endif

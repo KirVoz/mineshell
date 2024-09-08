@@ -35,7 +35,7 @@ char	**tokenizator(char *line)
 	token_count = count_tokens(line);
 	result = (char **)malloc((token_count + 1) * sizeof(char *));
 	if (!result)
-		return (NULL);
+		exit_fail("Failed to allocate memory for tokens in tokenizator");
 	while (*line && *line == ' ')
 		line++;
 	while (i < token_count)
@@ -59,17 +59,13 @@ int	lexer_main(t_minishell *minishell, char *line)
 	char	**tokens;
 
 	if (quote_counter(line))
-		return(syntax_quote_error(minishell, quote_counter(line)));
+		return (syntax_quote_error(minishell, quote_counter(line)));
 	tokens = tokenizator(line);
-	if (!tokens)
-		exit_fail("Failed to allocate memory for tokens");
-	// print_tokens_state(tokens, "after tokenisation");
 	expander_main(minishell, tokens);
-	print_tokens_state(tokens, "after expander");
-	// if (!validator_main(minishell, tokens))
-	// 	return (0);
+	if (!validator_main(minishell, &tokens))
+		return (0);
 	print_tokens_state(tokens, "after validator");
-	parser_main(minishell, tokens);
-	print_list_state(minishell, "lexer end");
+	parser_main(&minishell, &tokens);
+	print_list_state(minishell, "after parser");
 	return (1);
 }
