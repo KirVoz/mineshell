@@ -1,32 +1,62 @@
 #include "lexer.h"
 #include "minishell.h"
 
-static void	exe_solo(t_minishell *minishell, char *line)
+static void exe_solo(t_minishell *minishell, char *line)
 {
     pid_t pid;
+    int status;
 
     printf("Executing solo command: %s\n", line);
     pid = fork();
     if (pid == -1)
-        exit_fail("Failed to fork");
+    {
+        perror("Failed to fork");
+        exit(EXIT_FAILURE);
+    }
     if (pid == 0)
+    {
+        // Дочерний процесс
         execute_command(line, minishell);
+        exit(minishell->exit_code); // Завершить дочерний процесс с кодом завершения
+    }
     else
-        waitpid(pid, &minishell->exit_code, 0);
+    {
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+            minishell->exit_code = WEXITSTATUS(status);
+        else
+            minishell->exit_code = 1; // Установить код ошибки, если процесс завершился некорректно
+    }
 }
 
-static void	exe_from_env(t_minishell *minishell, char *path, char **res, char **env)
+static void exe_from_env(t_minishell *minishell, char *path, char **res, char **env)
 {
     pid_t pid;
+    int status;
 
     printf("Executing command from env: %s\n", path);
     pid = fork();
     if (pid == -1)
-        exit_fail("Failed to fork");
+    {
+        perror("Failed to fork");
+        exit(EXIT_FAILURE);
+    }
     if (pid == 0)
+    {
+        // Дочерний процесс
         execve(path, res, env);
+        perror("execve failed"); // Если execve вернул управление, значит произошла ошибка
+        exit(EXIT_FAILURE);
+    }
     else
-        waitpid(pid, &minishell->exit_code, 0);
+    {
+        // Родительский процесс
+        waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+            minishell->exit_code = WEXITSTATUS(status);
+        else
+            minishell->exit_code = 1; // Установить код ошибки, если процесс завершился некорректно
+    }
 }
 
 static int is_builtin(char *cmd)
