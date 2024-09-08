@@ -40,7 +40,8 @@ LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 # INCFLAGS = -I./includes -I/*your path to readline*/readline/include
 # LDFLAGS = -L/*your path to readline*/readline/lib -lreadline
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 
