@@ -8,6 +8,12 @@ t_cmd	*create_empty_node(void)
 	empty_node = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!empty_node)
 		exit_fail("Failed to create new command node");
+	empty_node->cmd = NULL;
+	empty_node->inpipe = 0;
+	empty_node->outpipe = 0;
+	empty_node->infile = NULL;
+	empty_node->outfile = NULL;
+	empty_node->next = NULL;
 	return (empty_node);
 }
 
@@ -49,7 +55,8 @@ void	add_command(t_cmd *current, char *token)
 		while (current->cmd[command_len])
 			command_len++;
 	}
-	command = ft_realloc(current->cmd, (command_len + 2) * sizeof(char *));
+	command = (char **)ft_realloc(current->cmd,
+		(command_len + 2) * sizeof(char *));
 	if (!command)
 		exit_fail("Failed to allocate memory for command");
 	current->cmd = command;

@@ -22,6 +22,7 @@ void	parser_main(t_minishell **minishell, char ***tokens)
 	int		i;
 
 	current = NULL;
+	// current->cmd = NULL;
 	cmd_list = NULL;
 	i = 0;
 	while ((*tokens)[i])

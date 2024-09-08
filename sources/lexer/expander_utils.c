@@ -80,6 +80,8 @@ int	dollar_special_case(char *token)
 		}
 		if (*(token + 1) && *(token + 1) == '$')
 			return (1);
+		if (*token == '$')
+			return (1);
 		if (!*(token + 1))
 			return (1);
 	}

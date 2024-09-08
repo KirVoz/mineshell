@@ -104,7 +104,7 @@ void	expander_main(t_minishell *minishell, char **tokens)
 			new_line_len = expanded_line_len(minishell, cp_token);
 			*tokens = expand_quoted_line(minishell, *tokens, new_line_len);
 		}
-		else if (!dollar_special_case(*tokens))
+		else if (dollar_special_case(*tokens))
 		{
 			new_line_len += env_value_len(minishell, &cp_token);
 			*tokens = expand_dollar_line(minishell, *tokens, new_line_len);
