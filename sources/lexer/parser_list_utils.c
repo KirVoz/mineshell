@@ -50,13 +50,11 @@ void	add_command(t_cmd *current, char *token)
 	command_len = 0;
 	if (current->cmd)
 	{
-		printf("DLINA KOMANDI -> %d\n", command_len);
-		printf("KOMANDA -> %s\n", current->cmd[0]);
 		while (current->cmd[command_len])
 			command_len++;
 	}
 	command = (char **)ft_realloc(current->cmd,
-		(command_len + 2) * sizeof(char *));
+	(command_len + 2) * sizeof(char *));
 	if (!command)
 		exit_fail("Failed to allocate memory for command");
 	current->cmd = command;
