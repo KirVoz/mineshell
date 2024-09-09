@@ -1,12 +1,12 @@
 #include "lexer.h"
 #include "minishell.h"
 
-static void exe_solo(t_minishell *minishell, char *line)
+static void exe_solo(t_minishell *minishell, char **cmd)
 {
     pid_t pid;
     int status;
 
-    printf("Executing solo command: %s\n", line);
+    printf("Executing solo command: %s\n", *cmd);
     pid = fork();
     if (pid == -1)
     {
@@ -16,7 +16,7 @@ static void exe_solo(t_minishell *minishell, char *line)
     if (pid == 0)
     {
         // Дочерний процесс
-        execute_command(line, minishell);
+        execute_command(*cmd, minishell);
         exit(minishell->exit_code); // Завершить дочерний процесс с кодом завершения
     }
     else
@@ -59,7 +59,7 @@ static void exe_from_env(t_minishell *minishell, char *path, char **res, char **
     }
 }
 
-static int is_builtin(char *cmd)
+static int  is_builtin(char *cmd)
 {
     size_t cmd_len;
 
@@ -251,58 +251,98 @@ int is_pipe(t_minishell *minishell, char **env)
     return 1;
 }
 
-void execute_single_command(t_minishell *minishell, char *cmd, char **env)
+void execute_single_command(t_minishell *minishell, char **cmd, char **env)
 {
     char *path;
 
-    if (is_builtin(cmd))
+    if (is_builtin(cmd[0]))
     {
-        printf("Executing built-in command: %s\n", cmd);
+        printf("Executing built-in command: %s\n", cmd[0]);
         exe_solo(minishell, cmd);
     }
     else
     {
-        path = get_path(minishell, cmd);
+        path = get_path(minishell, cmd[0]);
         if (!path)
         {
-            not_found(minishell, cmd);
+            not_found(minishell, cmd[0]);
             return;
         }
-        printf("Executing external command: %s\n", cmd);
-        exe_from_env(minishell, path, &cmd, env);
+        printf("Executing external command: %s\n", cmd[0]);
+        exe_from_env(minishell, path, cmd, env);
     }
 }
 
 void execute(t_minishell *minishell, char **env)
 {
-    t_cmd *current;
-    char **res;
+    t_cmd *cur;
 
-    printf("Starting execution\n");
+    // Проверка на наличие пайпов
+    if (is_pipe(minishell, env))
+        return;
 
-    res = array_init();
-    if (!*res) {
-        exit_fail("Failed to allocate memory for result in execute");
+    // Проход по всем командам в списке и выполнение каждой из них
+    cur = minishell->cmd;
+    while (cur)
+    {
+        execute_single_command(minishell, cur->cmd, env);
+        cur = cur->next;
     }
-
-    current = minishell->cmd;
-	while (current)
-	{
-		printf("!!!Command: %s\n", current->cmd[0]);
-		current = current->next;
-	}
-	current = minishell->cmd;
-
-    *res = ft_strdup(current->cmd[0]);
-    if (!*res) {
-        exit_fail("Failed to allocate memory for command string");
-    }
-
-    printf("Command to execute: %s\n", *res);
-
-	(void)env;
-    if (!is_pipe(minishell, env)) {
-        execute_single_command(minishell, *res, env);
-    }
-    printf("Execution finished\n\n");
 }
+
+// void execute_single_command(t_minishell *minishell, char *cmd, char **env)
+// {
+//     char *path;
+
+//     if (is_builtin(cmd))
+//     {
+//         printf("Executing built-in command: %s\n", cmd);
+//         exe_solo(minishell, cmd);
+//     }
+//     else
+//     {
+//         path = get_path(minishell, cmd);
+//         if (!path)
+//         {
+//             not_found(minishell, cmd);
+//             return;
+//         }
+//         printf("Executing external command: %s\n", cmd);
+//         exe_from_env(minishell, path, &cmd, env);
+//     }
+// }
+
+// void execute(t_minishell *minishell, char **env)
+// {
+//     t_cmd *current;
+//     char **res;
+
+//     printf("Starting execution\n");
+
+//     res = array_init();
+//     if (!*res) {
+//         exit_fail("Failed to allocate memory for result in execute");
+//     }
+
+//     current = minishell->cmd;
+// 	while (current)
+// 	{
+// 		printf("!!!Command: %s\n", current->cmd[0]);
+// 		current = current->next;
+// 	}
+// 	current = minishell->cmd;
+
+//     *res = ft_strdup(current->cmd[0]);
+//     if (!*res) {
+//         exit_fail("Failed to allocate memory for command string");
+//     }
+
+//     printf("Command to execute: %s\n", *res);
+
+// 	(void)env;
+//     if (!is_pipe(minishell, env)) {
+//         printf("SOLO\n");
+//         execute_single_command(minishell, *res, env);
+//     }
+//     printf("Execution finished\n\n");
+// }
