@@ -11,6 +11,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/commands.c \
 		$(EXE_PATH)/execute.c \
 		$(EXE_PATH)/path.c \
+		$(EXE_PATH)/pipes.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
 		$(SRC_PATH)/error_handler.c \
