@@ -16,8 +16,8 @@ void	print_list_state(t_minishell *minishell, char *name)
 		arg_index = 0;
 		while (current->cmd[arg_index] != NULL)
 		{
-			printf("  Arg %d: %s, infile %s outfile %s, inpipe %d outpipe %d\n", arg_index,
-				current->cmd[arg_index], current->infile, current->outfile, current->inpipe, current->outpipe);
+			printf("  Arg %d: %s, infile %s outfile %s, mode %c, inpipe %d outpipe %d\n", arg_index,
+				current->cmd[arg_index], current->infile, current->outfile, current->mode, current->inpipe, current->outpipe);
 			arg_index++;
 		}
 		current = current->next;

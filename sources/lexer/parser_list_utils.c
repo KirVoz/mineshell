@@ -11,6 +11,7 @@ t_cmd	*create_empty_node(void)
 	empty_node->cmd = NULL;
 	empty_node->inpipe = 0;
 	empty_node->outpipe = 0;
+	empty_node->mode = 'n';
 	empty_node->infile = NULL;
 	empty_node->outfile = NULL;
 	empty_node->next = NULL;

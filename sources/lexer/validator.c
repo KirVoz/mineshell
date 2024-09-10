@@ -80,5 +80,6 @@ int	validator_main(t_minishell *minishell, char ***tokens)
 	redirections_check(tokens);
 	if (!hanging_redirections(*tokens))
 		return (syntax_error(minishell, "newline"));
+	
 	return (1);
 }
