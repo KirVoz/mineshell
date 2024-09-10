@@ -38,6 +38,7 @@ typedef struct s_cmd
 	char			**cmd;
 	char			*infile;
 	char			*outfile;
+	char			mode; // o - overwrite, a - append, n - none
 	int				inpipe;
 	int				outpipe;
 	struct s_cmd	*next;

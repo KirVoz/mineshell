@@ -40,5 +40,9 @@ void	handle_redirections(t_cmd *current, char *delimiter, char *file)
 	{
 		free(current->outfile);
 		current->outfile = ft_strdup(file);
+		if (ft_strncmp(delimiter, ">>", delimiter_len) == 0)
+			current->mode = 'a';
+		else
+			current->mode = 'o';
 	}
 }
