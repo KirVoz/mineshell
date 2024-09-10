@@ -12,6 +12,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <fcntl.h>
 
 # define PROMPT "minishell$ "
 # define PROMPT_HEREDOC "heredoc> "
@@ -40,6 +41,7 @@ typedef struct s_cmd
 	char			*outfile;
 	int				inpipe;
 	int				outpipe;
+	int 			append;
 	struct s_cmd	*next;
 }					t_cmd;
 

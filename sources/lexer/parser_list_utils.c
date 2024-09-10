@@ -14,6 +14,7 @@ t_cmd	*create_empty_node(void)
 	empty_node->infile = NULL;
 	empty_node->outfile = NULL;
 	empty_node->next = NULL;
+	empty_node->append = 1; // new for append test тут надо реализовать переключение на 1  и 0 в зависимости от наличия или отсутствия оператора >> (пока что для проверки стоит 1)
 	return (empty_node);
 }
 
