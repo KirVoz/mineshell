@@ -98,6 +98,14 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
 
     if (is_builtin(current->cmd[0]))
         execute_command(current->cmd[0], minishell);
+    else if (ft_strncmp(current->cmd[0], "./minishell", 11) == 0)
+    {
+        if (execve("./minishell", current->cmd, env) == -1)
+        {
+            perror("execve ./minishell");
+            exit(EXIT_FAILURE);
+        }
+    }
     else
     {
         if (execve(get_path(minishell, current->cmd[0]), current->cmd, env) == -1)
@@ -188,25 +196,24 @@ static void wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
     minishell->exit_code = exit_code;
 }
 
+
 static void execute_commands(t_minishell *minishell, char **env)
 {
-    int num_cmd = count_commands(minishell->cmd);
-    int **pipes = NULL;
-    pid_t *pids = NULL;
+    int num_cmd;
+    int **pipes;
+    pid_t *pids;
 
+    num_cmd = count_commands(minishell->cmd);
+    pipes = NULL;
+    pids = NULL;
     if (num_cmd > 1)
-    {
         pipes = setup_pipes(num_cmd);
-    }
-
     pids = fork_processes(minishell, num_cmd, pipes, env);
-
     if (num_cmd > 1)
     {
         close_pipes(pipes, num_cmd);
         free_pipes(pipes, num_cmd);
     }
-
     wait_for_processes(pids, num_cmd, minishell);
     free(pids);
 }
