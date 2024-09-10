@@ -60,6 +60,8 @@ int	lexer_main(t_minishell *minishell, char *line)
 
 	if (quote_counter(line))
 		return (syntax_quote_error(minishell, quote_counter(line)));
+	// if (ft_strncmp(line, "<<", ft_strlen(line) == 0))
+	// 	line = heredoc_main(line);
 	tokens = tokenizator(line);
 	expander_main(minishell, tokens);
 	if (!validator_main(minishell, &tokens))
