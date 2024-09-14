@@ -15,6 +15,40 @@ void	process_token(t_cmd *current, char *token, char *next_token, int *i)
 	}
 }
 
+char	**alloc_empty_cmd(void)
+{
+	char	**empty_cmd;
+
+	empty_cmd = NULL;
+	empty_cmd = (char **)malloc(2 * sizeof(char *));
+	if (!empty_cmd)
+		exit_fail("Failed to allocate memory for command array");
+	empty_cmd[0] = ft_strdup("\0");
+	if (!empty_cmd[0])
+	{
+		free(empty_cmd);
+		exit_fail("Failed to allocate memory for command");
+	}
+	return (empty_cmd);
+}
+
+
+void	handle_empty_cmd(t_cmd **current)
+{
+	// t_cmd	*command_node;
+	// t_cmd	*last;
+
+	if (!(*current)->cmd)
+		(*current)->cmd = alloc_empty_cmd();
+	// command_node = create_empty_node();
+	// command_node->cmd = alloc_empty_cmd();
+	// last = *current;
+	// while (last->next)
+	// 	last = last->next;
+	// last->next = command_node;
+	// *current = command_node;
+}
+
 void	parser_main(t_minishell **minishell, char ***tokens)
 {
 	t_cmd	*current;

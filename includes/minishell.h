@@ -15,8 +15,7 @@
 # include <fcntl.h>
 
 # define PROMPT "minishell$ "
-# define PROMPT_HEREDOC "heredoc> "
-# define PROMPT_PIPE_HEREDOC "pipe heredoc>"
+# define PROMPT_HEREDOC "> "
 
 typedef struct s_minishell	t_minishell;
 typedef void				(*func)(t_minishell *s_minishell);
@@ -39,10 +38,11 @@ typedef struct s_cmd
 	char			**cmd;
 	char			*infile;
 	char			*outfile;
-	char			mode; // o - overwrite, a - append, n - none
+	char			*skipped_in;
+	char			*skipped_out;
+	int 			append;
 	int				inpipe;
 	int				outpipe;
-	int 			append;
 	struct s_cmd	*next;
 }					t_cmd;
 
@@ -85,6 +85,7 @@ void		init_minishell(t_minishell *minishell, char **env);
 void		exit_fail(const char *exit_message);
 void		error_handler(t_minishell *minishell, char *error);
 void		not_found(t_minishell *minishell, char *cmd);
+void   		no_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
 int			syntax_quote_error(t_minishell *minishell, char *token);
 

@@ -9,13 +9,14 @@ t_cmd	*create_empty_node(void)
 	if (!empty_node)
 		exit_fail("Failed to create new command node");
 	empty_node->cmd = NULL;
-	empty_node->inpipe = 0;
-	empty_node->outpipe = 0;
-	empty_node->mode = 'n';
 	empty_node->infile = NULL;
 	empty_node->outfile = NULL;
+	empty_node->skipped_in = NULL;
+	empty_node->skipped_out = NULL;
+	empty_node->append = 0;
+	empty_node->inpipe = 0;
+	empty_node->outpipe = 0;
 	empty_node->next = NULL;
-	empty_node->append = 1; // new for append test тут надо реализовать переключение на 1  и 0 в зависимости от наличия или отсутствия оператора >> (пока что для проверки стоит 1)
 	return (empty_node);
 }
 
@@ -40,6 +41,8 @@ void	process_node(t_cmd **current, t_cmd **cmd_list, char *token)
 		}
 		*current = command_node;
 	}
+	else if (!(*current)->cmd)
+		handle_empty_cmd(current);
 }
 
 void	add_command(t_cmd *current, char *token)
@@ -55,7 +58,7 @@ void	add_command(t_cmd *current, char *token)
 		while (current->cmd[command_len])
 			command_len++;
 	}
-	command = (char **)ft_realloc(current->cmd,
+	command = (char **)ft_realloc(current->cmd, command_len * sizeof(char *),
 	(command_len + 2) * sizeof(char *));
 	if (!command)
 		exit_fail("Failed to allocate memory for command");

@@ -15,6 +15,9 @@ SRC =	$(SRC_PATH)/main.c \
 		$(SRC_PATH)/utils.c \
 		$(SRC_PATH)/error_handler.c \
 		$(LXR_PATH)/lexer.c \
+		$(LXR_PATH)/pipe_heredoc.c \
+		$(LXR_PATH)/heredoc_utils.c \
+		$(LXR_PATH)/pipe_heredoc_utils.c \
 		$(LXR_PATH)/tokenizator.c \
 		$(LXR_PATH)/tokenizator_utils.c \
 		$(LXR_PATH)/expander.c \
@@ -39,8 +42,8 @@ LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 # INCFLAGS = -I./includes -I/*your path to readline*/readline/include
 # LDFLAGS = -L/*your path to readline*/readline/lib -lreadline
 
-CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 

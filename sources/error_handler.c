@@ -23,6 +23,14 @@ void    not_found(t_minishell *minishell, char *cmd)
     ft_putstr_fd("\n", 2);
     minishell->exit_code = 127;
 }
+void    no_file(t_minishell *minishell, char *filename)
+{
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd(filename, 2);
+    ft_putstr_fd(": ", 2);
+    perror("");
+    minishell->exit_code = 1;
+}
 
 int    syntax_error(t_minishell *minishell, char *token)
 {

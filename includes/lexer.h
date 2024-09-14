@@ -42,7 +42,7 @@ int		redirections_unification(char **tokens);
 int		pipe_redirections_mistake(t_minishell *minishell, char **tokens);
 
 void	delimiter_counter(char **token, int *pipes, int *right_redirs,
-		int *left_redirs);
+			int *left_redirs);
 int		tokens_counter(char **tokens);
 char	**tokens_realloc(char **tokens);
 int		redirections_check(char ***tokens);
@@ -58,8 +58,26 @@ int		if_pipe(char *token);
 int		is_redirection(char *token);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
 
-void	*ft_realloc(void *ptr, size_t size);
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void	free_tokens(char **tokens);
 char	**array_init(void);
+
+// pipe_heredoc // del
+char	**pipe_heredoc_main(char *line);
+char	**handle_heredoc(char *line);
+
+size_t	array_len(char **array);
+size_t	redirections_count(char **tokens);
+char	*strdup_nl(const char *s1);
+
+char	*find_delimeter(char **tokens, size_t *i);
+char	**read_heredoc_lines(char *delimiter);
+void	add_line_to_heredoc(char ***heredoc_tokens, size_t *size,
+			size_t *capacity, char *line);
+char	**merge_tokens(char **tokens, char ***heredoc_tokens, size_t *i);
+
+char	hanging_pipe_heredoc(char *line);
+
+void	handle_empty_cmd(t_cmd **current);
 
 #endif

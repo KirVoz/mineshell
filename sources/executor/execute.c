@@ -3,13 +3,10 @@
 
 static int  is_builtin(char *cmd)
 {
-    size_t cmd_len;
-
-    cmd_len = ft_strlen(cmd);
-    if (ft_strncmp(cmd, "echo", cmd_len) == 0 || ft_strncmp(cmd, "cd", cmd_len) == 0 || 
-        ft_strncmp(cmd, "pwd", cmd_len) == 0 || ft_strncmp(cmd, "export", cmd_len) == 0 || 
-        ft_strncmp(cmd, "unset", cmd_len) == 0 || ft_strncmp(cmd, "env", cmd_len) == 0 || 
-        ft_strncmp(cmd, "exit", cmd_len) == 0)
+    if (ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 || 
+        ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "export", 6) == 0 || 
+        ft_strncmp(cmd, "unset", 5) == 0 || ft_strncmp(cmd, "env", 3) == 0 || 
+        ft_strncmp(cmd, "exit", 4) == 0)
         return (1);
     return (0);
 }
@@ -27,14 +24,14 @@ static void free_pipes(int **pipes, int num_cmd)
     free(pipes);
 }
 
-static void open_file(const char *filename, int flags, int std_fd)
+static void open_file(t_minishell *minishell, const char *filename, int flags, int std_fd)
 {
     int fd;
 
     fd = open(filename, flags, 0644);
     if (fd == -1)
     {
-        perror("open file");
+        no_file(minishell, (char *)filename);
         exit(EXIT_FAILURE);
     }
     if (dup2(fd, std_fd) == -1)
@@ -45,11 +42,11 @@ static void open_file(const char *filename, int flags, int std_fd)
     close(fd);
 }
 
-static void redirect_input(t_cmd *current, int **pipes, int i)
+static void redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, int i)
 {
     if (current->infile)
     {
-        open_file(current->infile, O_RDONLY, STDIN_FILENO);
+        open_file(minishell, current->infile, O_RDONLY, STDIN_FILENO);
     }
     else if (i > 0)
     {
@@ -61,12 +58,16 @@ static void redirect_input(t_cmd *current, int **pipes, int i)
     }
 }
 
-static void redirect_output(t_cmd *current, int **pipes, int i, int num_cmd)
+static void redirect_output(t_minishell *minishell, t_cmd *current, int **pipes, int i, int num_cmd)
 {
     if (current->outfile)
     {
-        int flags = O_WRONLY | O_CREAT | (current->append ? O_APPEND : O_TRUNC);
-        open_file(current->outfile, flags, STDOUT_FILENO);
+        int flags;
+        if (current->append)
+            flags = O_WRONLY | O_CREAT | O_APPEND;
+        else
+            flags = O_WRONLY | O_CREAT | O_TRUNC;
+        open_file(minishell, current->outfile, flags, STDOUT_FILENO);
     }
     else if (i < num_cmd - 1)
     {
@@ -92,8 +93,8 @@ static void close_pipes(int **pipes, int num_cmd)
 
 static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, int i, int num_cmd, char **env)
 {
-    redirect_input(current, pipes, i);
-    redirect_output(current, pipes, i, num_cmd);
+    redirect_input(minishell, current, pipes, i);
+    redirect_output(minishell, current, pipes, i, num_cmd);
     close_pipes(pipes, num_cmd);
 
     if (is_builtin(current->cmd[0]))

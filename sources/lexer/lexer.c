@@ -54,15 +54,29 @@ char	**tokenizator(char *line)
 	return (result);
 }
 
+char	hanging_pipe_heredoc(char *line)
+{
+	if (ft_strchr(line, '<')
+			&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
+			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
+		return ('h');
+	else if (ft_strrchr(line, '|')
+			&& !(*(ft_strrchr(line, '|') + 1)))
+		return ('p');
+	return (0);
+}
+
 int	lexer_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
 
 	if (quote_counter(line))
 		return (syntax_quote_error(minishell, quote_counter(line)));
-	// if (ft_strncmp(line, "<<", ft_strlen(line) == 0))
-	// 	line = heredoc_main(line);
-	tokens = tokenizator(line);
+	if (hanging_pipe_heredoc(line))
+		tokens = pipe_heredoc_main(line);
+	else
+		tokens = tokenizator(line);
+	print_tokens_state(tokens, "after tokenizator");
 	expander_main(minishell, tokens);
 	if (!validator_main(minishell, &tokens))
 		return (0);
