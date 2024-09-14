@@ -10,7 +10,7 @@ int	pipe_redirections_mistake(t_minishell *minishell, char **tokens)
 	while (*tokens)
 	{
 		delimiter_counter(tokens, &pipes, &right_redirs, &left_redirs);
-		if (pipes > 1 || *tokens[0] == '|')
+		if (pipes > 1)
 			return (syntax_error(minishell, "|"));
 		else if (right_redirs == 3)
 			return (syntax_error(minishell, ">"));

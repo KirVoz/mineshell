@@ -11,11 +11,7 @@ t_blin commands[7] = {
     { "exit", execute_exit },
 };
 
-// static void	ft_putstr_fd(char *str, int fd)
-// {
-// 	write(fd, str, ft_strlen(str));
-// }
-// Function to execute the 'cd' command
+
 void execute_cd(t_minishell *minishell, int fd)
 {
     char *path;
@@ -37,8 +33,18 @@ void execute_cd(t_minishell *minishell, int fd)
 
 void execute_echo(t_minishell *minishell, int fd)
 {
-    (void)minishell;
-    ft_putstr_fd("Executing 'echo' command\n", fd);
+    int i = 1;
+    if (minishell->cmd->cmd[i] != NULL && ft_strncmp(minishell->cmd->cmd[i], "-n", 2) == 0)
+        i++;
+    while (minishell->cmd->cmd[i] != NULL)
+    {
+        ft_putstr_fd(minishell->cmd->cmd[i], fd);
+        if (minishell->cmd->cmd[i + 1] != NULL)
+            ft_putstr_fd(" ", fd);
+        i++;
+    }
+    if (minishell->cmd->cmd[1] != NULL && ft_strncmp(minishell->cmd->cmd[1], "-n", 2) != 0)
+        ft_putstr_fd("\n", fd);
 }
 
 void execute_pwd(t_minishell *minishell, int fd)
