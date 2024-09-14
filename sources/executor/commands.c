@@ -11,20 +11,37 @@ t_blin commands[7] = {
     { "exit", execute_exit },
 };
 
+// static void	ft_putstr_fd(char *str, int fd)
+// {
+// 	write(fd, str, ft_strlen(str));
+// }
 // Function to execute the 'cd' command
-void execute_cd(t_minishell *minishell)
+void execute_cd(t_minishell *minishell, int fd)
 {
-    (void)minishell;
-    printf("Executing 'cd' command\n");
+    char *path;
+
+    if (minishell->cmd->cmd[1] == NULL)
+    {
+    path = getenv("HOME");
+        if (path == NULL)
+        {
+            ft_putstr_fd("cd: HOME not set\n", fd);
+            return;
+        }
+    }
+    else
+        path = minishell->cmd->cmd[1];
+    if (chdir(path) != 0)
+        perror("cd");
 }
 
-void execute_echo(t_minishell *minishell)
+void execute_echo(t_minishell *minishell, int fd)
 {
     (void)minishell;
-    printf("Executing 'echo' command\n");
+    ft_putstr_fd("Executing 'echo' command\n", fd);
 }
 
-void execute_pwd(t_minishell *minishell)
+void execute_pwd(t_minishell *minishell, int fd)
 {
     char *cwd;
     size_t size = 1024;
@@ -42,50 +59,47 @@ void execute_pwd(t_minishell *minishell)
         free(cwd);
         exit(EXIT_FAILURE);
     }
-    if (printf("%s\n", cwd) < 0)
-    {
-        perror("Failed to write to stdout");
-        free(cwd);
-        exit(EXIT_FAILURE);
-    }
+    ft_putstr_fd(cwd, fd);
+    ft_putstr_fd("\n", fd);
     free(cwd);
 }
 
-void execute_export(t_minishell *minishell)
+void execute_export(t_minishell *minishell, int fd)
 {
     (void)minishell;
-    printf("Executing 'export' command\n");
+    ft_putstr_fd("Executing 'export' command\n", fd);
 }
 
-void execute_unset(t_minishell *minishell)
+void execute_unset(t_minishell *minishell, int fd)
 {
     (void)minishell;
-    printf("Executing 'unset' command\n");
+    ft_putstr_fd("Executing 'unset' command\n", fd);
 }
 
-void execute_env(t_minishell *minishell)
+void execute_env(t_minishell *minishell, int fd)
 {
     t_list *current = minishell->env->envp_var;
     while (current != NULL)
     {
-        printf("%s\n", (char *)current->content);
+        ft_putstr_fd((char *)current->content, fd);
         current = current->next;
     }
 }
 
-void execute_exit(t_minishell *minishell)
+void execute_exit(t_minishell *minishell, int fd)
 {
     (void)minishell;
-    printf("Executing 'exit' command\n"); // EXIT надо делать прирывающим цикл в мэйне иначе не выходит !!!
+    ft_putstr_fd("Executing 'exit' command\n", fd); // EXIT надо делать прирывающим цикл в мэйне иначе не выходит !!!
+    exit(0);
 }
 
-void execute_command(char *cmd, t_minishell *minishell)
+void execute_command(char *cmd, t_minishell *minishell, int fd)
 {
     for (int i = 0; i < 7; i++)
     {
         if (strcmp(cmd, commands[i].name) == 0)
         {
-            commands[i].func(minishell);
+            commands[i].func(minishell, fd);
             return;
         }
     }

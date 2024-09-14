@@ -53,6 +53,13 @@ static char *find_executable(char **paths, char *cmd)
     return NULL;
 }
 
+static bool is_explicit_path(const char *cmd)
+{
+    return (cmd[0] == '/' || 
+            (cmd[0] == '.' && cmd[1] == '/') || 
+            (cmd[0] == '.' && cmd[1] == '.' && cmd[2] == '/'));
+}
+
 char *get_path(t_minishell *minishell, char *cmd)
 {
     char **paths;
@@ -60,6 +67,13 @@ char *get_path(t_minishell *minishell, char *cmd)
 
     if (*cmd == '\0')
         return (NULL);
+    if (is_explicit_path(cmd))
+    {
+        if (access(cmd, F_OK) == 0)
+            return (strdup(cmd));
+        else
+            return (NULL);
+    }
     paths = get_paths(minishell->env->envp_var);
     if (paths == NULL)
         return (NULL);

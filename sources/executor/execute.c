@@ -98,7 +98,10 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
     close_pipes(pipes, num_cmd);
 
     if (is_builtin(current->cmd[0]))
-        execute_command(current->cmd[0], minishell);
+    {
+        execute_command(current->cmd[0], minishell, STDOUT_FILENO);
+        exit(EXIT_SUCCESS);
+    }
     else
     {
         if (execve(get_path(minishell, current->cmd[0]), current->cmd, env) == -1)
@@ -150,6 +153,7 @@ static pid_t *fork_processes(t_minishell *minishell, int num_cmd, int **pipes, c
     pids = malloc(sizeof(pid_t) * num_cmd);
     while (++i < num_cmd)
     {
+        printf("I - %d\n", i);
         pids[i] = fork();
         if (pids[i] == -1)
         {
@@ -191,23 +195,21 @@ static void wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
 
 static void execute_commands(t_minishell *minishell, char **env)
 {
-    int num_cmd = count_commands(minishell->cmd);
-    int **pipes = NULL;
-    pid_t *pids = NULL;
+    int num_cmd;
+    int **pipes;
+    pid_t *pids;
 
+    num_cmd = count_commands(minishell->cmd);
+    pipes = NULL;
+    pids = NULL;
     if (num_cmd > 1)
-    {
         pipes = setup_pipes(num_cmd);
-    }
-
     pids = fork_processes(minishell, num_cmd, pipes, env);
-
     if (num_cmd > 1)
     {
         close_pipes(pipes, num_cmd);
         free_pipes(pipes, num_cmd);
     }
-
     wait_for_processes(pids, num_cmd, minishell);
     free(pids);
 }
