@@ -29,7 +29,7 @@ typedef enum s_redirect
 
 typedef struct s_env
 {
-	t_list			*envp_var;
+	char			**envp_var;
 }					t_env;
 
 typedef struct s_cmd
@@ -60,6 +60,9 @@ typedef struct s_minishell
 	int		exit_code;
 }			t_minishell;
 
+
+/*utils.c*/
+void		*ft_realloc_exe(void *ptr, size_t size);
 /*emulated comms*/
 void		execute_cd(t_minishell *minishell, int fd);
 void		execute_echo(t_minishell *minishell, int fd);
@@ -71,7 +74,7 @@ void		execute_exit(t_minishell *minishell, int fd);
 void		execute_command(char *cmd, t_minishell *minishell, int fd);
 
 /*exe*/
-void		execute(t_minishell *minishell, char **env);
+void		execute(t_minishell *minishell);
 /*signals*/
 void		ft_signals(void);
 

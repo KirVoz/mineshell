@@ -3,17 +3,25 @@
 
 static void	init_envp(t_minishell *minishell, char **env)
 {
-	int	i;
+	int i;
+	int len;
 
+	len = 0;
+	while(env[len])
+		len++;
+	minishell->env->envp_var = (char **)malloc(sizeof(char *) * (len + 2));
+	if (minishell->env->envp_var == NULL)
+		exit_fail("Failed to allocate memory for envp_var");
 	i = 0;
-	while (env[i] != NULL)
+	while(env[i] != NULL)
 	{
-		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
-			i++;
-		ft_lstadd_back(&minishell->env->envp_var, ft_lstnew(env[i]));
+		minishell->env->envp_var[i] = ft_strdup(env[i]);
+		if (minishell->env->envp_var[i] == NULL)
+			exit_fail("Failed to allocate memory for envp_var[i]");
 		i++;
 	}
-	ft_lstadd_back(&minishell->env->envp_var, ft_lstnew("SHLVL=1"));
+	minishell->env->envp_var[i] = ft_strdup("SHLVL=1");
+	minishell->env->envp_var[++i] = NULL;
 }
 
 void	init_minishell(t_minishell *minishell, char **env)
@@ -37,11 +45,10 @@ int	main(int ac, char **av, char **env)
 	char		*line;
 
 	(void)av;
-	// (void)env;
 	ft_signals();
 	if (ac == 1)
 	{
-		init_minishell(&minishell, env);
+		init_minishell(&minishell, env); // в экзит хендлере не освобождается память для envp_var
 		while (1)
 		{
 			line = readline(PROMPT);
@@ -52,7 +59,7 @@ int	main(int ac, char **av, char **env)
 				add_history(line);
             	if (!lexer_main(&minishell, line))
 					continue ;
-				execute(&minishell, env);
+				execute(&minishell);
 			}
 			free(line);
 		}

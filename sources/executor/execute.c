@@ -153,7 +153,6 @@ static pid_t *fork_processes(t_minishell *minishell, int num_cmd, int **pipes, c
     pids = malloc(sizeof(pid_t) * num_cmd);
     while (++i < num_cmd)
     {
-        printf("I - %d\n", i);
         pids[i] = fork();
         if (pids[i] == -1)
         {
@@ -214,7 +213,10 @@ static void execute_commands(t_minishell *minishell, char **env)
     free(pids);
 }
 
-void execute(t_minishell *minishell, char **env)
+void execute(t_minishell *minishell)
 {
+    char **env;
+
+    env = minishell->env->envp_var;
     execute_commands(minishell, env);
 }

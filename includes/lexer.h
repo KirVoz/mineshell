@@ -33,7 +33,8 @@ size_t	expanded_line_len(t_minishell *minishell, char *token);
 int		dollar_special_case(char *token);
 
 char	*allocate_env_value(char *value);
-char	*find_env_value(t_list *env_list, char *var_name);
+char	*find_env_value(char **env_array, char *var_name);
+//char	*find_env_value(t_list *env_list, char *var_name); // поменял в expander_env_utils.c
 char	*get_env_value(t_minishell *minishell, char **token);
 size_t	env_value_len(t_minishell *minishell, char **token);
 
