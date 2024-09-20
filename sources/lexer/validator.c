@@ -10,7 +10,7 @@ int	pipe_redirections_mistake(t_minishell *minishell, char **tokens)
 	while (*tokens)
 	{
 		delimiter_counter(tokens, &pipes, &right_redirs, &left_redirs);
-		if (pipes > 1 || *tokens[0] == '|')
+		if (pipes > 1)
 			return (syntax_error(minishell, "|"));
 		else if (right_redirs == 3)
 			return (syntax_error(minishell, ">"));
@@ -61,6 +61,7 @@ int	hanging_redirections(char **tokens)
 
 	while (*tokens)
 	{
+		printf("deb1 %s\n", *tokens);
 		token_len = ft_strlen(*tokens);
 		if ((ft_strncmp(*tokens, "<", token_len) == 0
 				|| ft_strncmp(*tokens, ">", token_len) == 0

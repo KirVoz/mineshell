@@ -25,9 +25,9 @@ void	init_minishell(t_minishell *minishell, char **env)
 	minishell->env->envp_var = NULL;
 	// Инициализация списка переменных окружения
 	minishell->exit_code = 0;
-	minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (minishell->cmd == NULL)
-		exit_fail("Failed to allocate memory for cmd");
+	// minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
+	// if (minishell->cmd == NULL)
+	// 	exit_fail("Failed to allocate memory for cmd");
 	init_envp(minishell, env);
 }
 
@@ -53,6 +53,7 @@ int	main(int ac, char **av, char **env)
             	if (!lexer_main(&minishell, line))
 					continue ;
 				execute(&minishell, env);
+				printf("executed\n");
 			}
 			free(line);
 		}

@@ -70,7 +70,7 @@ char *get_path(t_minishell *minishell, char *cmd)
     if (is_explicit_path(cmd))
     {
         if (access(cmd, F_OK) == 0)
-            return (strdup(cmd));
+            return (ft_strdup(cmd));
         else
             return (NULL);
     }

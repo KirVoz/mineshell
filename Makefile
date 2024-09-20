@@ -36,21 +36,24 @@ OSRC = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
 
+# INCFLAGS = -I./includes -I/usr/include
+# LDFLAGS = -L/usr/lib -lreadline
+
 INCFLAGS = -I./includes -I/opt/homebrew/opt/readline/include
 LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 
 # INCFLAGS = -I./includes -I/*your path to readline*/readline/include
 # LDFLAGS = -L/*your path to readline*/readline/lib -lreadline
 
-# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 
 all: $(NAME)
 
 $(NAME): $(OSRC) $(LIBFT)
-	@$(CC) $(CFLAGS) $(LDFLAGS) ${OSRC} $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) ${OSRC} $(LIBFT) -o $(NAME) $(LDFLAGS) 
 
 $(LIBFT):
 	@make -C $(LIBFT_PATH)

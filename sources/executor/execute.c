@@ -217,4 +217,5 @@ static void execute_commands(t_minishell *minishell, char **env)
 void execute(t_minishell *minishell, char **env)
 {
     execute_commands(minishell, env);
+    free_minishell(minishell);
 }

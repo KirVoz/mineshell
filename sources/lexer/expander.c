@@ -64,29 +64,32 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 
 char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 {
+	char	*token_cp;
 	char	*result;
 	int		i;
 
+	token_cp = token;
 	i = 0;
 	result = (char *)malloc((len + 1) * sizeof(char));
 	if (!result)
 		exit_fail("Memmory allocation for result in expand_line failed.");
-	while (*token)
+	while (*token_cp)
 	{
-		if (*token == '$')
+		if (*token_cp == '$')
 		{
-			substitute_env(minishell, &token, &result, &i);
+			substitute_env(minishell, &token_cp, &result, &i);
 			continue ;
 		}
 		else
 		{
-			result[i] = *token;
+			result[i] = *token_cp;
 			i++;
 		}
-		token++;
+		token_cp++;
 	}
 	result[i] = '\0';
-	// free(token); need to free token before reassigning, not working now
+	printf("%s %s tokens\n", token, token_cp);
+	free(token);
 	return (result);
 }
 
@@ -101,7 +104,9 @@ void	expander_main(t_minishell *minishell, char **tokens)
 		cp_token = *tokens;
 		if (ft_strchr(*tokens, '"') || ft_strchr(*tokens, '\''))
 		{
+			printf("deb4 %s\n", cp_token);
 			new_line_len = expanded_line_len(minishell, cp_token);
+			printf("deb5 %s\n", cp_token);
 			*tokens = expand_quoted_line(minishell, *tokens, new_line_len);
 		}
 		else if (dollar_special_case(*tokens))
@@ -111,4 +116,5 @@ void	expander_main(t_minishell *minishell, char **tokens)
 		}
 		tokens++;
 	}
+	printf("deb3 %s\n", *tokens);
 }

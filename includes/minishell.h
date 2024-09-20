@@ -79,6 +79,9 @@ void		ft_signals(void);
 void		init_minishell(t_minishell *minishell, char **env);
 
 // utils.c
+// void ft_lstclear(t_list **lst, void (*del)(void *));
+void free_cmd(t_cmd *cmd);
+void free_minishell(t_minishell *minishell);
 
 /*error*/
 void		exit_fail(const char *exit_message);

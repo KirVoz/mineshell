@@ -41,8 +41,8 @@ void	process_node(t_cmd **current, t_cmd **cmd_list, char *token)
 		}
 		*current = command_node;
 	}
-	else if (!(*current)->cmd)
-		handle_empty_cmd(current);
+	// else if (!(*current)->cmd)
+	// 	handle_empty_cmd(current);
 }
 
 void	add_command(t_cmd *current, char *token)

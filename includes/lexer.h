@@ -68,7 +68,6 @@ char	**handle_heredoc(char *line);
 
 size_t	array_len(char **array);
 size_t	redirections_count(char **tokens);
-char	*strdup_nl(const char *s1);
 
 char	*find_delimeter(char **tokens, size_t *i);
 char	**read_heredoc_lines(char *delimiter);
