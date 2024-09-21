@@ -64,6 +64,7 @@ typedef struct s_minishell
 /*utils.c*/
 void		*ft_realloc_exe(void *ptr, size_t size);
 /*emulated comms*/
+int			find_string_in_array(char **array, const char *str, size_t n);
 void		execute_cd(t_minishell *minishell, int fd);
 void		execute_echo(t_minishell *minishell, int fd);
 void		execute_pwd(t_minishell *minishell, int fd);

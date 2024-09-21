@@ -11,31 +11,31 @@ t_blin commands[7] = {
     { "exit", execute_exit },
 };
 
-void    execute_cd(t_minishell *minishell, int fd)
-{
-    char *path;
+// void    execute_cd(t_minishell *minishell, int fd)
+// {
+//     char *path;
 
-    if (minishell->cmd->cmd[1] == NULL)
-    {
-        path = ft_strdup(minishell->env->envp_var[0] + 5);
-        if (path == NULL)
-            exit_fail("Failed to allocate memory for path");
-    }
-    else
-    {
-        path = ft_strdup(minishell->cmd->cmd[1]);
-        if (path == NULL)
-            exit_fail("Failed to allocate memory for path");
-    }
-    if (chdir(path) == -1)
-    {
-        ft_putstr_fd("cd: ", fd);
-        perror(path);
-        free(path);
-        return;
-    }
-    free(path);
-}
+//     if (minishell->cmd->cmd[1] == NULL)
+//     {
+//         path = ft_strdup(minishell->env->envp_var[0] + 5);
+//         if (path == NULL)
+//             exit_fail("Failed to allocate memory for path");
+//     }
+//     else
+//     {
+//         path = ft_strdup(minishell->cmd->cmd[1]);
+//         if (path == NULL)
+//             exit_fail("Failed to allocate memory for path");
+//     }
+//     if (chdir(path) == -1)
+//     {
+//         ft_putstr_fd("cd: ", fd);
+//         perror(path);
+//         free(path);
+//         return;
+//     }
+//     free(path);
+// }
 
 void execute_echo(t_minishell *minishell, int fd)
 {

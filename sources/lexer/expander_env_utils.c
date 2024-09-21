@@ -20,7 +20,7 @@ char *find_env_value(char **env_array, char *var_name)
 	i = -1;
     while (env_array[++i])
     {
-        if (ft_strncmp(env_array[i], var_name, var_name_len) == 0 && env_array[i][var_name_len + 1] == '=')
+        if (ft_strncmp(env_array[i], var_name, var_name_len) == 0 && env_array[i][var_name_len] == '=')
             return (ft_strchr(env_array[i], '=') + 1);
     }
     return (NULL);

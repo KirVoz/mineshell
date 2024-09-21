@@ -1,24 +1,18 @@
 #include "minishell.h"
 
-void    execute_pwd(t_minishell *minishell, int fd)
+void execute_pwd(t_minishell *minishell, int fd)
 {
-    char *cwd;
-    size_t size = 1024;
+    char cwd[1024]; // Буфер для хранения текущего пути
 
     (void)minishell;
-    cwd = (char *)malloc(size * sizeof(char));
-    if (cwd == NULL)
+    // Получаем текущую рабочую директорию с помощью getcwd
+    if (getcwd(cwd, sizeof(cwd)) != NULL)
     {
-        perror("Failed to allocate memory");
-        exit(EXIT_FAILURE);
+        ft_putstr_fd(cwd, fd); // Выводим текущую директорию
+        ft_putstr_fd("\n", fd); // Добавляем новую строку
     }
-    if (getcwd(cwd, size) == NULL)
+    else
     {
-        perror("getcwd() error");
-        free(cwd);
-        exit(EXIT_FAILURE);
+        perror("getcwd"); // Выводим сообщение об ошибке, если getcwd не сработала
     }
-    ft_putstr_fd(cwd, fd);
-    ft_putstr_fd("\n", fd);
-    free(cwd);
 }
