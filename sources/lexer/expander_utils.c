@@ -1,6 +1,23 @@
 #include "lexer.h"
 #include "minishell.h"
 
+size_t	strlcpy_eq(char *dst, const char *src, size_t dstsize)
+{
+	size_t	src_len;
+	size_t	copy_len;
+
+	src_len = ft_strlen(src);
+	if (dstsize == 0)
+		return (src_len);
+	copy_len = dstsize - 1;
+	if (copy_len > src_len)
+		copy_len = src_len;
+	ft_memcpy(dst, src, copy_len);
+	dst[copy_len] = '=';
+	dst[copy_len + 1] = '\0';
+	return (src_len);
+}
+
 char	*env_var_copy(char **token)
 {
 	char	*variable_name;
@@ -15,10 +32,10 @@ char	*env_var_copy(char **token)
 		var_len++;
 		(*token)++;
 	}
-	variable_name = (char *)malloc((var_len + 1) * sizeof(char));
+	variable_name = (char *)malloc((var_len + 2) * sizeof(char));
 	if (!variable_name)
 		exit_fail("Memmory allocation for variable_name failed.");
-	ft_strlcpy(variable_name, c_token, var_len + 1);
+	strlcpy_eq(variable_name, c_token, var_len + 1);
 	return (variable_name);
 }
 
@@ -59,6 +76,7 @@ size_t	expanded_line_len(t_minishell *minishell, char *token)
 		else if (*token == '$' && current_quote == '"')
 		{
 			len += env_value_len(minishell, &token);
+// 			printf("expanded_line_len %zu\n", len); //del
 			continue ;
 		}
 		else if (*token != current_quote || in_quote)
@@ -68,21 +86,21 @@ size_t	expanded_line_len(t_minishell *minishell, char *token)
 	return (len);
 }
 
-int	dollar_special_case(char *token)
+int	dollar_special_case(char **token)
 {
-	if (*token == '$')
+	if (**token == '$')
 	{
-		if (*(token + 1) && *(token + 1) == '?')
+		if (*(*token + 1) && *(*token + 1) == '?')
 		{
-			free(token);
-			token = ft_strdup("$?");
-			return (1);
+			free(*token);
+			*token = ft_strdup("$?");
+			return (0);
 		}
-		if (*(token + 1) && *(token + 1) == '$')
+		if (*(*token + 1) && *(*token + 1) == '$')
 			return (1);
-		if (*token == '$')
+		if (**token == '$')
 			return (1);
-		if (!*(token + 1))
+		if (!*(*token + 1))
 			return (1);
 	}
 	return (0);

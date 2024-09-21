@@ -1,11 +1,15 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	process_token(t_cmd *current, char *token, char *next_token, int *i)
+void	process_token(t_minishell **minishell, t_cmd *current,
+			char *token, char *next_token, int *i)
 {
 	if (is_redirection(token))
 	{
 		handle_redirections(current, token, next_token);
+		if (ft_strncmp(token, "<<", 2) == 0)
+			current->heredoc
+				= (*minishell)->heredoc_tmp[(*minishell)->current_heredoc++];
 		*i += 2;
 	}
 	else
@@ -32,23 +36,6 @@ char	**alloc_empty_cmd(void)
 	return (empty_cmd);
 }
 
-
-void	handle_empty_cmd(t_cmd **current)
-{
-	// t_cmd	*command_node;
-	// t_cmd	*last;
-
-	if (!(*current)->cmd)
-		(*current)->cmd = alloc_empty_cmd();
-	// command_node = create_empty_node();
-	// command_node->cmd = alloc_empty_cmd();
-	// last = *current;
-	// while (last->next)
-	// 	last = last->next;
-	// last->next = command_node;
-	// *current = command_node;
-}
-
 void	parser_main(t_minishell **minishell, char ***tokens)
 {
 	t_cmd	*current;
@@ -66,7 +53,9 @@ void	parser_main(t_minishell **minishell, char ***tokens)
 			i++;
 			continue ;
 		}
-		process_token(current, (*tokens)[i], (*tokens)[i + 1], &i);
+		process_token(minishell, current, (*tokens)[i], (*tokens)[i + 1], &i);
+		if (!current->cmd)
+			current->cmd = array_init();
 	}
 	(*minishell)->cmd = cmd_list;
 	free_tokens(*tokens);

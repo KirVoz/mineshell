@@ -73,15 +73,15 @@ int	lexer_main(t_minishell *minishell, char *line)
 	if (quote_counter(line))
 		return (syntax_quote_error(minishell, quote_counter(line)));
 	if (hanging_pipe_heredoc(line))
-		tokens = pipe_heredoc_main(line);
+		tokens = pipe_heredoc_main(minishell, line);
 	else
 		tokens = tokenizator(line);
-	print_tokens_state(tokens, "after tokenizator");
+	// print_tokens_state(tokens, "after tokenizator"); //del
 	expander_main(minishell, tokens);
 	if (!validator_main(minishell, &tokens))
 		return (0);
-	print_tokens_state(tokens, "after validator");
+	// print_tokens_state(tokens, "after validator"); //del
 	parser_main(&minishell, &tokens);
-	print_list_state(minishell, "after parser");
+	// print_list_state(minishell, "after parser"); //del
 	return (1);
 }

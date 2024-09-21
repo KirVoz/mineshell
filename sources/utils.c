@@ -1,26 +1,20 @@
 #include "minishell.h"
 
-void	free_cmd(t_cmd *cmd)
+void	*ft_realloc_exe(void *ptr, size_t size)
 {
-	if (cmd == NULL)
-		return ;
-	if (cmd->cmd != NULL)
-	{
-		for (int i = 0; cmd->cmd[i] != NULL; i++)
-			free(cmd->cmd[i]);
-		free(cmd->cmd);
-	}
-	free(cmd->infile);
-	free(cmd->outfile);
-	free(cmd->skipped_in);
-	free(cmd->skipped_out);
-	free_cmd(cmd->next);
-	free(cmd);
-}
+	void	*new_ptr;
 
-void	free_minishell(t_minishell *minishell)
-{
-	if (minishell == NULL)
-		return ;
-	free_cmd(minishell->cmd);
+	if (ptr == NULL)
+		return (malloc(size));
+	if (size == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+	new_ptr = malloc(size);
+	if (new_ptr == NULL)
+		return (NULL);
+	ft_memcpy(new_ptr, ptr, size);
+	free(ptr);
+	return (new_ptr);
 }

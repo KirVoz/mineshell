@@ -16,22 +16,33 @@ static void ft_free_split(char **split)
     free(split);
 }
 
-static char **get_paths(t_list *envp_var)
+static char **get_paths(t_minishell *minishell)
 {
-    t_list *tmp = envp_var;
-    char **paths = NULL;
+    int i;
 
-    while (tmp)
+    i = -1;
+    while (minishell->env->envp_var[++i] != NULL)
     {
-        if (ft_strncmp(tmp->content, "PATH=", 5) == 0)
-        {
-            paths = ft_split(tmp->content + 5, ':');
+        if (ft_strncmp(minishell->env->envp_var[i], "PATH=", 5) == 0)
             break;
-        }
-        tmp = tmp->next;
     }
-    return paths;
+    return ft_split(minishell->env->envp_var[i] + 5, ':');
 }
+// {
+//     t_list *tmp = envp_var;
+//     char **paths = NULL;
+
+//     while (tmp)
+//     {
+//         if (ft_strncmp(tmp->content, "PATH=", 5) == 0)
+//         {
+//             paths = ft_split(tmp->content + 5, ':');
+//             break;
+//         }
+//         tmp = tmp->next;
+//     }
+//     return paths;
+// }
 
 static char *find_executable(char **paths, char *cmd)
 {
@@ -70,11 +81,11 @@ char *get_path(t_minishell *minishell, char *cmd)
     if (is_explicit_path(cmd))
     {
         if (access(cmd, F_OK) == 0)
-            return (ft_strdup(cmd));
+            return (cmd);
         else
             return (NULL);
     }
-    paths = get_paths(minishell->env->envp_var);
+    paths = get_paths(minishell);
     if (paths == NULL)
         return (NULL);
     path = find_executable(paths, cmd);

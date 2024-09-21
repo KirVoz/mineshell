@@ -4,22 +4,12 @@
 char	*find_end_quote(char *line, int *count)
 {
 	char	quote;
-	int		quotes_before_delimetter;
 	int		i;
 
 	quote = *line;
-	quotes_before_delimetter = 0;
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == quote)
-			quotes_before_delimetter++;
-		if (ft_strchr(DELIMS, line[i]) && quotes_before_delimetter % 2 == 0)
-			break ;
+	i = 1;
+	while (line[i] && line[i] != quote)
 		i++;
-	}
-	while (!(line[i] == quote) || !line[i])
-		i--;
 	if (count)
 		(*count)++;
 	if (!count)
@@ -30,22 +20,12 @@ char	*find_end_quote(char *line, int *count)
 int	find_quotation_len(char *line)
 {
 	char	quote;
-	int		quotes_before_delimetter;
 	int		i;
 
 	quote = *line;
-	quotes_before_delimetter = 0;
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == quote)
-			quotes_before_delimetter++;
-		if (ft_strchr(DELIMS, line[i]) && quotes_before_delimetter % 2 == 0)
-			break ;
+	i = 1;
+	while (line[i] && line[i] != quote)
 		i++;
-	}
-	while (!(line[i] == quote) || !line[i])
-		i--;
 	return (i + 1);
 }
 

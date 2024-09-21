@@ -61,12 +61,12 @@ int	hanging_redirections(char **tokens)
 
 	while (*tokens)
 	{
-		printf("deb1 %s\n", *tokens);
 		token_len = ft_strlen(*tokens);
 		if ((ft_strncmp(*tokens, "<", token_len) == 0
 				|| ft_strncmp(*tokens, ">", token_len) == 0
 				|| ft_strncmp(*tokens, "<<", token_len) == 0
-				|| ft_strncmp(*tokens, ">>", token_len) == 0) && !*(tokens + 1))
+				|| ft_strncmp(*tokens, ">>", token_len) == 0) && !*(tokens + 1)
+				&& token_len != 0)
 			return (0);
 		tokens++;
 	}
@@ -80,6 +80,5 @@ int	validator_main(t_minishell *minishell, char ***tokens)
 	redirections_check(tokens);
 	if (!hanging_redirections(*tokens))
 		return (syntax_error(minishell, "newline"));
-	
 	return (1);
 }

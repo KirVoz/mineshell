@@ -29,7 +29,6 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 		size = old_size;
 	else
 		size = new_size;
-
 	if (!ptr)
 		return (malloc(new_size));
 	if (new_size == 0)
@@ -68,4 +67,48 @@ void	free_tokens(char **tokens)
 	while (tokens[i])
 		free(tokens[i++]);
 	free(tokens);
+}
+
+void	free_cmd(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd == NULL)
+		return ;
+	if (cmd->cmd != NULL)
+	{
+		while (cmd->cmd[i] != NULL)
+			free(cmd->cmd[i++]);
+		free(cmd->cmd);
+	}   
+	free(cmd->infile);
+	free(cmd->outfile);
+	free(cmd->skipped_in);
+	free(cmd->skipped_out);
+	free_cmd(cmd->next);
+	free(cmd);
+}
+
+void	free_heredoc_tmp(char ***heredoc_tmp)
+{
+	int	i;
+
+	i = 0;
+	while (heredoc_tmp[i])
+	{
+		free_tokens(heredoc_tmp[i]);
+		i++;
+	}
+	free(heredoc_tmp);
+}
+
+void	free_minishell(t_minishell *minishell)
+{
+	if (minishell == NULL)
+		return ;
+	minishell->current_heredoc = 0;
+	if (minishell->heredoc_tmp)
+		free_heredoc_tmp(minishell->heredoc_tmp);
+	free_cmd(minishell->cmd);
 }

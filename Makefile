@@ -11,6 +11,8 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/commands.c \
 		$(EXE_PATH)/execute.c \
 		$(EXE_PATH)/path.c \
+		$(EXE_PATH)/pwd.c \
+		$(EXE_PATH)/unset.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
 		$(SRC_PATH)/error_handler.c \
@@ -30,14 +32,11 @@ SRC =	$(SRC_PATH)/main.c \
 		$(LXR_PATH)/validator_utils.c \
 		$(LXR_PATH)/memory_managment.c \
 		$(LXR_PATH)/general_utils.c \
-		$(LXR_PATH)/debug_functions.c
+		$(LXR_PATH)/debug_functions.c 
 
 OSRC = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
-
-# INCFLAGS = -I./includes -I/usr/include
-# LDFLAGS = -L/usr/lib -lreadline
 
 INCFLAGS = -I./includes -I/opt/homebrew/opt/readline/include
 LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
@@ -45,8 +44,8 @@ LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 # INCFLAGS = -I./includes -I/*your path to readline*/readline/include
 # LDFLAGS = -L/*your path to readline*/readline/lib -lreadline
 
-CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-# CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 

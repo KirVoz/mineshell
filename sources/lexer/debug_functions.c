@@ -22,6 +22,9 @@ void	print_list_state(t_minishell *minishell, char *name)
 			   current->skipped_in, current->skipped_out, current->append, current->inpipe, current->outpipe);
 			arg_index++;
 		}
+		int i = 0;
+		while (current->heredoc && current->heredoc[i])
+			printf(" Heredoc: %s\n", current->heredoc[i++]);	
 		current = current->next;
 		cmd_index++;
 	}

@@ -1,6 +1,6 @@
 #ifndef LEXER_H
 # define LEXER_H
-# include "minishell.h" 
+# include "minishell.h"
 # define DELIMS "<>|"
 # define QUOTES "'\""
 
@@ -30,10 +30,10 @@ char	*env_var_copy(char **token);
 char	set_quote(char c, int *in_quote);
 size_t	expanded_env_var_len(char *line);
 size_t	expanded_line_len(t_minishell *minishell, char *token);
-int		dollar_special_case(char *token);
+int		dollar_special_case(char **token);
 
 char	*allocate_env_value(char *value);
-char	*find_env_value(t_list *env_list, char *var_name);
+char	*find_env_value(char **env_array, char *var_name);
 char	*get_env_value(t_minishell *minishell, char **token);
 size_t	env_value_len(t_minishell *minishell, char **token);
 
@@ -48,7 +48,8 @@ char	**tokens_realloc(char **tokens);
 int		redirections_check(char ***tokens);
 
 void	parser_main(t_minishell **minishell, char ***tokens);
-void	process_token(t_cmd *current, char *token, char *next_token, int *i);
+void	process_token(t_minishell **minishell, t_cmd *current, char *token,
+			char *next_token, int *i);
 
 t_cmd	*create_empty_node(void);
 void	process_node(t_cmd **current, t_cmd **cmd_list, char *token);
@@ -61,22 +62,22 @@ void	handle_redirections(t_cmd *current, char *delimiter, char *file);
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 void	free_tokens(char **tokens);
 char	**array_init(void);
+void	free_cmd(t_cmd *cmd);
+void	free_minishell(t_minishell *minishell);
 
-// pipe_heredoc // del
-char	**pipe_heredoc_main(char *line);
-char	**handle_heredoc(char *line);
+// pipe_heredoc //del
+char	**pipe_heredoc_main(t_minishell *minishell, char *line);
+char	**handle_heredoc(t_minishell *minishell, char **tokens);
 
 size_t	array_len(char **array);
 size_t	redirections_count(char **tokens);
 
-char	*find_delimeter(char **tokens, size_t *i);
+char	*find_delimiter(char **tokens, size_t *i);
 char	**read_heredoc_lines(char *delimiter);
 void	add_line_to_heredoc(char ***heredoc_tokens, size_t *size,
 			size_t *capacity, char *line);
 char	**merge_tokens(char **tokens, char ***heredoc_tokens, size_t *i);
 
 char	hanging_pipe_heredoc(char *line);
-
-void	handle_empty_cmd(t_cmd **current);
 
 #endif

@@ -19,22 +19,15 @@
 
 typedef struct s_minishell	t_minishell;
 
-typedef enum s_redirect
-{
-	REDIR_IN,
-	REDIR_OUT,
-	APPEND_IN,
-	APPEND_OUT,
-}	t_redir;
-
 typedef struct s_env
 {
-	t_list			*envp_var;
+	char			**envp_var;
 }					t_env;
 
 typedef struct s_cmd
 {
 	char			**cmd;
+	char			**heredoc;
 	char			*infile;
 	char			*outfile;
 	char			*skipped_in;
@@ -57,9 +50,14 @@ typedef struct s_minishell
 	t_env	*env;
 	t_blin	*buildins;
 	t_cmd	*cmd;
+	char	***heredoc_tmp;
+	int		current_heredoc;
 	int		exit_code;
 }			t_minishell;
 
+
+/*utils.c*/
+void		*ft_realloc_exe(void *ptr, size_t size);
 /*emulated comms*/
 void		execute_cd(t_minishell *minishell, int fd);
 void		execute_echo(t_minishell *minishell, int fd);
@@ -71,7 +69,7 @@ void		execute_exit(t_minishell *minishell, int fd);
 void		execute_command(char *cmd, t_minishell *minishell, int fd);
 
 /*exe*/
-void		execute(t_minishell *minishell, char **env);
+void		execute(t_minishell *minishell);
 /*signals*/
 void		ft_signals(void);
 
@@ -79,9 +77,6 @@ void		ft_signals(void);
 void		init_minishell(t_minishell *minishell, char **env);
 
 // utils.c
-// void ft_lstclear(t_list **lst, void (*del)(void *));
-void free_cmd(t_cmd *cmd);
-void free_minishell(t_minishell *minishell);
 
 /*error*/
 void		exit_fail(const char *exit_message);

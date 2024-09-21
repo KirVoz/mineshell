@@ -1,7 +1,7 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*find_delimeter(char **tokens, size_t *i)
+char	*find_delimiter(char **tokens, size_t *i)
 {
 	char	*delimiter;
 	size_t	len;
@@ -12,7 +12,8 @@ char	*find_delimeter(char **tokens, size_t *i)
 	{
 		if (*i + 2 < len && *tokens[*i] == '<' && *tokens[*i + 1] == '<')
 		{
-			delimiter = ft_strdup(tokens[*i + 2]);
+			*i += 2;
+			delimiter = ft_strdup(tokens[*i]);
 			if (!delimiter)
 				exit_fail("Failed to allocate memory for delimiter");
 			break ;
