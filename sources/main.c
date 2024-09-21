@@ -33,20 +33,25 @@ static void	init_envp(t_minishell *minishell, char **env)
         exit_fail("Failed to allocate memory for SHLVL=1");
     minishell->env->envp_var[++j] = NULL;
 }
+void	init_tmp(t_mem *tmp)
+{
+	tmp->tokens = NULL;
+	tmp->heredoc_tmp = NULL;
+	tmp->current_heredoc = 0;
+}
 
 void	init_minishell(t_minishell *minishell, char **env)
 {
 	minishell->env = (t_env *)malloc(sizeof(t_env));
-	// Инициализация структуры t_env
 	if (minishell->env == NULL)
 		exit_fail("Failed to allocate memory for env");
 	minishell->env->envp_var = NULL;
-	// Инициализация списка переменных окружения
-	minishell->exit_code = 0;
-	minishell->cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	if (minishell->cmd == NULL)
-		exit_fail("Failed to allocate memory for cmd");
 	init_envp(minishell, env);
+	minishell->tmp = (t_mem *)malloc(sizeof(t_mem));
+	if(!minishell->tmp)
+		exit_fail("Failed to allocate memory for tmp");
+	init_tmp(minishell->tmp);
+	minishell->exit_code = 0;
 }
 
 int	main(int ac, char **av, char **env)

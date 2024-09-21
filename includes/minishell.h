@@ -19,14 +19,6 @@
 
 typedef struct s_minishell	t_minishell;
 
-typedef enum s_redirect
-{
-	REDIR_IN,
-	REDIR_OUT,
-	APPEND_IN,
-	APPEND_OUT,
-}	t_redir;
-
 typedef struct s_env
 {
 	char			**envp_var;
@@ -35,6 +27,7 @@ typedef struct s_env
 typedef struct s_cmd
 {
 	char			**cmd;
+	char			**heredoc;
 	char			*infile;
 	char			*outfile;
 	char			*skipped_in;
@@ -52,11 +45,20 @@ typedef struct s_blin // сокращение от билдина
 	void	(*func)(t_minishell *, int);
 }			t_blin;
 
+typedef struct s_mem
+{
+	char	**tokens;
+	char	***heredoc_tmp;
+	int		current_heredoc;
+}			t_mem;
+
+
 typedef struct s_minishell
 {
 	t_env	*env;
 	t_blin	*buildins;
 	t_cmd	*cmd;
+	t_mem	*tmp;
 	int		exit_code;
 }			t_minishell;
 

@@ -26,31 +26,38 @@ int	pipe_redirections_mistake(t_minishell *minishell, char **tokens)
 	}
 	return (1);
 }
+int	checek_two_tokens(char *token, char *next_token)
+{
+	if (ft_strncmp(token, ">", 1) == 0 && ft_strncmp(next_token, ">", 1) == 0)
+		return (1);
+	if (ft_strncmp(token, "<", 1) == 0 && ft_strncmp(next_token, "<", 1) == 0)
+		return (1);
+	return (0);
+}
 
 int	redirections_unification(char **tokens)
 {
-	int	unified;
+	int		unified;
+	char	a;
+	int		i;
 
 	unified = 0;
-	while (*tokens)
+	i = 0;
+	while (tokens[i])
 	{
-		if (*(tokens + 1) && **tokens == '<' && **(tokens + 1) == '<')
+		if (tokens[i + 1] && checek_two_tokens(tokens[i], tokens[i + 1]))
 		{
-			free(*tokens);
-			free(*(tokens + 1));
-			*tokens = ft_strdup("<<");
-			*(tokens + 1) = ft_strdup("");
+			a =	tokens[i][0];
+			free(tokens[i]);
+			if (a == '>')
+				tokens[i] = ft_strdup(">>");
+			else
+				tokens[i] = ft_strdup("<<");
+			free(tokens[i + 1]);
+			tokens[i + 1] = ft_strdup("");
 			unified = 1;
 		}
-		else if (*(tokens + 1) && **tokens == '>' && **(tokens + 1) == '>')
-		{
-			free(*tokens);
-			free(*(tokens + 1));
-			*tokens = ft_strdup(">>");
-			*(tokens + 1) = ft_strdup("");
-			unified = 1;
-		}
-		tokens++;
+		i++;
 	}
 	return (unified);
 }
@@ -65,7 +72,8 @@ int	hanging_redirections(char **tokens)
 		if ((ft_strncmp(*tokens, "<", token_len) == 0
 				|| ft_strncmp(*tokens, ">", token_len) == 0
 				|| ft_strncmp(*tokens, "<<", token_len) == 0
-				|| ft_strncmp(*tokens, ">>", token_len) == 0) && !*(tokens + 1))
+				|| ft_strncmp(*tokens, ">>", token_len) == 0) && !*(tokens + 1)
+				&& token_len != 0)
 			return (0);
 		tokens++;
 	}
@@ -76,9 +84,9 @@ int	validator_main(t_minishell *minishell, char ***tokens)
 {
 	if (!pipe_redirections_mistake(minishell, *tokens))
 		return (0);
-	redirections_check(tokens);
+	if (redirections_unification(*tokens))
+		*tokens = tokens_realloc(tokens);
 	if (!hanging_redirections(*tokens))
 		return (syntax_error(minishell, "newline"));
-	
 	return (1);
 }

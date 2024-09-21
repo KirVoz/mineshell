@@ -8,6 +8,7 @@ t_cmd	*create_empty_node(void)
 	empty_node = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!empty_node)
 		exit_fail("Failed to create new command node");
+	empty_node->heredoc = NULL;
 	empty_node->cmd = NULL;
 	empty_node->infile = NULL;
 	empty_node->outfile = NULL;
@@ -41,8 +42,6 @@ void	process_node(t_cmd **current, t_cmd **cmd_list, char *token)
 		}
 		*current = command_node;
 	}
-	else if (!(*current)->cmd)
-		handle_empty_cmd(current);
 }
 
 void	add_command(t_cmd *current, char *token)

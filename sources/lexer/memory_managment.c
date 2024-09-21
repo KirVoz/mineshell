@@ -29,7 +29,6 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 		size = old_size;
 	else
 		size = new_size;
-
 	if (!ptr)
 		return (malloc(new_size));
 	if (new_size == 0)
@@ -38,6 +37,7 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 		return (NULL);
 	}
 	new_ptr = malloc(new_size);
+	ft_bzero(new_ptr, new_size);
 	if (!new_ptr)
 		return (NULL);
 	ft_memcpy(new_ptr, ptr, size);
@@ -64,7 +64,67 @@ void	free_tokens(char **tokens)
 	i = 0;
 	if (!tokens)
 		return ;
-	while (tokens[i])
-		free(tokens[i++]);
+	while (tokens[i] != NULL)
+	{
+		free(tokens[i]);
+		tokens[i] = NULL;
+		i++;
+	}
 	free(tokens);
+}
+
+void	free_cmd(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	if (cmd == NULL)
+		return ;
+	if (cmd->cmd != NULL)
+	{
+		while (cmd->cmd[i] != NULL)
+			free(cmd->cmd[i++]);
+		free(cmd->cmd);
+	}   
+	free(cmd->infile);
+	free(cmd->outfile);
+	free(cmd->skipped_in);
+	free(cmd->skipped_out);
+	free_cmd(cmd->next);
+	free(cmd);
+}
+
+void	free_heredoc_tmp(char ***heredoc_tmp)
+{
+	int	i;
+
+	i = 0;
+	while (heredoc_tmp[i])
+	{
+		free_tokens(heredoc_tmp[i]);
+		i++;
+	}
+	free(heredoc_tmp);
+}
+
+void	free_minishell(t_minishell *minishell)
+{
+	if (!minishell || !minishell->tmp || !minishell->cmd)
+		return ;
+	minishell->tmp->current_heredoc = 0;
+	if (minishell->tmp->tokens)
+	{
+		free_tokens(minishell->tmp->tokens);
+		minishell->tmp->tokens = NULL;
+	}
+	if (minishell->tmp->heredoc_tmp)
+	{
+		free_heredoc_tmp(minishell->tmp->heredoc_tmp);
+		minishell->tmp->heredoc_tmp = NULL;
+	}
+	if (minishell->cmd)
+	{
+		free_cmd(minishell->cmd);
+		minishell->cmd = NULL;
+	}
 }

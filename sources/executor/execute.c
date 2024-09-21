@@ -42,9 +42,43 @@ static void open_file(t_minishell *minishell, const char *filename, int flags, i
     close(fd);
 }
 
+static void write_heredoc_to_fd(t_cmd *cmd, int fd) 
+{
+	int j;
+
+	j = 0;
+	while (cmd->heredoc[j] != NULL)
+	{
+		// printf("heredoc: %s\n", cmd->heredoc[j]); //del
+		write(fd, cmd->heredoc[j], strlen(cmd->heredoc[j]));
+		write(fd, "\n", 1);
+		j++;
+	}
+}
+static void heredoc_fd(t_cmd *cmd)
+{
+    int heredoc_fd[2];
+    
+    if (pipe(heredoc_fd) == -1)
+    {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
+    write_heredoc_to_fd((cmd), heredoc_fd[1]);
+    close(heredoc_fd[1]);
+    if (dup2(heredoc_fd[0], STDIN_FILENO) == -1)
+    {
+        perror("dup2 file");
+        exit(EXIT_FAILURE);
+    }
+    close(heredoc_fd[0]);
+}
+
 static void redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, int i)
 {
-    if (current->infile)
+    if (current->heredoc)
+        heredoc_fd(current);
+    else if (current->infile)
     {
         open_file(minishell, current->infile, O_RDONLY, STDIN_FILENO);
     }
@@ -107,6 +141,7 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
         if (execve(get_path(minishell, current->cmd[0]), current->cmd, env) == -1)
         {
             not_found(minishell, current->cmd[0]);
+            free(current->cmd[0]);
             exit(EXIT_FAILURE);
         }
     }
@@ -219,4 +254,5 @@ void execute(t_minishell *minishell)
 
     env = minishell->env->envp_var;
     execute_commands(minishell, env);
+    free_minishell(minishell);
 }

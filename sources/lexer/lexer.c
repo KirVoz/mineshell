@@ -1,30 +1,6 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*quote_counter(char *line)
-{
-	int		double_q;
-	int		single_q;
-	char	*line_cpy;
-
-	double_q = 0;
-	single_q = 0;
-	line_cpy = line;
-	while (*line_cpy)
-	{
-		if (ft_strchr("\"", *line_cpy))
-			double_q++;
-		else if (ft_strchr("\'", *line_cpy))
-			single_q++;
-		line_cpy++;
-	}
-	if (double_q % 2 != 0)
-		return ("\"");
-	else if (single_q % 2 != 0)
-		return ("'");
-	return (NULL);
-}
-
 char	**tokenizator(char *line)
 {
 	int		i;
@@ -46,7 +22,7 @@ char	**tokenizator(char *line)
 			while (i > 0)
 				free(result[--i]);
 			free(result);
-			return (NULL);
+			exit_fail("Failed to allocate memory for result in tokenizator");
 		}
 		i++;
 	}
@@ -54,34 +30,23 @@ char	**tokenizator(char *line)
 	return (result);
 }
 
-char	hanging_pipe_heredoc(char *line)
-{
-	if (ft_strchr(line, '<')
-			&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
-			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
-		return ('h');
-	else if (ft_strrchr(line, '|')
-			&& !(*(ft_strrchr(line, '|') + 1)))
-		return ('p');
-	return (0);
-}
-
 int	lexer_main(t_minishell *minishell, char *line)
 {
-	char	**tokens;
-
 	if (quote_counter(line))
 		return (syntax_quote_error(minishell, quote_counter(line)));
 	if (hanging_pipe_heredoc(line))
-		tokens = pipe_heredoc_main(line);
+		minishell->tmp->tokens = pipe_heredoc_main(minishell, line);
 	else
-		tokens = tokenizator(line);
-	print_tokens_state(tokens, "after tokenizator");
-	expander_main(minishell, tokens);
-	if (!validator_main(minishell, &tokens))
+		minishell->tmp->tokens = tokenizator(line);
+	// print_tokens_state(tokens, "after tokenizator"); //del
+	expander_main(minishell, minishell->tmp->tokens);
+	if (!validator_main(minishell, &minishell->tmp->tokens))
+	{
+		free_minishell(minishell);
 		return (0);
-	print_tokens_state(tokens, "after validator");
-	parser_main(&minishell, &tokens);
-	print_list_state(minishell, "after parser");
+	}
+	// print_tokens_state(tokens, "after validator"); //del
+	parser_main(&minishell, &minishell->tmp->tokens);
+	// print_list_state(minishell, "after parser"); //del
 	return (1);
 }

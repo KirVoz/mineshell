@@ -1,10 +1,12 @@
-// #include "lexer.h"
-// #include "minishell.h"
+#include "lexer.h"
+#include "minishell.h"
 
-// char	*array_chr(char **array, char c)
-// {
-// 	while (*array)
-// 	{
-// 		if (**array ==)
-// 	}
-// }
+size_t	array_len(char **array)
+{
+	size_t	i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
+}
