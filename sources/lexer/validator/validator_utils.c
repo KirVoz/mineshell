@@ -33,38 +33,33 @@ int	tokens_counter(char **tokens)
 	return (count);
 }
 
-char	**tokens_realloc(char **tokens)
+char	**tokens_realloc(char ***tokens)
 {
 	char	**res;
-	char	**cp_res;
-	char	**cp_tokens;
+	int		i;
+	int		j;
 
-	cp_tokens = tokens;
-	res = (char **)malloc((tokens_counter(tokens) + 1) * sizeof(char *));
+	i = 0;
+	j = 0;
+	res = (char **)malloc((tokens_counter(*tokens) + 1) * sizeof(char *));
 	if (!res)
 		exit_fail("Failed to allocate memory for tokens in tokens_realloc");
-	cp_res = res;
-	while (*cp_tokens)
+	while ((*tokens)[i])
 	{
-		if (!ft_strchr("", **cp_tokens))
+		if (*(*tokens)[i] != '\0')
 		{
-			*cp_res = ft_strdup(*cp_tokens);
-			if (!cp_res)
+			res[j] = ft_strdup((*tokens)[i]);
+			if (!res[j])
 				exit_fail("Failed to allocate memory for token in tokens_realloc");
-			free(*cp_tokens);
-			cp_res++;
+			free((*tokens)[i]);
+			j++;
 		}
-		cp_tokens++;
+		else
+			free((*tokens)[i]);
+		i++;
 	}
-	*cp_res = NULL;
-	cp_res = NULL;
-	free(tokens);
+	res[j] = NULL;
+	free(*tokens);
+	*tokens = res;
 	return (res);
-}
-
-int	redirections_check(char ***tokens)
-{
-	if (redirections_unification(*tokens))
-		*tokens = tokens_realloc(*tokens);
-	return (0);
 }

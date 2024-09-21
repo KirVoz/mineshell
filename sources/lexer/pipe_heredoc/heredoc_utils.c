@@ -62,7 +62,6 @@ void	add_line_to_heredoc(char ***heredoc_tokens, size_t *size,
 	size_t	old_capacity;
 
 	old_capacity = *capacity;
-	(void)old_capacity;
 	if (*size == *capacity - 1)
 	{
 		(*capacity) *= 2;
@@ -74,32 +73,4 @@ void	add_line_to_heredoc(char ***heredoc_tokens, size_t *size,
 	(*heredoc_tokens)[(*size)++] = ft_strdup(line);
 	if (!(*heredoc_tokens)[*size - 1])
 		exit_fail("Failed to allocate memory for heredoc tokens");
-}
-
-char	**merge_tokens(char **tokens, char ***heredoc_tokens, size_t *i)
-{
-	size_t	new_index;
-	size_t	t_count;
-	size_t	h_count;
-	size_t	j;
-	char	**new_tokens;
-
-	new_index = 0;
-	t_count = array_len(tokens);
-	h_count = array_len(*heredoc_tokens);
-	j = 0;
-	new_tokens = (char **)malloc((t_count - 3 + h_count + 1) * sizeof(char *));
-	if (!new_tokens)
-		return (NULL);
-	while (j < *i)
-		new_tokens[new_index++] = ft_strdup(tokens[j++]);
-	j = 0;
-	while (j < h_count)
-		new_tokens[new_index++] = ft_strdup((*heredoc_tokens)[j++]);
-	j = *i + 3;
-	while (j < t_count)
-		new_tokens[new_index++] = ft_strdup(tokens[j++]);
-	new_tokens[new_index] = NULL;
-	free_tokens(*heredoc_tokens);
-	return (new_tokens);
 }

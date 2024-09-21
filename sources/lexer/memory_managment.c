@@ -64,8 +64,12 @@ void	free_tokens(char **tokens)
 	i = 0;
 	if (!tokens)
 		return ;
-	while (tokens[i])
-		free(tokens[i++]);
+	while (tokens[i] != NULL)
+	{
+		free(tokens[i]);
+		tokens[i] = NULL;
+		i++;
+	}
 	free(tokens);
 }
 
@@ -105,10 +109,22 @@ void	free_heredoc_tmp(char ***heredoc_tmp)
 
 void	free_minishell(t_minishell *minishell)
 {
-	if (minishell == NULL)
+	if (!minishell || !minishell->tmp || !minishell->cmd)
 		return ;
-	minishell->current_heredoc = 0;
-	if (minishell->heredoc_tmp)
-		free_heredoc_tmp(minishell->heredoc_tmp);
-	free_cmd(minishell->cmd);
+	minishell->tmp->current_heredoc = 0;
+	if (minishell->tmp->tokens)
+	{
+		free_tokens(minishell->tmp->tokens);
+		minishell->tmp->tokens = NULL;
+	}
+	if (minishell->tmp->heredoc_tmp)
+	{
+		free_heredoc_tmp(minishell->tmp->heredoc_tmp);
+		minishell->tmp->heredoc_tmp = NULL;
+	}
+	if (minishell->cmd)
+	{
+		free_cmd(minishell->cmd);
+		minishell->cmd = NULL;
+	}
 }

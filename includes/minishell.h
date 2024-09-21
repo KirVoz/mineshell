@@ -45,13 +45,20 @@ typedef struct s_blin // сокращение от билдина
 	void	(*func)(t_minishell *, int);
 }			t_blin;
 
+typedef struct s_mem
+{
+	char	**tokens;
+	char	***heredoc_tmp;
+	int		current_heredoc;
+}			t_mem;
+
+
 typedef struct s_minishell
 {
 	t_env	*env;
 	t_blin	*buildins;
 	t_cmd	*cmd;
-	char	***heredoc_tmp;
-	int		current_heredoc;
+	t_mem	*tmp;
 	int		exit_code;
 }			t_minishell;
 

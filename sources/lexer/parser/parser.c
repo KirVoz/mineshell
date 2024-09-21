@@ -8,8 +8,8 @@ void	process_token(t_minishell **minishell, t_cmd *current,
 	{
 		handle_redirections(current, token, next_token);
 		if (ft_strncmp(token, "<<", 2) == 0)
-			current->heredoc
-				= (*minishell)->heredoc_tmp[(*minishell)->current_heredoc++];
+			current->heredoc = (*minishell)->tmp
+				->heredoc_tmp[(*minishell)->tmp->current_heredoc++];
 		*i += 2;
 	}
 	else
@@ -17,23 +17,6 @@ void	process_token(t_minishell **minishell, t_cmd *current,
 		add_command(current, token);
 		(*i)++;
 	}
-}
-
-char	**alloc_empty_cmd(void)
-{
-	char	**empty_cmd;
-
-	empty_cmd = NULL;
-	empty_cmd = (char **)malloc(2 * sizeof(char *));
-	if (!empty_cmd)
-		exit_fail("Failed to allocate memory for command array");
-	empty_cmd[0] = ft_strdup("\0");
-	if (!empty_cmd[0])
-	{
-		free(empty_cmd);
-		exit_fail("Failed to allocate memory for command");
-	}
-	return (empty_cmd);
 }
 
 void	parser_main(t_minishell **minishell, char ***tokens)
@@ -58,6 +41,4 @@ void	parser_main(t_minishell **minishell, char ***tokens)
 			current->cmd = array_init();
 	}
 	(*minishell)->cmd = cmd_list;
-	free_tokens(*tokens);
-	*tokens = NULL; 
 }
