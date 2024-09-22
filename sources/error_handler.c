@@ -24,6 +24,7 @@ void    not_found(t_minishell *minishell, char *cmd)
     minishell->exit_code = 127;
     // printf("structs exit code in not_found = %d\n", minishell->exit_code); //del
 }
+
 void    no_file(t_minishell *minishell, char *filename)
 {
     ft_putstr_fd("minishell: ", 2);
@@ -31,6 +32,15 @@ void    no_file(t_minishell *minishell, char *filename)
     ft_putstr_fd(": ", 2);
     perror("");
     minishell->exit_code = 1;
+}
+
+void    no_path_file(t_minishell *minishell, char *filename)
+{
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd(filename, 2);
+    ft_putstr_fd(": No such file or directory", 2);
+    ft_putstr_fd("\n", 2);
+    minishell->exit_code = 127;
 }
 
 int    syntax_error(t_minishell *minishell, char *token)

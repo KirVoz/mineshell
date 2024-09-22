@@ -26,7 +26,9 @@ static char **get_paths(t_minishell *minishell)
         if (ft_strncmp(minishell->env->envp_var[i], "PATH=", 5) == 0)
             break;
     }
-    return ft_split(minishell->env->envp_var[i] + 5, ':');
+    if (minishell->env->envp_var[i])
+        return ft_split(minishell->env->envp_var[i] + 5, ':');
+    return (NULL);
 }
 // {
 //     t_list *tmp = envp_var;

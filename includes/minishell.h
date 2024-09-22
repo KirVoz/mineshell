@@ -97,6 +97,7 @@ void		exit_fail(const char *exit_message);
 void		error_handler(t_minishell *minishell, char *error);
 void		not_found(t_minishell *minishell, char *cmd);
 void   		no_file(t_minishell *minishell, char *filename);
+void    	no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
 int			syntax_quote_error(t_minishell *minishell, char *token);
 

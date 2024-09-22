@@ -142,6 +142,21 @@ static void execute_single_command(t_minishell *minishell, t_cmd *cmd, char **en
     }
 }
 
+static int path_present(t_minishell *minishell)
+{
+    int i;
+
+    i = -1;
+    while (minishell->env->envp_var[++i] != NULL)
+    {
+        if (ft_strncmp(minishell->env->envp_var[i], "PATH=", 5) == 0)
+            break;
+    }
+    if (minishell->env->envp_var[i])
+        return (1);
+    return (0);
+}
+
 static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, int i, int num_cmd, char **env)
 {
     redirect_input(minishell, current, pipes, i);
@@ -157,7 +172,10 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
     {
         if (execve(get_path(minishell, current->cmd[0]), current->cmd, env) == -1)
         {
-            not_found(minishell, current->cmd[0]);
+            if (!path_present(minishell))
+                no_path_file(minishell, current->cmd[0]);
+            else
+                not_found(minishell, current->cmd[0]);
             // printf("structs exit code in execute_child = %d\n", minishell->exit_code); //del
             free(current->cmd[0]);
             exit(EXIT_FAILURE);
