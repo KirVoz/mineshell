@@ -22,6 +22,7 @@ void    not_found(t_minishell *minishell, char *cmd)
     ft_putstr_fd(": command not found", 2);
     ft_putstr_fd("\n", 2);
     minishell->exit_code = 127;
+    // printf("structs exit code in not_found = %d\n", minishell->exit_code); //del
 }
 void    no_file(t_minishell *minishell, char *filename)
 {

@@ -34,7 +34,7 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 	in_quote = 0;
 	i = 0;
 	token_cp = token;
-// 	printf("len %zu\n", len); //del
+	// printf("len %zu\n", len); //del
 	result = (char *)malloc((len + 1) * sizeof(char));
 	if (!result)
 		exit_fail("Memmory allocation for result in expand_line failed.");
@@ -48,7 +48,8 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 		}
 		else if (*token_cp == current_quote && in_quote)
 			in_quote = 0;
-		else if (*token_cp == '$' && current_quote == '"')
+		else if (*token_cp == '$' && current_quote == '"'
+			&& !(*(token_cp + 1) == '"' || *(token_cp + 1) == '\''))
 		{
 			substitute_env(minishell, &token_cp, &result, &i);
 			continue ;
@@ -78,7 +79,7 @@ char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 		exit_fail("Memmory allocation for result in expand_line failed.");
 	while (*token_cp)
 	{
-		if (*token_cp == '$')
+		if (*token_cp == '$' && *(token_cp + 1))
 		{
 			substitute_env(minishell, &token_cp, &result, &i);
 			continue ;
@@ -97,25 +98,26 @@ char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 
 void	expander_main(t_minishell *minishell, char **tokens)
 {
-	char	*cp_token;
+	char	*token_cp;
 	size_t	new_line_len;
 
 	new_line_len = 0;
 	while (*tokens)
 	{
-		cp_token = *tokens;
+		token_cp = *tokens;
 		if (ft_strchr(*tokens, '"') || ft_strchr(*tokens, '\''))
 		{
-			new_line_len = expanded_line_len(minishell, cp_token);
-// 			printf("expander_main new_line_len %zu\n", new_line_len); //del
+			new_line_len = expanded_line_len(minishell, token_cp);
+			// printf("expander_main new_line_len %zu\n", new_line_len); //del
 			*tokens = expand_quoted_line(minishell, *tokens, new_line_len);
 		}
 		else if (dollar_special_case(tokens))
 		{
-			new_line_len += env_value_len(minishell, &cp_token);
-// 			printf("expander_main new_line_len %zu\n", new_line_len); //del
+			new_line_len += env_value_len(minishell, &token_cp);
+			// printf("expander_main new_line_len %zu\n", new_line_len); //del
 			*tokens = expand_dollar_line(minishell, *tokens, new_line_len);
 		}
 		tokens++;
 	}
+	token_cp = NULL;
 }

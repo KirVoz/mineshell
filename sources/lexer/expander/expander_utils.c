@@ -27,7 +27,8 @@ char	*env_var_copy(char **token)
 	var_len = 0;
 	(*token)++;
 	c_token = *token;
-	while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
+	while (**token && !(**token == ' ' || **token == '"'
+		|| **token == '\'' || **token == '/'))
 	{
 		var_len++;
 		(*token)++;
@@ -73,10 +74,11 @@ size_t	expanded_line_len(t_minishell *minishell, char *token)
 			current_quote = set_quote(*token, &in_quote);
 		else if (*token == current_quote && in_quote)
 			in_quote = 0;
-		else if (*token == '$' && current_quote == '"')
+		else if (*token == '$' && current_quote == '"'
+			&& !(*(token + 1) == '"' || *(token + 1) == '\''))
 		{
 			len += env_value_len(minishell, &token);
-// 			printf("expanded_line_len %zu\n", len); //del
+			// printf("expanded_line_len %zu\n", len); //del
 			continue ;
 		}
 		else if (*token != current_quote || in_quote)
@@ -93,9 +95,11 @@ int	dollar_special_case(char **token)
 		if (*(*token + 1) && *(*token + 1) == '?')
 		{
 			free(*token);
-			*token = ft_strdup("$?");
+			*token = ft_strdup("$?"); //rewrite
 			return (0);
 		}
+		if (!*(*token + 1))
+			return (0);
 		if (*(*token + 1) && *(*token + 1) == '$')
 			return (1);
 		if (**token == '$')

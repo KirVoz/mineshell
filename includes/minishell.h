@@ -30,8 +30,8 @@ typedef struct s_cmd
 	char			**heredoc;
 	char			*infile;
 	char			*outfile;
-	char			*skipped_in;
-	char			*skipped_out;
+	t_list			*skipped_in;
+	t_list			*skipped_out;
 	int 			append;
 	int				inpipe;
 	int				outpipe;
@@ -63,6 +63,13 @@ typedef struct s_minishell
 }			t_minishell;
 
 
+// minishell_init.c
+void		init_envp(t_minishell *minishell, char **env);
+void		init_tmp(t_mem *tmp);
+t_cmd		*init_cmd_node(void);
+void		init_minishell(t_minishell *minishell, char **env);
+
+
 /*utils.c*/
 void		*ft_realloc_exe(void *ptr, size_t size);
 /*emulated comms*/
@@ -82,7 +89,6 @@ void		execute(t_minishell *minishell);
 void		ft_signals(void);
 
 // main.c
-void		init_minishell(t_minishell *minishell, char **env);
 
 // utils.c
 int			count_str(char **str);

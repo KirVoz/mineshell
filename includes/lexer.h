@@ -73,7 +73,6 @@ void	delimiter_counter(char **token, int *pipes, int *right_redirs,
 			int *left_redirs);
 int		tokens_counter(char **tokens);
 char	**tokens_realloc(char ***tokens);
-int		redirections_check(char ***tokens);
 
 // PARSER //del
 void	process_token(t_minishell **minishell, t_cmd *current, char *token,
@@ -81,14 +80,12 @@ void	process_token(t_minishell **minishell, t_cmd *current, char *token,
 void	parser_main(t_minishell **minishell, char ***tokens);
 
 // PARSER_LIST_UTILS //del
-t_cmd	*create_empty_node(void);
 void	process_node(t_cmd **current, t_cmd **cmd_list, char *token);
 void	add_command(t_cmd *current, char *token);
 
 // PARSER_UTILS //del
 int		if_pipe(char *token);
 int		is_redirection(char *token);
-size_t	strlcat_delim(char *dst, const char *src, size_t size);
 void	store_skipped_infiles(t_cmd **current);
 void	store_skipped_outfiles(t_cmd **current);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
@@ -100,6 +97,7 @@ void	free_tokens(char **tokens);
 void	free_cmd(t_cmd *cmd);
 void	free_heredoc_tmp(char ***heredoc_tmp);
 void	free_minishell(t_minishell *minishell);
+void	exit_free(t_minishell *minishell);
 
 // GENERAL_UTILS //del
 size_t	array_len(char **array);
