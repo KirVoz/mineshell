@@ -27,7 +27,8 @@ char	*env_var_copy(char **token)
 	var_len = 0;
 	(*token)++;
 	c_token = *token;
-	while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
+	while (**token && !(**token == ' ' || **token == '"'
+		|| **token == '\'' || **token == '/'))
 	{
 		var_len++;
 		(*token)++;

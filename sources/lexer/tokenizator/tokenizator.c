@@ -82,9 +82,9 @@ char	*find_end_quote_len(char *line, int *len)
 
 char	*getting_start(char **line, char *start, int *len)
 {
-	int	in_token;
+	// int	in_token;
 
-	in_token = 0;
+	// in_token = 0;
 	while (*line)
 	{
 		if (ft_strchr(QUOTES, **line))
@@ -95,12 +95,11 @@ char	*getting_start(char **line, char *start, int *len)
 		}
 		else if (is_delimiter(*line))
 		{
-			if (in_token)
-				in_token = 0;
+			(*line)++;
+			if (*len == 0)
+				(*len)++;
 			break ;
 		}
-		else if (!in_token)
-			in_token = 1;
 		(*len)++;
 		(*line)++;
 	}
