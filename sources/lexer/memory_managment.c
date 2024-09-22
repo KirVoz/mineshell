@@ -75,21 +75,17 @@ void	free_tokens(char **tokens)
 
 void	free_cmd(t_cmd *cmd)
 {
-	int	i;
-
-	i = 0;
 	if (cmd == NULL)
 		return ;
-	if (cmd->cmd != NULL)
-	{
-		while (cmd->cmd[i] != NULL)
-			free(cmd->cmd[i++]);
-		free(cmd->cmd);
-	}   
 	free(cmd->infile);
 	free(cmd->outfile);
-	free(cmd->skipped_in);
-	free(cmd->skipped_out);
+	free_tokens(cmd->cmd);
+	free_tokens(cmd->heredoc);
+	ft_lstclear(&cmd->skipped_in, free);
+	ft_lstclear(&cmd->skipped_out, free);
+	cmd->append = 0;
+	cmd->inpipe = 0;
+	cmd->outpipe = 0;
 	free_cmd(cmd->next);
 	free(cmd);
 }
@@ -109,9 +105,8 @@ void	free_heredoc_tmp(char ***heredoc_tmp)
 
 void	free_minishell(t_minishell *minishell)
 {
-	if (!minishell || !minishell->tmp || !minishell->cmd)
+	if (!minishell)
 		return ;
-	minishell->tmp->current_heredoc = 0;
 	if (minishell->tmp->tokens)
 	{
 		free_tokens(minishell->tmp->tokens);
@@ -122,9 +117,19 @@ void	free_minishell(t_minishell *minishell)
 		free_heredoc_tmp(minishell->tmp->heredoc_tmp);
 		minishell->tmp->heredoc_tmp = NULL;
 	}
+	minishell->tmp->current_heredoc = 0;
 	if (minishell->cmd)
 	{
 		free_cmd(minishell->cmd);
 		minishell->cmd = NULL;
 	}
+}
+
+void	exit_free(t_minishell *minishell)
+{
+	free_minishell(minishell);
+	free(minishell->tmp);
+	free_tokens(minishell->env->envp_var);
+	free(minishell->env);
+	exit(0);
 }

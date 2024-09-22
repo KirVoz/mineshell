@@ -1,26 +1,6 @@
 #include "lexer.h"
 #include "minishell.h"
 
-t_cmd	*create_empty_node(void)
-{
-	t_cmd	*empty_node;
-
-	empty_node = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!empty_node)
-		exit_fail("Failed to create new command node");
-	empty_node->heredoc = NULL;
-	empty_node->cmd = NULL;
-	empty_node->infile = NULL;
-	empty_node->outfile = NULL;
-	empty_node->skipped_in = NULL;
-	empty_node->skipped_out = NULL;
-	empty_node->append = 0;
-	empty_node->inpipe = 0;
-	empty_node->outpipe = 0;
-	empty_node->next = NULL;
-	return (empty_node);
-}
-
 void	process_node(t_cmd **current, t_cmd **cmd_list, char *token)
 {
 	t_cmd	*command_node;
@@ -28,7 +8,7 @@ void	process_node(t_cmd **current, t_cmd **cmd_list, char *token)
 
 	if (!*current || if_pipe(token))
 	{
-		command_node = create_empty_node();
+		command_node = init_cmd_node();
 		if (!*cmd_list)
 			*cmd_list = command_node;
 		else

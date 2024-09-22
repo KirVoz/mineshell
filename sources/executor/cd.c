@@ -35,16 +35,25 @@ static void change_pwd(t_minishell *minishell, char *new_path)
 {
     int home_index;
 
-    for (int j = 0; minishell->env->envp_var[j]; j++)
-    {
-        printf("MY ENV = %s\n", minishell->env->envp_var[j]);
-    }
+    // for (int j = 0; minishell->env->envp_var[j]; j++)
+    // {
+    //     printf("MY ENV = %s\n", minishell->env->envp_var[j]);
+    // }
     home_index = find_string_in_array(minishell->env->envp_var, "PWD=", 4);
     printf("home_index = %d\n", home_index);
+    printf("MY ENV = %s\n", minishell->env->envp_var[home_index]);
     if (home_index != -1)
     {
+        printf("change_pwd before = %s\n", minishell->env->envp_var[home_index]);
+        printf("change_pwd pt before 1 = %p\n", (void *)minishell->env->envp_var[13]);
         free(minishell->env->envp_var[home_index]);
-        minishell->env->envp_var[home_index] = new_path;
+        minishell->env->envp_var[home_index] = ft_strdup(new_path);
+        printf("change_pwd before reassinging = %s\n", minishell->env->envp_var[home_index]);
+        printf("change_pwd pt before 2 = %p\n", (void *)minishell->env->envp_var[13]);
+        // minishell->env->envp_var[find_string_in_array(minishell->env->envp_var,
+        //     "PWD=", 4)]= minishell->env->envp_var[home_index];    
+        printf("change_pwd after = %s\n", minishell->env->envp_var[home_index]);
+        printf("change_pwd pt before = %p\n", (void *)minishell->env->envp_var[13]);
     }
     else
     {
@@ -67,12 +76,16 @@ void execute_cd(t_minishell *minishell, int fd)
         if (old_pwd == NULL)
             exit_fail("Failed to allocate memory for old_pwd");
         update_env_var(minishell, "OLDPWD=", old_pwd);
-        update_env_var(minishell, "PWD=", new_path);
+        // update_env_var(minishell, "PWD=", new_path);
     }
     else
     {
         new_path = ft_strdup(minishell->cmd->cmd[1]);
     }
+    printf("execute_cd before = %s\n", minishell->env->envp_var[13]);
+    printf("execute_cd before = %p\n", (void *)minishell->env->envp_var[13]);
     change_pwd(minishell, new_path);
+    printf("execute_cd after = %p\n", (void *)minishell->env->envp_var[13]);
+    printf("execute_cd after = %s\n", minishell->env->envp_var[13]);
     printf("%s\n", new_path);
 }

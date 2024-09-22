@@ -141,6 +141,7 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
         if (execve(get_path(minishell, current->cmd[0]), current->cmd, env) == -1)
         {
             not_found(minishell, current->cmd[0]);
+            // printf("structs exit code in execute_child = %d\n", minishell->exit_code); //del
             free(current->cmd[0]);
             exit(EXIT_FAILURE);
         }
@@ -219,7 +220,8 @@ static void wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
             exit_code = WEXITSTATUS(status);
             if (exit_code != 0)
             {
-                printf("Command failed with exit code: %d\n", exit_code);
+                // printf("Command failed with exit code: %d\n", exit_code); //del
+                // printf("structs exit code in wait_for_processes = %d\n", minishell->exit_code); //del
             }
         }
         i++;
