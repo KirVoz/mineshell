@@ -50,7 +50,7 @@ static void write_heredoc_to_fd(t_cmd *cmd, int fd)
 	while (cmd->heredoc[j] != NULL)
 	{
 		// printf("heredoc: %s\n", cmd->heredoc[j]); //del
-		write(fd, cmd->heredoc[j], ft_strlen(cmd->heredoc[j]));
+		write(fd, cmd->heredoc[j], strlen(cmd->heredoc[j]));
 		write(fd, "\n", 1);
 		j++;
 	}
@@ -122,23 +122,6 @@ static void close_pipes(int **pipes, int num_cmd)
     {
         close(pipes[j][0]);
         close(pipes[j][1]);
-    }
-}
-
-static void execute_single_command(t_minishell *minishell, t_cmd *cmd, char **env)
-{
-    if (is_builtin(cmd->cmd[0]))
-    {
-        execute_command(cmd->cmd[0], minishell, STDOUT_FILENO);
-    }
-    else
-    {
-        if (execve(get_path(minishell, cmd->cmd[0]), cmd->cmd, env) == -1)
-        {
-            not_found(minishell, cmd->cmd[0]);
-            free(cmd->cmd[0]);
-            exit(EXIT_FAILURE);
-        }
     }
 }
 
@@ -253,24 +236,16 @@ static void execute_commands(t_minishell *minishell, char **env)
     num_cmd = count_commands(minishell->cmd);
     pipes = NULL;
     pids = NULL;
-
-    if (num_cmd == 1 && is_builtin(minishell->cmd->cmd[0]))
+    if (num_cmd > 1)
+        pipes = setup_pipes(num_cmd);
+    pids = fork_processes(minishell, num_cmd, pipes, env);
+    if (num_cmd > 1)
     {
-        execute_single_command(minishell, minishell->cmd, env);
+        close_pipes(pipes, num_cmd);
+        free_pipes(pipes, num_cmd);
     }
-    else
-    {
-        if (num_cmd > 1)
-            pipes = setup_pipes(num_cmd);
-        pids = fork_processes(minishell, num_cmd, pipes, env);
-        if (num_cmd > 1)
-        {
-            close_pipes(pipes, num_cmd);
-            free_pipes(pipes, num_cmd);
-        }
-        wait_for_processes(pids, num_cmd, minishell);
-        free(pids);
-    }
+    wait_for_processes(pids, num_cmd, minishell);
+    free(pids);
 }
 
 void execute(t_minishell *minishell)
@@ -279,5 +254,5 @@ void execute(t_minishell *minishell)
 
     env = minishell->env->envp_var;
     execute_commands(minishell, env);
-    free_minishell(minishell);
+    free_minishell(minishell); // почему тут ?
 }

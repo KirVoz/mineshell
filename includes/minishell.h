@@ -85,7 +85,7 @@ void		ft_signals(void);
 void		init_minishell(t_minishell *minishell, char **env);
 
 // utils.c
-
+int			count_str(char **str);
 /*error*/
 void		exit_fail(const char *exit_message);
 void		error_handler(t_minishell *minishell, char *error);
