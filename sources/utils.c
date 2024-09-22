@@ -18,3 +18,12 @@ void	*ft_realloc_exe(void *ptr, size_t size)
 	free(ptr);
 	return (new_ptr);
 }
+int count_str(char **str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}

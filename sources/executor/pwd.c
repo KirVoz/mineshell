@@ -1,18 +1,26 @@
 #include "minishell.h"
 
-void execute_pwd(t_minishell *minishell, int fd)
+int find_string_in_array(char **array, const char *str, size_t n)
 {
-    char cwd[1024]; // Буфер для хранения текущего пути
+    int i;
+    
+    i = 0;
+    while (array[i])
+    {
+        if (ft_strncmp(array[i], str, n) == 0)
+            return i;
+        i++;
+    }
+    return -1;
+}
 
-    (void)minishell;
-    // Получаем текущую рабочую директорию с помощью getcwd
-    if (getcwd(cwd, sizeof(cwd)) != NULL)
-    {
-        ft_putstr_fd(cwd, fd); // Выводим текущую директорию
-        ft_putstr_fd("\n", fd); // Добавляем новую строку
-    }
-    else
-    {
-        perror("getcwd"); // Выводим сообщение об ошибке, если getcwd не сработала
-    }
+void    execute_pwd(t_minishell *minishell, int fd)
+{
+    int i;
+    char *pwd;
+
+    i = find_string_in_array(minishell->env->envp_var, "PWD=", 4);
+    pwd = minishell->env->envp_var[i] + 4;
+    ft_putstr_fd(pwd, fd);
+    ft_putstr_fd("\n", fd);
 }

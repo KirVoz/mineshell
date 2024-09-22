@@ -11,32 +11,6 @@ t_blin commands[7] = {
     { "exit", execute_exit },
 };
 
-// void    execute_cd(t_minishell *minishell, int fd)
-// {
-//     char *path;
-
-//     if (minishell->cmd->cmd[1] == NULL)
-//     {
-//         path = ft_strdup(minishell->env->envp_var[0] + 5);
-//         if (path == NULL)
-//             exit_fail("Failed to allocate memory for path");
-//     }
-//     else
-//     {
-//         path = ft_strdup(minishell->cmd->cmd[1]);
-//         if (path == NULL)
-//             exit_fail("Failed to allocate memory for path");
-//     }
-//     if (chdir(path) == -1)
-//     {
-//         ft_putstr_fd("cd: ", fd);
-//         perror(path);
-//         free(path);
-//         return;
-//     }
-//     free(path);
-// }
-
 void execute_echo(t_minishell *minishell, int fd)
 {
     int i = 1;
@@ -53,60 +27,6 @@ void execute_echo(t_minishell *minishell, int fd)
         ft_putstr_fd("\n", fd);
 }
 
-
-
-void execute_export(t_minishell *minishell, int fd)
-{
-    int i;
-    char *new_var;
-    char *existing_var;
-    int env_count;
-
-    // Подсчёт количества переменных окружения
-    for (env_count = 0; minishell->env->envp_var[env_count] != NULL; env_count++);
-
-    if (minishell->cmd->cmd[1] != NULL)
-    {
-        new_var = minishell->cmd->cmd[1];
-        // Проверка корректности переменной окружения
-        if (strchr(new_var, '=') == NULL)
-        {
-            ft_putstr_fd("export: not a valid identifier\n", fd);
-            return;
-        }
-        // Обновление существующей переменной
-        for (i = 0; i < env_count; i++)
-        {
-            existing_var = minishell->env->envp_var[i];
-            if (strncmp(existing_var, new_var, strchr(new_var, '=') - new_var) == 0)
-            {
-                free(minishell->env->envp_var[i]);
-                minishell->env->envp_var[i] = ft_strdup(new_var);
-                if (minishell->env->envp_var[i] == NULL)
-                    exit_fail("Failed to allocate memory for envp_var element");
-                return;
-            }
-        }
-        // Добавление новой переменной
-        minishell->env->envp_var = ft_realloc_exe(minishell->env->envp_var, sizeof(char *) * (env_count + 2)); // +1 для новой переменной и +1 для NULL
-        if (minishell->env->envp_var == NULL)
-            exit_fail("Failed to allocate memory for envp_var");
-        minishell->env->envp_var[env_count] = ft_strdup(new_var);
-        if (minishell->env->envp_var[env_count] == NULL)
-            exit_fail("Failed to allocate memory for new_var");
-        minishell->env->envp_var[env_count + 1] = NULL;
-    }
-    else
-    {
-        for (i = 0; i < env_count; i++)
-        {
-            ft_putstr_fd("declare -x ", fd);
-            ft_putstr_fd(minishell->env->envp_var[i], fd);
-            ft_putstr_fd("\n", fd);
-        }
-    }
-}
-
 void execute_env(t_minishell *minishell, int fd)
 {
     int i;
@@ -114,6 +34,7 @@ void execute_env(t_minishell *minishell, int fd)
     i = 0;
     while (minishell->env->envp_var[i] != NULL)
     {
+        ft_putstr_fd("ENV  -   ", fd);
         ft_putstr_fd(minishell->env->envp_var[i], fd);
         ft_putstr_fd("\n", fd);
         i++;

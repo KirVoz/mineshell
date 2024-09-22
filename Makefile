@@ -19,6 +19,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/path.c \
 		$(EXE_PATH)/pwd.c \
 		$(EXE_PATH)/cd.c \
+		$(EXE_PATH)/export.c \
 		$(EXE_PATH)/unset.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
