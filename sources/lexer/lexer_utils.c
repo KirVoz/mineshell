@@ -5,18 +5,24 @@ char	*quote_counter(char *line)
 {
 	int		double_q;
 	int		single_q;
-	char	*line_cpy;
+	int		in_double_q;
 
 	double_q = 0;
 	single_q = 0;
-	line_cpy = line;
-	while (*line_cpy)
+	in_double_q = 0;
+	while (*line)
 	{
-		if (ft_strchr("\"", *line_cpy))
+		if (ft_strchr("\"", *line))
+		{
 			double_q++;
-		else if (ft_strchr("\'", *line_cpy))
+			if (in_double_q)
+				in_double_q = 0;
+			else
+				in_double_q = 1;
+		}
+		else if (ft_strchr("\'", *line) && !in_double_q)
 			single_q++;
-		line_cpy++;
+		line++;
 	}
 	if (double_q % 2 != 0)
 		return ("\"");

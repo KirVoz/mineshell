@@ -17,8 +17,13 @@ void	substitute_env(t_minishell *minishell, char **token, char **result,
 		(*i)++;
 		env_value++;
 	}
-	while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
-		(*token)++;
+	// while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
+	// 	(*token)++;
+	// while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
+	// {
+	// 	(*result)[*i] = *(*token)++;
+	// 	(*i)++;
+	// }
 	free(cp_env_value);
 }
 
@@ -98,26 +103,26 @@ char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 
 void	expander_main(t_minishell *minishell, char **tokens)
 {
-	char	*token_cp;
+	char	*cp_token;
 	size_t	new_line_len;
 
 	new_line_len = 0;
 	while (*tokens)
 	{
-		token_cp = *tokens;
+		cp_token = *tokens;
 		if (ft_strchr(*tokens, '"') || ft_strchr(*tokens, '\''))
 		{
-			new_line_len = expanded_line_len(minishell, token_cp);
+			new_line_len = expanded_line_len(minishell, cp_token);
 			// printf("expander_main new_line_len %zu\n", new_line_len); //del
 			*tokens = expand_quoted_line(minishell, *tokens, new_line_len);
 		}
 		else if (dollar_special_case(tokens))
 		{
-			new_line_len += env_value_len(minishell, &token_cp);
+			new_line_len += env_value_len(minishell, &cp_token);
 			// printf("expander_main new_line_len %zu\n", new_line_len); //del
 			*tokens = expand_dollar_line(minishell, *tokens, new_line_len);
 		}
 		tokens++;
 	}
-	token_cp = NULL;
+	cp_token = NULL;
 }

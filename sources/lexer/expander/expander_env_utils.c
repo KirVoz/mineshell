@@ -42,6 +42,19 @@ char	*get_env_value(t_minishell *minishell, char **token)
 	return (env_value);
 }
 
+size_t	additional_len(char *token)
+{
+	size_t	len;
+
+	len = 0;
+	while (*token && !ft_strchr(" \n\"\'", *token))
+	{
+		len++;
+		token++;
+	}
+	return (len);
+}
+
 size_t	env_value_len(t_minishell *minishell, char **token)
 {
 	char	*variable_name;
@@ -65,6 +78,8 @@ size_t	env_value_len(t_minishell *minishell, char **token)
 			// printf("variable_name %s, env_list %s, ind %d\n", variable_name, env_list, i); //del
 			// printf("value_len %zu, ft_strlen(env_list) %zu, var_len %zu\n", value_len, ft_strlen(env_list), var_len); //del
 			value_len = ft_strlen(env_list) - var_len;
+			if (*token)
+				value_len += additional_len(*token);
 			break ;
 		}
 	}
