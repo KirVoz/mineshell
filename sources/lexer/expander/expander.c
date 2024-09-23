@@ -42,10 +42,7 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 	in_quote = 0;
 	i = 0;
 	token_cp = token;
-	// printf("len %zu\n", len); //del
-	result = (char *)malloc((len + 1) * sizeof(char));
-	if (!result)
-		exit_fail("Memmory allocation for result in expand_line failed.");
+	result = allocate_string(len, "Result in expand_line");
 	while (*token_cp)
 	{
 		if ((*token_cp == '\'' || *token_cp == '\"') && !in_quote)
@@ -82,9 +79,7 @@ char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 
 	token_cp = token;
 	i = 0;
-	result = (char *)malloc((len + 1) * sizeof(char));
-	if (!result)
-		exit_fail("Memmory allocation for result in expand_line failed.");
+	result = allocate_string(len, "Result in expand_line");
 	while (*token_cp)
 	{
 		if (*token_cp == '$' && *(token_cp + 1))
@@ -156,8 +151,7 @@ char	*expand_question_mark(t_minishell *minishell, char *token)
 	i = 0;
 	token_cp = token;
 	exit_code = ft_itoa(minishell->exit_code);
-	result = allocate_string(exit_len(token, exit_code),
-		"Memmory allocation for result in expand_question_mark failed.");
+	result = allocate_string(exit_len(token, exit_code), "Expand_question");
 	while (*token)
 	{
 		if (*token == '$' && *(token + 1) && *(token + 1) == '?')
@@ -171,6 +165,7 @@ char	*expand_question_mark(t_minishell *minishell, char *token)
 			result[i++] = *(token++);
 	}
 	result[i] = '\0';
+	free(exit_code);
 	free(token_cp);
 	return (result);
 }

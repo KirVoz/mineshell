@@ -65,19 +65,19 @@ char	**merge_tokens(char **tokens, char **new_tokens)
 	i = 0;
 	j = 0;
 	result = allocate_array(array_len(tokens) + array_len(new_tokens),
-		"Failed to allocate memory for result in merge_tokens");
+		"Кesult in merge_tokens");
 	while (tokens[i])
 	{
 		result[i] = ft_strdup(tokens[i]);
 		if (!result[i])
-			error_array_allocation(result, i);
+			error_array_allocation(result, i, "Result[i] in merge_tokens");
 		i++;
 	}
 	while (new_tokens[j])
 	{
 		result[i] = ft_strdup(new_tokens[j]);
 		if (!result[i])
-			error_array_allocation(result, i);
+			error_array_allocation(result, i, "Result[i] in merge_tokens");
 		i++;
 		j++;
 	}

@@ -8,8 +8,8 @@ void	process_token(t_minishell **minishell, t_cmd *current,
 	{
 		handle_redirections(current, token, next_token);
 		if (ft_strncmp(token, "<<", 2) == 0)
-			current->heredoc = (*minishell)->tmp
-				->heredoc_tmp[(*minishell)->tmp->current_heredoc++];
+			current->heredoc = (*minishell)->tmp->heredoc_tmp
+			[(*minishell)->tmp->current_heredoc++];
 		*i += 2;
 	}
 	else

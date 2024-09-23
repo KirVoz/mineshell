@@ -47,6 +47,7 @@ typedef struct s_blin // сокращение от билдина
 
 typedef struct s_mem
 {
+	char	*line;
 	char	**tokens;
 	char	***heredoc_tmp;
 	int		current_heredoc;

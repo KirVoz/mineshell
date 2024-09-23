@@ -5,6 +5,7 @@ char	*extract_token(char **line)
 {
 	char	*start;
 	char	*token;
+	char	*token_tmp;
 	int		len;
 
 	start = *line;
@@ -13,6 +14,14 @@ char	*extract_token(char **line)
 	token = getting_token(start, len);
 	while (**line && **line == ' ')
 		(*line)++;
+	if (*(*line - 1) && *(*line - 1) == ' ')
+	{
+		token_tmp = token;
+		token = ft_strjoin(token, " ");
+		if (!token)
+			exit_fail("Tokens in extract_token");
+		free(token_tmp);
+	}
 	return (token);
 }
 
@@ -25,22 +34,6 @@ char	*getting_token(char *start, int len)
 		return (NULL);
 	ft_strlcpy(token, start, len + 1);
 	return (token);
-}
-
-char	*find_end_quote_len(char *line, int *len)
-{
-	int		i;
-	char	quote;
-
-	i = 1;
-	quote = *line;
-	while (line[i] && line[i] != quote)
-	{
-		i++;
-		(*len)++;
-	}
-	*len += 2;
-	return (&(line[i + 1]));
 }
 
 char	*getting_start(char **line, char *start, int *len)
@@ -66,4 +59,20 @@ char	*getting_start(char **line, char *start, int *len)
 		(*line)++;
 	}
 	return (start);
+}
+
+char	*find_end_quote_len(char *line, int *len)
+{
+	int		i;
+	char	quote;
+
+	i = 1;
+	quote = *line;
+	while (line[i] && line[i] != quote)
+	{
+		i++;
+		(*len)++;
+	}
+	*len += 2;
+	return (&(line[i + 1]));
 }

@@ -7,13 +7,13 @@ PHD_PATH = sources/lexer/pipe_heredoc
 EXP_PATH = sources/lexer/expander
 VLD_PATH = sources/lexer/validator
 PRS_PATH = sources/lexer/parser
+MEM_PATH = sources/memory_managment
 EXE_PATH = sources/executor
 LIBFT_PATH = libraries/libft
 READLINE_PATH = libraries/readline
 OBJ_DIR = objects
 
 SRC =	$(SRC_PATH)/main.c \
-		$(SRC_PATH)/minishell_init.c \
 		$(EXE_PATH)/commands.c \
 		$(EXE_PATH)/execute.c \
 		$(EXE_PATH)/path.c \
@@ -42,7 +42,9 @@ SRC =	$(SRC_PATH)/main.c \
 		$(PRS_PATH)/parser_list_utils.c \
 		$(VLD_PATH)/validator.c \
 		$(VLD_PATH)/validator_utils.c \
-		$(LXR_PATH)/memory_managment.c \
+		$(MEM_PATH)/memory_allocation.c \
+		$(MEM_PATH)/memory_deallocation.c \
+		$(MEM_PATH)/minishell_init.c \
 		$(LXR_PATH)/general_utils.c \
 		$(LXR_PATH)/debug_functions.c 
 
@@ -53,8 +55,8 @@ CC = cc
 INCFLAGS = -I./includes -I/opt/homebrew/opt/readline/include
 LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 
-# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 

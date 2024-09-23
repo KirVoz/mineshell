@@ -4,7 +4,6 @@
 int	main(int ac, char **av, char **env)
 {
 	t_minishell	minishell;
-	char		*line;
 
 	(void)av;
 	ft_signals();
@@ -13,17 +12,16 @@ int	main(int ac, char **av, char **env)
 		init_minishell(&minishell, env); // в экзит хендлере не освобождается память для envp_var
 		while (1)
 		{
-			line = readline(PROMPT);
-			if (!line)
+			minishell.tmp->line = readline(PROMPT);
+			if (!minishell.tmp->line)
 				break ;
-			if (line[0] != '\0')
+			if (minishell.tmp->line[0] != '\0')
 			{
-				add_history(line);
-            	if (!lexer_main(&minishell, line))
+				add_history(minishell.tmp->line);
+            	if (!lexer_main(&minishell, minishell.tmp->line))
 					continue ;
 				execute(&minishell);
 			}
-			free(line);
 		}
 		exit_free(&minishell, minishell.exit_code);
 	}

@@ -3,13 +3,13 @@
 # include <string.h>
 
 t_blin commands[7] = {
-    { "echo", execute_echo },
-    { "cd", execute_cd },
-    { "pwd", execute_pwd },
-    { "export", execute_export },
-    { "unset", execute_unset },
-    { "env", execute_env },
-    { "exit", execute_exit },
+    { "echo ", execute_echo },
+    { "cd ", execute_cd },
+    { "pwd ", execute_pwd },
+    { "export ", execute_export },
+    { "unset ", execute_unset },
+    { "env ", execute_env },
+    { "exit ", execute_exit },
 };
 
 void execute_exit(t_minishell *minishell, int fd)
@@ -17,8 +17,6 @@ void execute_exit(t_minishell *minishell, int fd)
     int exit_code;
 
     (void)fd;
-    // (void)minishell;
-    // ft_putstr_fd("Executing 'exit' command\n", fd); // EXIT надо делать прирывающим цикл в мэйне иначе не выходит !!!
     if (minishell->cmd->cmd[2])
     {
         arg_count_error(minishell, "exit");
