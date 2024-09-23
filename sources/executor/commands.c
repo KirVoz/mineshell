@@ -39,7 +39,7 @@ void execute_command(char *cmd, t_minishell *minishell, int fd)
     i = 0;
     while (i < 7)
     {
-        if (st_strncmp(cmd, commands[i].name, ft_strlen(commands[i].name)) == 0)
+        if (ft_strncmp(cmd, commands[i].name, ft_strlen(commands[i].name)) == 0)
         {
             commands[i].func(minishell, fd);
             return;

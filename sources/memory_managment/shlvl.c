@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include "libft.h"
 
 static int get_new_shlvl(int current_level)
 {
@@ -14,20 +15,28 @@ static int get_new_shlvl(int current_level)
 static int calculate_shlvl_length(int level)
 {
     int length;
+    int temp;
     
+    temp = level;
     length = 6;
-    while (level > 0)
+    while (temp > 0)
     {
         length++;
-        level /= 10;
+        temp /= 10;
     }
     return length;
 }
 
 static void convert_level_to_string(char *str, int level, int length)
 {
-    str[length--] = '\0';
-    while (level > 0)
+    str[length] = '\0';
+    length--;
+    if (level == 0)
+    {
+        str[length] = '0';
+        return;
+    }
+    while (level > 0 && length >= 0)
     {
         str[length--] = (level % 10) + '0';
         level /= 10;
@@ -40,11 +49,11 @@ static char *allocate_and_construct_shlvl(int level)
     char *new_shlvl;
 
     length = calculate_shlvl_length(level);
-    new_shlvl = malloc(length + 1);
+    new_shlvl = malloc(sizeof(char)* (length + 1));
     if (!new_shlvl)
         exit_fail("Failed to allocate memory for new SHLVL");
-    ft_strcpy(new_shlvl, "SHLVL=");
-    convert_level_to_string(new_shlvl + 6, level, length - 1);
+    ft_memcpy(new_shlvl, "SHLVL=", 6);
+    convert_level_to_string(new_shlvl + 6, level, length - 6);
     return new_shlvl;
 }
 
