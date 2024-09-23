@@ -1,24 +1,66 @@
 #include "minishell.h"
 #include "lexer.h"
 
-void	init_envp(t_minishell *minishell, char **env)
+char *increment_shlvl(const char *shlvl)
+{
+    int level;
+	int new_shlvl_len;
+	int temp_level;
+	char *new_shlvl;
+	char *level_str;
+	int i;
+	
+	level = ft_atoi(shlvl + 6);
+    level++;
+    if (level > 99)
+    {
+        level = 1;
+        printf("SHLVL reset to 1\n");
+    }
+	new_shlvl_len = 6;
+    temp_level = level;
+    while (temp_level > 0)
+    {
+        new_shlvl_len++;
+        temp_level /= 10;
+    }
+    new_shlvl = malloc(new_shlvl_len + 1);
+    if (!new_shlvl)
+        exit_fail("Failed to allocate memory for new SHLVL");
+    ft_strcpy(new_shlvl, "SHLVL=");
+    level_str = new_shlvl + 6;
+    i = new_shlvl_len - 1;
+    new_shlvl[i--] = '\0';
+    while (level > 0)
+    {
+        new_shlvl[i--] = (level % 10) + '0';
+        level /= 10;
+    }
+    return new_shlvl;
+}
+
+void init_envp(t_minishell *minishell, char **env)
 {
     int i;
     int j;
     int len;
 
     len = 0;
-    while(env[len])
+    while (env[len])
         len++;
-    minishell->env->envp_var = (char **)malloc(sizeof(char *) * (len + 2));
+    minishell->env->envp_var = (char **)malloc(sizeof(char *) * (len + 1));
     if (minishell->env->envp_var == NULL)
         exit_fail("Failed to allocate memory for envp_var");
     i = 0;
     j = 0;
-    while(env[i] != NULL)
+    while (env[i] != NULL)
     {
         if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
         {
+            minishell->env->envp_var[j] = increment_shlvl(env[i]);
+            if (minishell->env->envp_var[j] == NULL)
+                exit_fail("Failed to allocate memory for incremented SHLVL");
+            j++;
             i++;
             continue;
         }
@@ -28,10 +70,7 @@ void	init_envp(t_minishell *minishell, char **env)
         j++;
         i++;
     }
-    minishell->env->envp_var[j] = ft_strdup("SHLVL=1");
-    if (minishell->env->envp_var[j] == NULL)
-        exit_fail("Failed to allocate memory for SHLVL=1");
-    minishell->env->envp_var[++j] = NULL;
+    minishell->env->envp_var[j] = NULL;
 }
 
 void	init_tmp(t_mem *tmp)

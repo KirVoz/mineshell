@@ -19,7 +19,6 @@ void    execute_pwd(t_minishell *minishell, int fd)
     int i;
     char *pwd;
 
-    
     i = find_string_in_array(minishell->env->envp_var, "PWD=", 4);
     pwd = minishell->env->envp_var[i] + 4;
     ft_putstr_fd(pwd, fd);

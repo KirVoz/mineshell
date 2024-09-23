@@ -42,6 +42,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(PRS_PATH)/parser_list_utils.c \
 		$(VLD_PATH)/validator.c \
 		$(VLD_PATH)/validator_utils.c \
+		$(MEM_PATH)/shlvl.c \
 		$(MEM_PATH)/memory_allocation.c \
 		$(MEM_PATH)/memory_deallocation.c \
 		$(MEM_PATH)/minishell_init.c \
