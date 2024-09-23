@@ -37,7 +37,7 @@ int	redirections_unification_required(char **tokens)
 	return (required);
 }
 
-int	hanging_redirections(char **tokens)
+int	hanging_tokens(char **tokens)
 {
 	size_t	token_len;
 
@@ -47,7 +47,8 @@ int	hanging_redirections(char **tokens)
 		if ((ft_strncmp(*tokens, "<", token_len) == 0
 				|| ft_strncmp(*tokens, ">", token_len) == 0
 				|| ft_strncmp(*tokens, "<<", token_len) == 0
-				|| ft_strncmp(*tokens, ">>", token_len) == 0) && !*(tokens + 1)
+				|| ft_strncmp(*tokens, ">>", token_len) == 0
+				|| ft_strncmp(*tokens, "|", token_len) == 0) && !*(tokens + 1)
 			&& token_len != 0)
 			return (0);
 		tokens++;
@@ -90,7 +91,7 @@ int	validator_main(t_minishell *minishell, char ***tokens)
 		*tokens = tokens_realloc(tokens);
 	if (!pipe_redirections_mistake(minishell, *tokens))
 		return (0);
-	if (!hanging_redirections(*tokens))
+	if (!hanging_tokens(*tokens))
 		return (syntax_error(minishell, "newline"));
 	return (1);
 }

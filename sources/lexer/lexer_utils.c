@@ -31,14 +31,44 @@ char	*quote_counter(char *line)
 	return (NULL);
 }
 
+#include <ctype.h>
+
 char	hanging_pipe_heredoc(char *line)
 {
+	int i;
+	int valid;
+
+	i = 0;
+	valid = 0;
+	while (line[i] && line[i] != '|')
+	{
+		if (!isspace(line[i]) && line[i] != '<' && line[i] != '>')
+			valid = 1;
+		i++;
+	}
+	if (line[i] == '|' && valid)
+	{
+				i++;
+		while (line[i] && isspace(line[i]))
+			i++;
+		if (!line[i])
+			return ('p');
+	}
 	if (ft_strchr(line, '<')
 			&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
 			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
 		return ('h');
-	else if (ft_strrchr(line, '|')
-			&& !(*(ft_strrchr(line, '|') + 1)))
-		return ('p');
 	return (0);
 }
+
+// char	hanging_pipe_heredoc(char *line)
+// {
+// 	if (ft_strchr(line, '<')
+// 			&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
+// 			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
+// 		return ('h');
+// 	else if (ft_strrchr(line, '|')
+// 			&& !(*(ft_strrchr(line, '|') + 1)))
+// 		return ('p');
+// 	return (0);
+// }
