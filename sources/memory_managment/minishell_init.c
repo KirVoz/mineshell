@@ -36,6 +36,7 @@ void	init_envp(t_minishell *minishell, char **env)
 
 void	init_tmp(t_mem *tmp)
 {
+	tmp->line = NULL;
 	tmp->tokens = NULL;
 	tmp->heredoc_tmp = NULL;
 	tmp->current_heredoc = 0;

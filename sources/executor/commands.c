@@ -3,13 +3,13 @@
 # include <string.h>
 
 t_blin commands[7] = {
-    { "echo", execute_echo },
-    { "cd", execute_cd },
-    { "pwd", execute_pwd },
-    { "export", execute_export },
-    { "unset", execute_unset },
-    { "env", execute_env },
-    { "exit", execute_exit },
+    { "echo ", execute_echo },
+    { "cd ", execute_cd },
+    { "pwd ", execute_pwd },
+    { "export ", execute_export },
+    { "unset ", execute_unset },
+    { "env ", execute_env },
+    { "exit ", execute_exit },
 };
 
 void execute_echo(t_minishell *minishell, int fd)
@@ -20,8 +20,8 @@ void execute_echo(t_minishell *minishell, int fd)
     while (minishell->cmd->cmd[i] != NULL)
     {
         ft_putstr_fd(minishell->cmd->cmd[i], fd);
-        if (minishell->cmd->cmd[i + 1] != NULL)
-            ft_putstr_fd(" ", fd);
+        // if (minishell->cmd->cmd[i + 1] != NULL)
+        //     ft_putstr_fd(" ", fd);
         i++;
     }
     if (minishell->cmd->cmd[1] != NULL && ft_strncmp(minishell->cmd->cmd[1], "-n", 2) != 0)

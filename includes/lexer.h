@@ -1,6 +1,7 @@
 #ifndef LEXER_H
 # define LEXER_H
 # include "minishell.h"
+
 # define DELIMS "<>|"
 # define QUOTES "'\""
 # define VALID_TOKENS {"|", "<", ">", "<<", ">>", NULL}
@@ -21,12 +22,14 @@ char	hanging_pipe_heredoc(char *line);
 char	*extract_token(char **line);
 char	*getting_start(char **line, char *start, int *len);
 char	*getting_token(char *start, int len);
+char	*find_end_quote_len(char *line, int *len);
 
 // TOKENIZATOR_UTILS //del
 char	*find_end_quote(char *line, int *count);
 int		find_quotation_len(char *line);
 int		count_tokens(char *line);
 int		is_delimiter(char *line);
+
 
 // PIPE_HEREDOC //del
 char	**pipe_heredoc_main(t_minishell *minishell, char *line);
@@ -95,19 +98,18 @@ int		is_redirection(char *token);
 void	store_skipped_infiles(t_cmd **current);
 void	store_skipped_outfiles(t_cmd **current);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
-
 // MEMORY_MANAGEMENT //del
 void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char	**array_init(void);
-void	free_tokens(char **tokens);
-void	free_cmd(t_cmd *cmd);
-void	free_heredoc_tmp(char ***heredoc_tmp);
-void	free_minishell(t_minishell *minishell);
-void	exit_free(t_minishell *minishell, int exit_code);
 char	*allocate_string(size_t len, char *error);
 char	**allocate_array(size_t len, char *error);
-void	error_array_allocation(char **result, int i);
-
+void	error_array_allocation(char **result, int i, char *error);
+// MEMORY DEALLOCATION //del
+void	free_tokens(char **tokens);
+void	free_heredoc_tmp(char ***heredoc_tmp);
+void	free_cmd(t_cmd *cmd);
+void	free_minishell(t_minishell *minishell);
+void	exit_free(t_minishell *minishell, int exit_code);
 // GENERAL_UTILS //del
 size_t	array_len(char **array);
 
