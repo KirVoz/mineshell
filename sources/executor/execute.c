@@ -55,6 +55,7 @@ static void write_heredoc_to_fd(t_cmd *cmd, int fd)
 		j++;
 	}
 }
+
 static void heredoc_fd(t_cmd *cmd)
 {
     int heredoc_fd[2];
