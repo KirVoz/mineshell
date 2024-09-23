@@ -104,6 +104,9 @@ void	free_cmd(t_cmd *cmd);
 void	free_heredoc_tmp(char ***heredoc_tmp);
 void	free_minishell(t_minishell *minishell);
 void	exit_free(t_minishell *minishell, int exit_code);
+char	*allocate_string(size_t len, char *error);
+char	**allocate_array(size_t len, char *error);
+void	error_array_allocation(char **result, int i);
 
 // GENERAL_UTILS //del
 size_t	array_len(char **array);

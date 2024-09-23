@@ -18,12 +18,7 @@ char	**tokenizator(char *line)
 	{
 		result[i] = extract_token(&line);
 		if (!result[i])
-		{
-			while (i > 0)
-				free(result[--i]);
-			free(result);
-			exit_fail("Failed to allocate memory for result in tokenizator");
-		}
+			error_array_allocation(result, i);
 		i++;
 	}
 	result[token_count] = NULL;

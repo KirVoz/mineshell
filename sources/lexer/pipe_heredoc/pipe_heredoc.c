@@ -56,6 +56,52 @@ char	**handle_heredoc(t_minishell *minishell, char **tokens)
 	return (tokens);
 }
 
+char	**merge_tokens(char **tokens, char **new_tokens)
+{
+	char	**result;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	result = allocate_array(array_len(tokens) + array_len(new_tokens),
+		"Failed to allocate memory for result in merge_tokens");
+	while (tokens[i])
+	{
+		result[i] = ft_strdup(tokens[i]);
+		if (!result[i])
+			error_array_allocation(result, i);
+		i++;
+	}
+	while (new_tokens[j])
+	{
+		result[i] = ft_strdup(new_tokens[j]);
+		if (!result[i])
+			error_array_allocation(result, i);
+		i++;
+		j++;
+	}
+	result[i] = NULL;
+	return (result);
+}
+
+char	**handle_pipe(char **tokens)
+{
+	char	**merged_tokens;
+	char	**new_tokens;
+	char 	*new_line;
+
+	merged_tokens = NULL;
+	new_line = readline(PROMPT_HEREDOC);
+	new_tokens = tokenizator(new_line);
+	merged_tokens = merge_tokens(tokens, new_tokens);
+	free(new_line);
+	free_tokens(tokens);
+	free_tokens(new_tokens);
+	return (merged_tokens);
+}
+
+
 char	**pipe_heredoc_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
@@ -63,5 +109,7 @@ char	**pipe_heredoc_main(t_minishell *minishell, char *line)
 	tokens = tokenizator(line);
 	if (hanging_pipe_heredoc(line) == 'h')
 		tokens = handle_heredoc(minishell, tokens);
+	else if (hanging_pipe_heredoc(line) == 'p')
+		tokens = handle_pipe(tokens);
 	return (tokens);
 }

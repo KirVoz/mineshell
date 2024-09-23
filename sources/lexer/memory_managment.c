@@ -132,3 +132,32 @@ void	exit_free(t_minishell *minishell, int exit_code)
 	free(minishell->env);
 	exit(exit_code);
 }
+
+char	*allocate_string(size_t len, char *error)
+{
+	char	*result;
+
+	result = (char *)malloc((len + 1) * sizeof(char));
+	if (!result)
+		exit_fail(error);
+	return (result);
+}
+
+char	**allocate_array(size_t len, char *error)
+{
+	char	**result;
+
+	result = (char **)malloc((len + 1) * sizeof(char *));
+	if (!result)
+		exit_fail(error);
+	return (result);
+}
+
+
+void	error_array_allocation(char **result, int i)
+{
+		while (i > 0)
+			free(result[--i]);
+		free(result);
+		exit_fail("Failed to allocate memory for result in tokenizator");
+}
