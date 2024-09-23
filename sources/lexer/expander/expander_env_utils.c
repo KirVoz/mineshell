@@ -1,16 +1,6 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*allocate_env_value(char *value)
-{
-	char	*env_value;
-
-	env_value = ft_strdup(value);
-	if (!env_value)
-		exit_fail("Memory allocation for env_value failed.");
-	return (env_value);
-}
-
 char	*find_env_value(char **env_array, char *var_name)
 {
 	size_t	var_name_len;
@@ -42,47 +32,35 @@ char	*get_env_value(t_minishell *minishell, char **token)
 	return (env_value);
 }
 
-size_t	additional_len(char *token)
-{
-	size_t	len;
-
-	len = 0;
-	while (*token && !ft_strchr(" \n\"\'", *token))
-	{
-		len++;
-		token++;
-	}
-	return (len);
-}
-
-size_t	env_value_len(t_minishell *minishell, char **token)
+char	*env_var_copy(char **token)
 {
 	char	*variable_name;
-	char	*env_list;
-	size_t	value_len;
+	char	*c_token;
 	size_t	var_len;
-	int		i;
 
-	// size_t	full_var_len;
-	variable_name = env_var_copy(token);
-	var_len = ft_strlen(variable_name);
-	value_len = 0;
-	// full_var_len = 0;
-	i = -1;
-	while (minishell->env->envp_var[++i])
+	var_len = 0;
+	(*token)++;
+	c_token = *token;
+	while (**token && !(**token == ' ' || **token == '"' || **token == '\''
+		|| **token == '/' || **token == '$' || **token == '='))
 	{
-		env_list = minishell->env->envp_var[i];
-		// full_var_len = expanded_env_var_len(env_list);
-		if (ft_strnstr(env_list, variable_name, var_len))
-		{
-			// printf("variable_name %s, env_list %s, ind %d\n", variable_name, env_list, i); //del
-			// printf("value_len %zu, ft_strlen(env_list) %zu, var_len %zu\n", value_len, ft_strlen(env_list), var_len); //del
-			value_len = ft_strlen(env_list) - var_len;
-			if (*token)
-				value_len += additional_len(*token);
-			break ;
-		}
+		var_len++;
+		(*token)++;
 	}
-	free(variable_name);
-	return (value_len);
+	variable_name = (char *)malloc((var_len + 2) * sizeof(char));
+	if (!variable_name)
+		exit_fail("Memmory allocation for variable_name failed.");
+	strlcpy_eq(variable_name, c_token, var_len + 1);
+	return (variable_name);
+}
+
+void	digit_env_var_substitute(char **token, char **result, int *i)
+{
+	*token += 2;
+	while (**token && !(**token == ' ' || **token == '"'
+		|| **token == '\''))
+	{
+		(*result)[*i] = *(*token)++;
+		(*i)++;
+	}
 }

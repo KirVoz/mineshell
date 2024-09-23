@@ -80,7 +80,6 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd->infile);
 	free(cmd->outfile);
 	free_tokens(cmd->cmd);
-	free_tokens(cmd->heredoc);
 	ft_lstclear(&cmd->skipped_in, free);
 	ft_lstclear(&cmd->skipped_out, free);
 	cmd->append = 0;
@@ -125,11 +124,11 @@ void	free_minishell(t_minishell *minishell)
 	}
 }
 
-void	exit_free(t_minishell *minishell)
+void	exit_free(t_minishell *minishell, int exit_code)
 {
 	free_minishell(minishell);
 	free(minishell->tmp);
 	free_tokens(minishell->env->envp_var);
 	free(minishell->env);
-	exit(0);
+	exit(exit_code);
 }

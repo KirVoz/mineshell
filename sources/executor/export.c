@@ -67,4 +67,5 @@ void execute_export(t_minishell *minishell, int fd)
             ft_putstr_fd("\n", fd);
         }
     }
+    minishell->exit_code = 0;
 }

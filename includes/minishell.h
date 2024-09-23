@@ -100,6 +100,7 @@ void   		no_file(t_minishell *minishell, char *filename);
 void    	no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
 int			syntax_quote_error(t_minishell *minishell, char *token);
+void    	arg_count_error(t_minishell *minishell, char *command);
 
 // path.c
 char		*get_path(t_minishell *minishell, char *cmd);

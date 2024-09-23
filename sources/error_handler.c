@@ -43,6 +43,15 @@ void    no_path_file(t_minishell *minishell, char *filename)
     minishell->exit_code = 127;
 }
 
+void    arg_count_error(t_minishell *minishell, char *command)
+{
+    ft_putstr_fd("minishell: ", 2);
+    ft_putstr_fd(command, 2);
+    ft_putstr_fd(": too many arguments", 2);
+    ft_putstr_fd("\n", 2);
+    minishell->exit_code = 1;
+}
+
 int    syntax_error(t_minishell *minishell, char *token)
 {
     ft_putstr_fd("minishell: ", 2);

@@ -51,4 +51,5 @@ void execute_unset(t_minishell *minishell, int fd)
         }
         i++;
     }
+    minishell->exit_code = 0;
 }

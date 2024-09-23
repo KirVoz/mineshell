@@ -26,7 +26,7 @@ int	main(int ac, char **av, char **env)
 			}
 			free(line);
 		}
-		exit_free(&minishell);
+		exit_free(&minishell, minishell.exit_code);
 	}
 	else
 		printf("Invalid number of arguments\n");

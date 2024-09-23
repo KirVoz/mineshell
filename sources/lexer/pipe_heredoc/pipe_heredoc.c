@@ -1,6 +1,23 @@
 #include "lexer.h"
 #include "minishell.h"
 
+int	incorrect_delimiter(char *delimiter)
+{
+	char	*tokens[6] = VALID_TOKENS;
+	int		i = 0;
+	
+	while (tokens[i])
+	{
+		if (ft_strncmp(delimiter, tokens[i], ft_strlen(tokens[i])) == 0)
+		{
+			free (delimiter);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 void	add_heredocs(t_minishell *minishell, char **tokens, size_t redirections)
 {
 	char	***heredoc_tmp;
@@ -18,6 +35,8 @@ void	add_heredocs(t_minishell *minishell, char **tokens, size_t redirections)
 	while (heredoc_index < redirections)
 	{
 		delimiter = find_delimiter(tokens, &i);
+		if (!incorrect_delimiter(delimiter))
+			return ;
 		heredoc_tokens = read_heredoc_lines(delimiter);
 		expander_main(minishell, heredoc_tokens);
 		minishell->tmp->heredoc_tmp[heredoc_index] = heredoc_tokens;

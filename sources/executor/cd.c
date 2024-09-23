@@ -87,4 +87,5 @@ void execute_cd(t_minishell *minishell, int fd)
         new_path = ft_strdup(minishell->cmd->cmd[1]);
         change_directory(minishell, new_path);
     }
+    minishell->exit_code = 0;
 }

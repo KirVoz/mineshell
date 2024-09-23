@@ -41,14 +41,13 @@ int	lexer_main(t_minishell *minishell, char *line)
 	// print_tokens_state(minishell->tmp->tokens, "after tokenizator, before expander"); //del
 	expander_main(minishell, minishell->tmp->tokens);
 	// print_tokens_state(minishell->tmp->tokens, "after expander, before validator"); //del
-	// return (1);
 	if (!validator_main(minishell, &minishell->tmp->tokens))
 	{
 		free_minishell(minishell);
 		return (0);
 	}
-	// print_tokens_state(tokens, "after validator"); //del
+	// print_tokens_state(minishell->tmp->tokens, "after validator"); //del
 	parser_main(&minishell, &minishell->tmp->tokens);
-	print_list_state(minishell, "after parser"); //del
+	// print_list_state(minishell, "after parser"); //del
 	return (1);
 }

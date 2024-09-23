@@ -16,43 +16,6 @@ char	*extract_token(char **line)
 	return (token);
 }
 
-int	if_quote(int *in_quote, char c)
-{
-	if (c == '\'' || c == '\"')
-		*in_quote = 1;
-	return (1);
-}
-
-// char	*getting_start(char **line, char *start, int *len)
-// {
-// 	int		in_quote;
-
-// 	in_quote = 0;
-// 	while (**line)
-// 	{
-// 		if (ft_strchr(QUOTES, **line) && !in_quote)
-// 		{
-// 			*len = find_quotation_len(*line);
-// 			*line = find_end_quote(*line, NULL);
-// 			break ;
-// 		}
-// 		if (is_delimiter(*line))
-// 		{
-// 			if (*len > 0)
-// 				break ;
-// 			if (ft_strchr(DELIMS, **line))
-// 			{
-// 				*len = 1;
-// 				(*line)++;
-// 				break ;
-// 			}
-// 		}
-// 		(*len)++;
-// 		(*line)++;
-// 	}
-// 	return (start);
-// }
-
 char	*getting_token(char *start, int len)
 {
 	char	*token;
@@ -82,9 +45,6 @@ char	*find_end_quote_len(char *line, int *len)
 
 char	*getting_start(char **line, char *start, int *len)
 {
-	// int	in_token;
-
-	// in_token = 0;
 	while (*line)
 	{
 		if (ft_strchr(QUOTES, **line))
@@ -95,9 +55,11 @@ char	*getting_start(char **line, char *start, int *len)
 		}
 		else if (is_delimiter(*line))
 		{
-			(*line)++;
 			if (*len == 0)
+			{
+				(*line)++;
 				(*len)++;
+			}
 			break ;
 		}
 		(*len)++;

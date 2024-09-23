@@ -33,6 +33,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(PHD_PATH)/pipe_heredoc_utils.c \
 		$(EXP_PATH)/expander.c \
 		$(EXP_PATH)/expander_utils.c \
+		$(EXP_PATH)/expander_len_utils.c \
 		$(EXP_PATH)/expander_env_utils.c \
 		$(PRS_PATH)/parser.c \
 		$(PRS_PATH)/parser_utils.c \

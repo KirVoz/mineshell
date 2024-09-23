@@ -3,6 +3,7 @@
 # include "minishell.h"
 # define DELIMS "<>|"
 # define QUOTES "'\""
+# define VALID_TOKENS {"|", "<", ">", "<<", ">>", NULL}
 
 // DEBUG //del
 void	print_list_state(t_minishell *minishell, char *name);
@@ -50,21 +51,26 @@ void	expander_main(t_minishell *minishell, char **tokens);
 
 // EXPANDER_UTILS //del
 size_t	strlcpy_eq(char *dst, const char *src, size_t dstsize);
-char	*env_var_copy(char **token);
+char	*allocate_env_value(char *value);
 char	set_quote(char c, int *in_quote);
-size_t	expanded_env_var_len(char *line);
-size_t	expanded_line_len(t_minishell *minishell, char *token);
 int		dollar_special_case(char **token);
 
+// EXPANDER_LEN_UTILS //del
+size_t	expanded_line_len(t_minishell *minishell, char *token);
+size_t	expanded_env_var_len(char *line);
+size_t	env_value_len(t_minishell *minishell, char **token);
+size_t	digit_env_var_len(char **token);
+size_t	additional_len(char *token);
+
 // EXPANDER_ENV_UTILS //del
-char	*allocate_env_value(char *value);
 char	*find_env_value(char **env_array, char *var_name);
 char	*get_env_value(t_minishell *minishell, char **token);
-size_t	env_value_len(t_minishell *minishell, char **token);
+char	*env_var_copy(char **token);
+void	digit_env_var_substitute(char **token, char **result, int *i);
 
 // VALIDATOR //del
 int		pipe_redirections_mistake(t_minishell *minishell, char **tokens);
-int		redirections_unification(char **tokens);
+int		redirections_unification_required(char **tokens);
 int		hanging_redirections(char **tokens);
 int		validator_main(t_minishell *minishell, char ***tokens);
 
@@ -97,7 +103,7 @@ void	free_tokens(char **tokens);
 void	free_cmd(t_cmd *cmd);
 void	free_heredoc_tmp(char ***heredoc_tmp);
 void	free_minishell(t_minishell *minishell);
-void	exit_free(t_minishell *minishell);
+void	exit_free(t_minishell *minishell, int exit_code);
 
 // GENERAL_UTILS //del
 size_t	array_len(char **array);

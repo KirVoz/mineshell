@@ -23,4 +23,5 @@ void    execute_pwd(t_minishell *minishell, int fd)
     pwd = minishell->env->envp_var[i] + 4;
     ft_putstr_fd(pwd, fd);
     ft_putstr_fd("\n", fd);
+    minishell->exit_code = 0;
 }

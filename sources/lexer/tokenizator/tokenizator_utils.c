@@ -39,7 +39,10 @@ int	count_tokens(char *line)
 	while (*line)
 	{
 		if (ft_strchr(QUOTES, *line))
+		{
 			line = find_end_quote(line, &count);
+			in_token = 0;
+		}
 		else if (is_delimiter(line))
 		{
 			if (in_token)
