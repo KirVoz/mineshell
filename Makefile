@@ -56,8 +56,8 @@ CC = cc
 INCFLAGS = -I./includes -I/opt/homebrew/opt/readline/include
 LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 
-CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 

@@ -19,7 +19,7 @@ char	*quote_counter(char *line);
 char	hanging_pipe_heredoc(char *line);
 
 // TOKENIZATOR //del
-char	*extract_token(char **line);
+char	*extract_token(char **line, int i);
 char	*getting_start(char **line, char *start, int *len);
 char	*getting_token(char *start, int len);
 char	*find_end_quote_len(char *line, int *len);
@@ -74,7 +74,7 @@ void	digit_env_var_substitute(char **token, char **result, int *i);
 // VALIDATOR //del
 int		pipe_redirections_mistake(t_minishell *minishell, char **tokens);
 int		redirections_unification_required(char **tokens);
-int		hanging_redirections(char **tokens);
+int		hanging_tokens(char **tokens);
 int		validator_main(t_minishell *minishell, char ***tokens);
 
 // VALIDATOR_UTILS //del

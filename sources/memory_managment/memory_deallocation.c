@@ -66,7 +66,11 @@ void	free_minishell(t_minishell *minishell)
 		free_cmd(minishell->cmd);
 		minishell->cmd = NULL;
 	}
-	free(minishell->tmp->line);
+	if (minishell->tmp->line)
+	{
+		free(minishell->tmp->line);
+		minishell->tmp->line = NULL;
+	}
 }
 
 void	exit_free(t_minishell *minishell, int exit_code)

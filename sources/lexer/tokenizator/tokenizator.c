@@ -1,7 +1,7 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*extract_token(char **line)
+char	*extract_token(char **line, int i)
 {
 	char	*start;
 	char	*token;
@@ -14,7 +14,8 @@ char	*extract_token(char **line)
 	token = getting_token(start, len);
 	while (**line && **line == ' ')
 		(*line)++;
-	if (*(*line - 1) && *(*line - 1) == ' ')
+	if (!ft_strchr(DELIMS, *token) && *(*line - 1)
+		&& *(*line - 1) == ' ' && i != 0)
 	{
 		token_tmp = token;
 		token = ft_strjoin(token, " ");
