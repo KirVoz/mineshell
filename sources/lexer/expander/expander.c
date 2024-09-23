@@ -193,7 +193,7 @@ void	expander_main(t_minishell *minishell, char **tokens)
 	while (*tokens)
 	{
 		token_cp = *tokens;
-		if (strnstr(*tokens, "$?", ft_strlen(*tokens))
+		if (ft_strnstr(*tokens, "$?", ft_strlen(*tokens))
 			&& !ft_strchr(*tokens, '\''))
 			*tokens = expand_question_mark(minishell, *tokens);
 		else if (ft_strchr(*tokens, '"') || ft_strchr(*tokens, '\''))

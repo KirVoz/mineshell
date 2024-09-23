@@ -15,8 +15,13 @@ t_blin commands[7] = {
 void execute_echo(t_minishell *minishell, int fd)
 {
     int i = 1;
-    if (minishell->cmd->cmd[i] != NULL && ft_strncmp(minishell->cmd->cmd[i], "-n", 2) == 0)
+    int newline = 1;
+
+    while (minishell->cmd->cmd[i] != NULL && ft_strncmp(minishell->cmd->cmd[i], "-n", 2) == 0)
+    {
+        newline = 0;
         i++;
+    }
     while (minishell->cmd->cmd[i] != NULL)
     {
         ft_putstr_fd(minishell->cmd->cmd[i], fd);
@@ -24,7 +29,7 @@ void execute_echo(t_minishell *minishell, int fd)
             ft_putstr_fd(" ", fd);
         i++;
     }
-    if (minishell->cmd->cmd[1] != NULL && ft_strncmp(minishell->cmd->cmd[1], "-n", 2) != 0)
+    if (newline)
         ft_putstr_fd("\n", fd);
     minishell->exit_code = 0;
 }
