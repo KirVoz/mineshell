@@ -22,7 +22,6 @@ int	main(int ac, char **av, char **env)
             	if (!lexer_main(&minishell, line))
 					continue ;
 				execute(&minishell);
-		        // printf("structs exit code in main = %d\n", minishell.exit_code);
 			}
 			free(line);
 		}

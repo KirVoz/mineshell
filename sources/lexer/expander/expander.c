@@ -146,16 +146,6 @@ void	write_exit_code(char **result, char *exit_code, int *i)
 	}
 }
 
-char	*allocate_result(size_t len)
-{
-	char	*result;
-
-	result = (char *)malloc((len + 1) * sizeof(char));
-	if (!result)
-		exit_fail("Memmory allocation for result in expand_question_mark failed.");
-	return (result);
-}
-
 char	*expand_question_mark(t_minishell *minishell, char *token)
 {
 	char	*result;
@@ -166,7 +156,8 @@ char	*expand_question_mark(t_minishell *minishell, char *token)
 	i = 0;
 	token_cp = token;
 	exit_code = ft_itoa(minishell->exit_code);
-	result = allocate_result(exit_len(token, exit_code));
+	result = allocate_string(exit_len(token, exit_code),
+		"Memmory allocation for result in expand_question_mark failed.");
 	while (*token)
 	{
 		if (*token == '$' && *(token + 1) && *(token + 1) == '?')
