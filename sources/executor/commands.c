@@ -31,15 +31,20 @@ void execute_exit(t_minishell *minishell, int fd)
     exit_free(minishell, exit_code);
 }
 
+
 void execute_command(char *cmd, t_minishell *minishell, int fd)
 {
-    for (int i = 0; i < 7; i++)
+    int i;
+
+    i = 0;
+    while (i < 7)
     {
-        if (strcmp(cmd, commands[i].name) == 0)
+        if (ft_strncmp(cmd, commands[i].name, ft_strlen(commands[i].name)) == 0)
         {
             commands[i].func(minishell, fd);
             return;
         }
+        i++;
     }
     printf("Command not found: %s\n", cmd);
 }

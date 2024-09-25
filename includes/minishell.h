@@ -40,7 +40,7 @@ typedef struct s_cmd
 }					t_cmd;
 
 
-typedef struct s_blin // сокращение от билдина
+typedef struct s_blin
 {
 	char	*name;
 	void	(*func)(t_minishell *, int);
@@ -65,14 +65,13 @@ typedef struct s_minishell
 	int		exit_code;
 }			t_minishell;
 
-
+// shlvl.c
+char		*increment_shlvl(const char *shlvl);
 // minishell_init.c
 void		init_envp(t_minishell *minishell, char **env);
 void		init_tmp(t_mem *tmp);
 t_cmd		*init_cmd_node(int cmd_count);
 void		init_minishell(t_minishell *minishell, char **env);
-
-
 /*utils.c*/
 void		*ft_realloc_exe(void *ptr, size_t size);
 /*emulated comms*/
@@ -85,17 +84,13 @@ void		execute_unset(t_minishell *minishell, int fd);
 void		execute_env(t_minishell *minishell, int fd);
 void		execute_exit(t_minishell *minishell, int fd);
 void		execute_command(char *cmd, t_minishell *minishell, int fd);
-
-/*exe*/
+//exe
 void		execute(t_minishell *minishell);
-/*signals*/
+//signals
 void		ft_signals(void);
-
-// main.c
-
-// utils.c
+//utils.c
 int			count_str(char **str);
-/*error*/
+//error
 void		exit_fail(const char *exit_message);
 void		error_handler(t_minishell *minishell, char *error);
 void		not_found(t_minishell *minishell, char *cmd);
@@ -104,8 +99,7 @@ void    	no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
 int			syntax_quote_error(t_minishell *minishell, char *token);
 void    	arg_count_error(t_minishell *minishell, char *command);
-
-// path.c
+//path.c
 char		*get_path(t_minishell *minishell, char *cmd);
 
 #endif

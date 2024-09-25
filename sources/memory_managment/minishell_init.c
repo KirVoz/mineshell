@@ -20,26 +20,31 @@ void	init_envp(t_minishell *minishell, char **env)
 	int	len;
 
 	len = 0;
-	i = 0;
-	j = 0;
 	while (env[len])
 		len++;
-	minishell->env->envp_var = allocate_array(len + 1, "Envp_var in init");
+	minishell->env->envp_var = (char **)malloc(sizeof(char *) * (len + 1));
+	if (minishell->env->envp_var == NULL)
+		exit_fail("Failed to allocate memory for envp_var");
+	i = 0;
+	j = 0;
 	while (env[i] != NULL)
 	{
 		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
 		{
+			minishell->env->envp_var[j] = increment_shlvl(env[i]);
+			if (minishell->env->envp_var[j] == NULL)
+				exit_fail("Failed to allocate memory for incremented SHLVL");
+			j++;
 			i++;
 			continue ;
 		}
-		minishell->env->envp_var[j] = allocate_dup(env[i], "Envp_var in init");
+		minishell->env->envp_var[j] = ft_strdup(env[i]);
+		if (minishell->env->envp_var[j] == NULL)
+			exit_fail("Failed to allocate memory for envp_var[i]");
 		j++;
 		i++;
 	}
-	minishell->env->envp_var[j] = ft_strdup("SHLVL=1");
-	if (minishell->env->envp_var[j] == NULL)
-		exit_fail("Failed to allocate memory for SHLVL=1");
-	minishell->env->envp_var[++j] = NULL;
+	minishell->env->envp_var[j] = NULL;
 }
 
 void	init_tmp(t_mem *tmp)
