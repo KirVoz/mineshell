@@ -1,26 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe_heredoc.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:24:02 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:24:03 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
-int	incorrect_delimiter(char *delimiter)
+void	add_heredocs(t_minishell *minishell, char **tokens, size_t rd)
 {
-	char	*tokens[6] = VALID_TOKENS;
-	int		i = 0;
-	
-	while (tokens[i])
-	{
-		if (ft_strncmp(delimiter, tokens[i], ft_strlen(tokens[i])) == 0)
-		{
-			free (delimiter);
-			return (0);
-		}
-		i++;
-	}
-	return (1);
-}
-
-void	add_heredocs(t_minishell *minishell, char **tokens, size_t redirections)
-{
-	char	***heredoc_tmp;
 	size_t	i;
 	size_t	heredoc_index;
 	char	*delimiter;
@@ -28,21 +22,24 @@ void	add_heredocs(t_minishell *minishell, char **tokens, size_t redirections)
 
 	i = 0;
 	heredoc_index = 0;
-	heredoc_tmp = (char ***)malloc((redirections + 1) * sizeof(char **));
-	if (!heredoc_tmp)
+	minishell->tmp->heredoc_tmp = (char ***)malloc((rd + 1) * sizeof(char **));
+	if (!minishell->tmp->heredoc_tmp)
 		exit_fail("Failed to allocate memory for heredoc_tmp");
-	minishell->tmp->heredoc_tmp = heredoc_tmp;
-	while (heredoc_index < redirections)
+	while (heredoc_index < rd)
 	{
 		delimiter = find_delimiter(tokens, &i);
-		if (!incorrect_delimiter(delimiter))
+		if (!incorrect_delimiter(&delimiter))
+		{
+			free(minishell->tmp->heredoc_tmp);
+			minishell->tmp->heredoc_tmp = NULL;
 			return ;
-		heredoc_tokens = read_heredoc_lines(delimiter);
-		expander_main(minishell, heredoc_tokens);
+		}
+		heredoc_tokens = procees_heredoc_lines(delimiter);
+		heredoc_expander(minishell, heredoc_tokens);
 		minishell->tmp->heredoc_tmp[heredoc_index] = heredoc_tokens;
 		heredoc_index++;
 	}
-	minishell->tmp->heredoc_tmp[redirections] = NULL;
+	minishell->tmp->heredoc_tmp[rd] = NULL;
 }
 
 char	**handle_heredoc(t_minishell *minishell, char **tokens)
@@ -52,44 +49,16 @@ char	**handle_heredoc(t_minishell *minishell, char **tokens)
 	redirections = redirections_count(tokens);
 	if (!redirections)
 		return (tokens);
-	add_heredocs(minishell, tokens, redirections);
+	if (*(tokens + 1))
+		add_heredocs(minishell, tokens, redirections);
 	return (tokens);
-}
-
-char	**merge_tokens(char **tokens, char **new_tokens)
-{
-	char	**result;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	j = 0;
-	result = allocate_array(array_len(tokens) + array_len(new_tokens),
-		"Result in merge_tokens");
-	while (tokens[i])
-	{
-		result[i] = ft_strdup(tokens[i]);
-		if (!result[i])
-			error_array_allocation(result, i, "Result[i] in merge_tokens");
-		i++;
-	}
-	while (new_tokens[j])
-	{
-		result[i] = ft_strdup(new_tokens[j]);
-		if (!result[i])
-			error_array_allocation(result, i, "Result[i] in merge_tokens");
-		i++;
-		j++;
-	}
-	result[i] = NULL;
-	return (result);
 }
 
 char	**handle_pipe(char **tokens)
 {
 	char	**merged_tokens;
 	char	**new_tokens;
-	char 	*new_line;
+	char	*new_line;
 
 	merged_tokens = NULL;
 	new_line = readline(PROMPT_HEREDOC);
@@ -100,7 +69,6 @@ char	**handle_pipe(char **tokens)
 	free_tokens(new_tokens);
 	return (merged_tokens);
 }
-
 
 char	**pipe_heredoc_main(t_minishell *minishell, char *line)
 {

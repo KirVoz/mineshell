@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_len_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:30:51 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:30:52 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
@@ -20,7 +32,6 @@ size_t	expanded_line_len(t_minishell *minishell, char *token)
 			&& !(*(token + 1) == '"' || *(token + 1) == '\''))
 		{
 			len += env_value_len(minishell, &token);
-			// printf("expanded_line_len %zu\n", len); //del
 			continue ;
 		}
 		else if (*token != current_quote || in_quote)
@@ -66,7 +77,7 @@ size_t	digit_env_var_len(char **token)
 	len = 0;
 	*token += 2;
 	while (**token && !(**token == ' ' || **token == '"' || **token == '\''
-		|| **token == '/' || **token == '$' || **token == '='))
+			|| **token == '/' || **token == '$' || **token == '='))
 	{
 		len++;
 		(*token)++;
@@ -83,6 +94,21 @@ size_t	additional_len(char *token)
 	{
 		len++;
 		token++;
+	}
+	if (*token == ' ')
+		len++;
+	return (len);
+}
+
+size_t	expanded_env_var_len(char *line)
+{
+	int	len;
+
+	len = 0;
+	while (*line && *line != '\n')
+	{
+		len++;
+		line++;
 	}
 	return (len);
 }

@@ -17,8 +17,8 @@ void	print_list_state(t_minishell *minishell, char *name)
 		printf("Command %d:\n", cmd_index);
 		for (int arg_index = 0; current->cmd[arg_index] != NULL; arg_index++)
 		{
-			printf(" Arg %d:\n   cmd:        %s\n   infile:     %s\n   outfile:    %s\n",
-			arg_index, current->cmd[arg_index], current->infile, current->outfile);
+			printf(" Arg %d:\n   cmd:        %s\n   whitespace: %d\n   infile:     %s\n   outfile:    %s\n",
+			arg_index, current->cmd[arg_index], current->whitespace[arg_index], current->infile, current->outfile);
 			printf("   s_infiles:  ");
 			skipped_in = current->skipped_in;
 			while (skipped_in != NULL)
@@ -40,7 +40,7 @@ void	print_list_state(t_minishell *minishell, char *name)
 		}
 		for (int i = 0; current->heredoc && current->heredoc[i]; i++)
 		{
-			printf(" Heredoc: %s\n", current->heredoc[i]);
+			printf("   heredoc: %s\n", current->heredoc[i]);
 		}
 		current = current->next;
 		cmd_index++;

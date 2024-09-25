@@ -1,13 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:22:25 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:22:28 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
 char	**tokenizator(char *line)
 {
 	int		i;
+	int		token_flag;
 	int		token_count;
 	char	**result;
 
 	i = 0;
+	token_flag = 0;
 	token_count = count_tokens(line);
 	result = (char **)malloc((token_count + 1) * sizeof(char *));
 	if (!result)
@@ -16,7 +30,7 @@ char	**tokenizator(char *line)
 		line++;
 	while (i < token_count)
 	{
-		result[i] = extract_token(&line, i);
+		result[i] = extract_token(&line, i, &token_flag);
 		if (!result[i])
 			error_array_allocation(result, i, "Result[i] in tokenizator");
 		i++;
@@ -33,16 +47,16 @@ int	lexer_main(t_minishell *minishell, char *line)
 		minishell->tmp->tokens = pipe_heredoc_main(minishell, line);
 	else
 		minishell->tmp->tokens = tokenizator(line);
-	// print_tokens_state(minishell->tmp->tokens, "after tokenizator, before expander"); //del
+	// print_tokens_state(minishell->tmp->tokens, "after tokenizator, before expander"); 
 	expander_main(minishell, minishell->tmp->tokens);
-	// print_tokens_state(minishell->tmp->tokens, "after expander, before validator"); //del
+	// print_tokens_state(minishell->tmp->tokens, "after expander, before validator"); 
 	if (!validator_main(minishell, &minishell->tmp->tokens))
 	{
 		free_minishell(minishell);
 		return (0);
 	}
-	// print_tokens_state(minishell->tmp->tokens, "after validator"); //del
+	// print_tokens_state(minishell->tmp->tokens, "after validator"); 
 	parser_main(&minishell, &minishell->tmp->tokens);
-	// print_list_state(minishell, "after parser"); //del
+	// print_list_state(minishell, "after parser"); 
 	return (1);
 }

@@ -1,74 +1,65 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:22:38 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:22:42 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
 char	*quote_counter(char *line)
 {
-	int		double_q;
-	int		single_q;
-	int		in_double_q;
+	int		double_quote;
+	int		single_quote;
 
-	double_q = 0;
-	single_q = 0;
-	in_double_q = 0;
+	double_quote = 0;
+	single_quote = 0;
 	while (*line)
 	{
-		if (ft_strchr("\"", *line))
-		{
-			double_q++;
-			if (in_double_q)
-				in_double_q = 0;
-			else
-				in_double_q = 1;
-		}
-		else if (ft_strchr("\'", *line) && !in_double_q)
-			single_q++;
+		if (*line == '\"' && !single_quote)
+			double_quote = !double_quote;
+		else if (*line == '\'' && !double_quote)
+			single_quote = !single_quote;
 		line++;
 	}
-	if (double_q % 2 != 0)
+	if (double_quote % 2 != 0)
 		return ("\"");
-	else if (single_q % 2 != 0)
+	else if (single_quote % 2 != 0)
 		return ("'");
 	return (NULL);
 }
 
-#include <ctype.h>
-
 char	hanging_pipe_heredoc(char *line)
 {
-	int i;
-	int valid;
+	int		valid;
+	char	*tmp;
 
-	i = 0;
 	valid = 0;
-	while (line[i] && line[i] != '|')
+	tmp = line;
+	while (*line && *line != '|')
 	{
-		if (!isspace(line[i]) && line[i] != '<' && line[i] != '>')
+		if (!isspace(*line) && *line != '<' && *line != '>')
 			valid = 1;
-		i++;
+		line++;
 	}
-	if (line[i] == '|' && valid)
+	if (ft_strrchr(line, '|') && valid)
 	{
-				i++;
-		while (line[i] && isspace(line[i]))
-			i++;
-		if (!line[i])
+		line = ft_strrchr(line, '|') + 1;
+		while (*line && isspace(*line))
+			line++;
+		if (!*line)
 			return ('p');
 	}
+	line = tmp;
 	if (ft_strchr(line, '<')
-			&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
-			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
+		&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
+		&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
 		return ('h');
 	return (0);
 }
-
-// char	hanging_pipe_heredoc(char *line)
-// {
-// 	if (ft_strchr(line, '<')
-// 			&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
-// 			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
-// 		return ('h');
-// 	else if (ft_strrchr(line, '|')
-// 			&& !(*(ft_strrchr(line, '|') + 1)))
-// 		return ('p');
-// 	return (0);
-// }

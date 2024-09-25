@@ -32,10 +32,13 @@ SRC =	$(SRC_PATH)/main.c \
 		$(TKN_PATH)/tokenizator_utils.c \
 		$(PHD_PATH)/pipe_heredoc.c \
 		$(PHD_PATH)/heredoc_utils.c \
+		$(PHD_PATH)/heredoc_expander.c \
+		$(PHD_PATH)/pipe_utils.c \
 		$(PHD_PATH)/pipe_heredoc_utils.c \
 		$(EXP_PATH)/expander.c \
 		$(EXP_PATH)/expander_utils.c \
 		$(EXP_PATH)/expander_len_utils.c \
+		$(EXP_PATH)/expander_len_utils2.c \
 		$(EXP_PATH)/expander_env_utils.c \
 		$(PRS_PATH)/parser.c \
 		$(PRS_PATH)/parser_utils.c \
@@ -55,8 +58,8 @@ CC = cc
 INCFLAGS = -I./includes -I/opt/homebrew/opt/readline/include
 LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
 
-# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 

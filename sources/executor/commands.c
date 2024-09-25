@@ -9,7 +9,7 @@ t_blin commands[7] = {
     { "export", execute_export },
     { "unset", execute_unset },
     { "env", execute_env },
-    { "exit ", execute_exit },
+    { "exit", execute_exit },
 };
 
 void execute_exit(t_minishell *minishell, int fd)

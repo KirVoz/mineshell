@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizator_utils.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:23:31 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:23:33 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
@@ -12,9 +24,23 @@ char	*find_end_quote(char *line, int *count)
 		i++;
 	if (count)
 		(*count)++;
-	if (!count)
-		return (&(line[i + 1]));
-	return (&(line[i]));
+	return (&(line[i + 1]));
+}
+
+char	*find_end_quote_len(char *line, int *len)
+{
+	int		i;
+	char	quote;
+
+	i = 1;
+	quote = *line;
+	while (line[i] && line[i] != quote)
+	{
+		i++;
+		(*len)++;
+	}
+	*len += 2;
+	return (&(line[i + 1]));
 }
 
 int	find_quotation_len(char *line)
@@ -29,41 +55,16 @@ int	find_quotation_len(char *line)
 	return (i + 1);
 }
 
-int	count_tokens(char *line)
-{
-	int	count;
-	int	in_token;
-
-	count = 0;
-	in_token = 0;
-	while (*line)
-	{
-		if (ft_strchr(QUOTES, *line))
-		{
-			line = find_end_quote(line, &count);
-			in_token = 0;
-		}
-		else if (is_delimiter(line))
-		{
-			if (in_token)
-				in_token = 0;
-			if (ft_strchr(DELIMS, *line))
-				count++;
-		}
-		else if (!in_token)
-		{
-			in_token = 1;
-			count++;
-		}
-		line++;
-	}
-	return (count);
-}
-
 int	is_delimiter(char *line)
 {
 	if (*line == ' ' || ft_strchr(DELIMS, *line) != NULL || ((*line == '<'
 				|| *line == '>') && *(line + 1) == *line))
 		return (1);
 	return (0);
+}
+
+void	set_token_flag(char *token, int *flag)
+{
+	if (ft_strchr(DELIMS, *token))
+		*flag = 1;
 }

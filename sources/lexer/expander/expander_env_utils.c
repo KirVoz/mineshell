@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_env_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:24:38 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:24:39 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
@@ -25,7 +37,7 @@ char	*get_env_value(t_minishell *minishell, char **token)
 	var_name = env_var_copy(token);
 	value = find_env_value(minishell->env->envp_var, var_name);
 	if (value)
-		env_value = allocate_env_value(value);
+		env_value = allocate_dup(value, "Env_value in get_env_value.");
 	else
 		env_value = NULL;
 	free(var_name);
@@ -42,7 +54,7 @@ char	*env_var_copy(char **token)
 	(*token)++;
 	c_token = *token;
 	while (**token && !(**token == ' ' || **token == '"' || **token == '\''
-		|| **token == '/' || **token == '$' || **token == '='))
+			|| **token == '/' || **token == '$' || **token == '='))
 	{
 		var_len++;
 		(*token)++;
@@ -54,13 +66,23 @@ char	*env_var_copy(char **token)
 	return (variable_name);
 }
 
-void	digit_env_var_substitute(char **token, char **result, int *i)
+void	substitute_env(t_minishell *minishell, char **token, char **result,
+		int *i)
 {
-	*token += 2;
-	while (**token && !(**token == ' ' || **token == '"'
-		|| **token == '\''))
+	char	*env_value;
+	char	*cp_env_value;
+
+	if (*(*token + 1) && ft_isdigit(*(*token + 1)))
+		return (digit_env_var_substitute(token, result, i));
+	env_value = get_env_value(minishell, token);
+	if (!env_value)
+		return ;
+	cp_env_value = env_value;
+	while (*env_value)
 	{
-		(*result)[*i] = *(*token)++;
+		(*result)[*i] = *env_value;
 		(*i)++;
+		env_value++;
 	}
+	free(cp_env_value);
 }

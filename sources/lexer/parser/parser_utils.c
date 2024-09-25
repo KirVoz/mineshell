@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:25:42 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:25:43 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
-int	if_pipe(char *token)
+int	is_pipe(char *token)
 {
 	size_t	token_len;
 
@@ -17,9 +29,9 @@ int	is_redirection(char *token)
 
 	token_len = ft_strlen(token);
 	if ((ft_strlen(token) != 0) && (ft_strncmp(token, "<", token_len) == 0
-		|| ft_strncmp(token, ">", token_len) == 0
-		|| ft_strncmp(token, "<<", token_len) == 0
-		|| ft_strncmp(token, ">>", token_len) == 0))
+			|| ft_strncmp(token, ">", token_len) == 0
+			|| ft_strncmp(token, "<<", token_len) == 0
+			|| ft_strncmp(token, ">>", token_len) == 0))
 		return (1);
 	return (0);
 }

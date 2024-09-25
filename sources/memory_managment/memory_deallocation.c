@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   memory_deallocation.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:26:08 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:26:09 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
@@ -22,6 +34,8 @@ void	free_heredoc_tmp(char ***heredoc_tmp)
 	int	i;
 
 	i = 0;
+	if (!heredoc_tmp)
+		return ;
 	while (heredoc_tmp[i])
 	{
 		free_tokens(heredoc_tmp[i]);
@@ -39,6 +53,7 @@ void	free_cmd(t_cmd *cmd)
 	free_tokens(cmd->cmd);
 	ft_lstclear(&cmd->skipped_in, free);
 	ft_lstclear(&cmd->skipped_out, free);
+	free(cmd->whitespace);
 	cmd->append = 0;
 	cmd->inpipe = 0;
 	cmd->outpipe = 0;
@@ -61,6 +76,7 @@ void	free_minishell(t_minishell *minishell)
 		minishell->tmp->heredoc_tmp = NULL;
 	}
 	minishell->tmp->current_heredoc = 0;
+	minishell->tmp->i = 0;
 	if (minishell->cmd)
 	{
 		free_cmd(minishell->cmd);

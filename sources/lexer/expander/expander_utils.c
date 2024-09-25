@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_utils.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:24:54 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:24:55 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
@@ -18,27 +30,14 @@ size_t	strlcpy_eq(char *dst, const char *src, size_t dstsize)
 	return (src_len);
 }
 
-size_t	expanded_env_var_len(char *line)
+char	*allocate_dup(char *dup, char *error)
 {
-	int	len;
+	char	*result;
 
-	len = 0;
-	while (*line && *line != '\n')
-	{
-		len++;
-		line++;
-	}
-	return (len);
-}
-
-char	*allocate_env_value(char *value)
-{
-	char	*env_value;
-
-	env_value = ft_strdup(value);
-	if (!env_value)
-		exit_fail("Memory allocation for env_value failed.");
-	return (env_value);
+	result = ft_strdup(dup);
+	if (!result)
+		exit_fail(error);
+	return (result);
 }
 
 char	set_quote(char c, int *in_quote)
@@ -47,24 +46,23 @@ char	set_quote(char c, int *in_quote)
 	return (c);
 }
 
-int	dollar_special_case(char **token)
+void	write_exit_code(char **result, char *exit_code, int *i)
 {
-	if (**token == '$')
+	while (*exit_code)
 	{
-		if (*(*token + 1) && *(*token + 1) == '?')
-		{
-			free(*token);
-			*token = ft_strdup("$?"); //rewrite
-			return (0);
-		}
-		if (!*(*token + 1))
-			return (0);
-		if (*(*token + 1) && *(*token + 1) == '$')
-			return (1);
-		if (**token == '$')
-			return (1);
-		if (!*(*token + 1))
-			return (1);
+		(*result)[*i] = *exit_code;
+		(*i)++;
+		exit_code++;
 	}
-	return (0);
+}
+
+void	digit_env_var_substitute(char **token, char **result, int *i)
+{
+	*token += 2;
+	while (**token && !(**token == ' ' || **token == '"'
+			|| **token == '\''))
+	{
+		(*result)[*i] = *(*token)++;
+		(*i)++;
+	}
 }

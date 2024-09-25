@@ -32,6 +32,7 @@ typedef struct s_cmd
 	char			*outfile;
 	t_list			*skipped_in;
 	t_list			*skipped_out;
+	int				*whitespace;
 	int 			append;
 	int				inpipe;
 	int				outpipe;
@@ -51,6 +52,7 @@ typedef struct s_mem
 	char	**tokens;
 	char	***heredoc_tmp;
 	int		current_heredoc;
+	int		i;
 }			t_mem;
 
 
@@ -67,7 +69,7 @@ typedef struct s_minishell
 // minishell_init.c
 void		init_envp(t_minishell *minishell, char **env);
 void		init_tmp(t_mem *tmp);
-t_cmd		*init_cmd_node(void);
+t_cmd		*init_cmd_node(int cmd_count);
 void		init_minishell(t_minishell *minishell, char **env);
 
 

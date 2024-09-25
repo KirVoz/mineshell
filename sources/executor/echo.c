@@ -24,6 +24,8 @@ void execute_echo(t_minishell *minishell, int fd)
     while (minishell->cmd->cmd[i] != NULL)
     {
         ft_putstr_fd(minishell->cmd->cmd[i], fd);
+        if (minishell->cmd->whitespace[i])
+            ft_putstr_fd(" ", fd);
         i++;
     }
     if (newline)

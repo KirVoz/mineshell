@@ -1,33 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:24:31 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:24:33 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
-void	substitute_env(t_minishell *minishell, char **token, char **result,
-		int *i)
+void	processing_quoted_line(t_minishell *minishell, char **token,
+		char *result, char *current_quote)
 {
-	char	*env_value;
-	char	*cp_env_value;
+	int		in_quote;
 
-	if (*(*token + 1) && ft_isdigit(*(*token + 1)))
-		return (digit_env_var_substitute(token, result, i));
-	// (*token)++;
-	env_value = get_env_value(minishell, token);
-	if (!env_value)
-		return ; //del should be correct return if there's no such env
-	cp_env_value = env_value;
-	while (*env_value)
+	if (*current_quote == 0)
+		in_quote = 0;
+	else
+		in_quote = 1;
+	if ((**token == '\'' || **token == '\"') && !in_quote)
+		*current_quote = set_quote(**token, &in_quote);
+	else if (**token == *current_quote && in_quote)
+		in_quote = 0;
+	else if (**token == '$' && *current_quote == '"'
+		&& !(*(*token + 1) == '"' || *(*token + 1) == '\''))
 	{
-		(*result)[*i] = *env_value;
-		(*i)++;
-		env_value++;
+		substitute_env(minishell, token, &result, &minishell->tmp->i);
+		(*token)--;
+		return ;
 	}
-	// while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
-	// 	(*token)++;
-	// while (**token && !(**token == ' ' || **token == '"' || **token == '\''))
-	// {
-	// 	(*result)[*i] = *(*token)++;
-	// 	(*i)++;
-	// }
-	free(cp_env_value);
+	else if (**token != *current_quote || in_quote)
+	{
+		result[minishell->tmp->i] = **token;
+		minishell->tmp->i++;
+	}
 }
 
 char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
@@ -35,38 +45,18 @@ char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
 	char	*result;
 	char	*token_cp;
 	char	current_quote;
-	int		in_quote;
-	int		i;
 
-	current_quote = 0;
-	in_quote = 0;
-	i = 0;
 	token_cp = token;
+	current_quote = 0;
 	result = allocate_string(len, "Result in expand_line");
 	while (*token_cp)
 	{
-		if ((*token_cp == '\'' || *token_cp == '\"') && !in_quote)
-		{
-			current_quote = set_quote(*token_cp, &in_quote);
-			if (len == 2 && *(token_cp + 1) && *(token_cp + 1) == current_quote)
-				result[i++] = '\n';
-		}
-		else if (*token_cp == current_quote && in_quote)
-			in_quote = 0;
-		else if (*token_cp == '$' && current_quote == '"'
-			&& !(*(token_cp + 1) == '"' || *(token_cp + 1) == '\''))
-		{
-			substitute_env(minishell, &token_cp, &result, &i);
-			continue ;
-		}
-		else if (*token_cp != current_quote || in_quote)
-		{
-			result[i] = *token_cp;
-			i++;
-		}
+		processing_quoted_line(minishell, &token_cp,
+			result, &current_quote);
 		token_cp++;
 	}
-	result[i] = '\0';
+	result[minishell->tmp->i] = '\0';
+	minishell->tmp->i = 0;
 	free(token);
 	return (result);
 }
@@ -97,48 +87,6 @@ char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
 	result[i] = '\0';
 	free(token);
 	return (result);
-}
-
-size_t	count_to_dollar(char **line)
-{
-	size_t	len;
-
-	len = 0;
-	while (**line && **line != '$')
-	{
-		len++;
-		(*line)++;
-	}
-	return (len);
-}
-
-size_t	exit_len(char *token, char *exit_code)
-{
-	size_t	len;
-
-	len = 0;
-	while (*token)
-	{
-		if (*token == '$' && *(token + 1) && *(token + 1) == '?')
-		{
-			len += ft_strlen(exit_code);
-			token++;
-		}
-		else if (*token != '"')
-			len++;
-		token++;
-	}
-	return (len);
-}
-
-void	write_exit_code(char **result, char *exit_code, int *i)
-{
-	while (*exit_code)
-	{
-		(*result)[*i] = *exit_code;
-		(*i)++;
-		exit_code++;
-	}
 }
 
 char	*expand_question_mark(t_minishell *minishell, char *token)

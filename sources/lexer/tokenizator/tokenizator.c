@@ -1,7 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizator.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 06:23:18 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/25 06:23:23 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lexer.h"
 #include "minishell.h"
 
-char	*extract_token(char **line, int i)
+char	*extract_token(char **line, int i, int *token_flag)
 {
 	char	*start;
 	char	*token;
@@ -14,7 +26,7 @@ char	*extract_token(char **line, int i)
 	token = getting_token(start, len);
 	while (**line && **line == ' ')
 		(*line)++;
-	if (!ft_strchr(DELIMS, *token) && *(*line - 1)
+	if (!ft_strchr(DELIMS, *token) && *(*line - 1) && !*token_flag
 		&& *(*line - 1) == ' ' && i != 0)
 	{
 		token_tmp = token;
@@ -22,7 +34,10 @@ char	*extract_token(char **line, int i)
 		if (!token)
 			exit_fail("Tokens in extract_token");
 		free(token_tmp);
+		token_flag = 0;
 	}
+	set_token_flag(token, token_flag);
+	token_tmp = NULL;
 	return (token);
 }
 
@@ -50,10 +65,7 @@ char	*getting_start(char **line, char *start, int *len)
 		else if (is_delimiter(*line))
 		{
 			if (*len == 0)
-			{
-				(*line)++;
-				(*len)++;
-			}
+				redirection_handle(line, len, NULL);
 			break ;
 		}
 		(*len)++;
@@ -62,18 +74,53 @@ char	*getting_start(char **line, char *start, int *len)
 	return (start);
 }
 
-char	*find_end_quote_len(char *line, int *len)
+void	redirection_handle(char **line, int *count, int *in_token)
 {
-	int		i;
-	char	quote;
-
-	i = 1;
-	quote = *line;
-	while (line[i] && line[i] != quote)
+	if (in_token && *in_token)
+		*in_token = 0;
+	if (**line == '|')
 	{
-		i++;
-		(*len)++;
+		(*count)++;
+		(*line)++;
 	}
-	*len += 2;
-	return (&(line[i + 1]));
+	else if (**line == '<' || **line == '>')
+	{
+		(*count)++;
+		(*line)++;
+		if (**line && (**line == '<' || **line == '>'))
+		{
+			(*line)++;
+			if (!in_token)
+				(*count)++;
+		}
+	}
+	else if (**line == ' ')
+		(*line)++;
+}
+
+int	count_tokens(char *line)
+{
+	int	count;
+	int	in_token;
+
+	count = 0;
+	in_token = 0;
+	while (*line)
+	{
+		if (ft_strchr(QUOTES, *line))
+		{
+			line = find_end_quote(line, &count);
+			in_token = 0;
+		}
+		else if (is_delimiter(line))
+			redirection_handle(&line, &count, &in_token);
+		else if (!in_token)
+		{
+			in_token = 1;
+			count++;
+		}
+		else if (*line && !is_delimiter(line))
+			line++;
+	}
+	return (count);
 }

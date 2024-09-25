@@ -49,7 +49,6 @@ static void write_heredoc_to_fd(t_cmd *cmd, int fd)
 	j = 0;
 	while (cmd->heredoc[j] != NULL)
 	{
-		// printf("heredoc: %s\n", cmd->heredoc[j]); //del
 		write(fd, cmd->heredoc[j], ft_strlen(cmd->heredoc[j]));
 		write(fd, "\n", 1);
 		j++;
@@ -177,7 +176,6 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
                 no_path_file(minishell, current->cmd[0]);
             else
                 not_found(minishell, current->cmd[0]);
-            // printf("structs exit code in execute_child = %d\n", minishell->exit_code); //del
             free(current->cmd[0]);
             exit(EXIT_FAILURE);
         }
