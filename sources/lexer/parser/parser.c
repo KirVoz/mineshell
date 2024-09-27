@@ -26,7 +26,7 @@ void	process_token(t_minishell **minishell, t_cmd *current,
 	}
 	else
 	{
-		add_command(*minishell, current, token, *i);
+		add_command(current, token);
 		(*i)++;
 	}
 }

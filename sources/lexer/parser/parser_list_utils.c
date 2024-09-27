@@ -37,32 +37,7 @@ void	process_node(t_cmd **current, t_cmd **cmd_list,
 	}
 }
 
-void	proccess_whitespace(t_minishell *minishell,
-		t_cmd *current, char **token, int i)
-{
-	int		len;
-
-	len = 0;
-	while ((*token)[len])
-		len++;
-	if (len != 0 && (*token)[len - 1] == ' ')
-	{
-		current->whitespace[i] = 1;
-		*token = (char *)ft_realloc(*token, (len + 1) * sizeof(char),
-				len * sizeof(char));
-		if (!*token)
-			exit_fail("token in proccess_whitespace");
-		(*token)[len - 1] = '\0';
-		if (minishell->tmp->tokens[i + 1] && (*(minishell->tmp->tokens
-					[i + 1]) == '<' || *(minishell->tmp->tokens[i + 1]) == '>'
-				|| *(minishell->tmp->tokens[i + 1]) == '|'))
-			current->whitespace[i] = 0;
-	}
-	else
-		current->whitespace[i] = 0;
-}
-
-void	add_command(t_minishell *minishell, t_cmd *current, char *token, int i)
+void	add_command(t_cmd *current, char *token)
 {
 	int		command_len;
 	char	**command;
@@ -81,7 +56,6 @@ void	add_command(t_minishell *minishell, t_cmd *current, char *token, int i)
 		exit_fail("Failed to allocate memory for command");
 	current->cmd = command;
 	current->cmd[command_len] = ft_strdup(token);
-	proccess_whitespace(minishell, current, &current->cmd[command_len], i);
 	if (!current->cmd[command_len])
 		exit_fail("Failed to duplicate token in add_command");
 	current->cmd[command_len + 1] = NULL;

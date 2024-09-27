@@ -13,82 +13,6 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	processing_quoted_line(t_minishell *minishell, char **token,
-		char *result, char *current_quote)
-{
-	int		in_quote;
-
-	if (*current_quote == 0)
-		in_quote = 0;
-	else
-		in_quote = 1;
-	if ((**token == '\'' || **token == '\"') && !in_quote)
-		*current_quote = set_quote(**token, &in_quote);
-	else if (**token == *current_quote && in_quote)
-		in_quote = 0;
-	else if (**token == '$' && *current_quote == '"'
-		&& !(*(*token + 1) == '"' || *(*token + 1) == '\''))
-	{
-		substitute_env(minishell, token, &result, &minishell->tmp->i);
-		(*token)--;
-		return ;
-	}
-	else if (**token != *current_quote || in_quote)
-	{
-		result[minishell->tmp->i] = **token;
-		minishell->tmp->i++;
-	}
-}
-
-char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len)
-{
-	char	*result;
-	char	*token_cp;
-	char	current_quote;
-
-	token_cp = token;
-	current_quote = 0;
-	result = allocate_string(len, "Result in expand_line");
-	while (*token_cp)
-	{
-		processing_quoted_line(minishell, &token_cp,
-			result, &current_quote);
-		token_cp++;
-	}
-	result[minishell->tmp->i] = '\0';
-	minishell->tmp->i = 0;
-	free(token);
-	return (result);
-}
-
-char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len)
-{
-	char	*token_cp;
-	char	*result;
-	int		i;
-
-	token_cp = token;
-	i = 0;
-	result = allocate_string(len, "Result in expand_line");
-	while (*token_cp)
-	{
-		if (*token_cp == '$' && *(token_cp + 1))
-		{
-			substitute_env(minishell, &token_cp, &result, &i);
-			continue ;
-		}
-		else
-		{
-			result[i] = *token_cp;
-			i++;
-		}
-		token_cp++;
-	}
-	result[i] = '\0';
-	free(token);
-	return (result);
-}
-
 char	*expand_question_mark(t_minishell *minishell, char *token)
 {
 	char	*result;
@@ -118,31 +42,66 @@ char	*expand_question_mark(t_minishell *minishell, char *token)
 	return (result);
 }
 
+char	*substitute(t_minishell *minishell, char *token, char *exp_token)
+{
+	int		j;
+	int		n;
+	char	*env_value;
+
+	j = 0;
+	n = 0;
+	while (*token)
+	{
+		if (*token == '$' && *(token + 1) && *(token + 1) != '$')
+		{
+			env_value = get_env_value(minishell, &token);
+			if (*env_value == '\0' && *token == ' ')
+				token++;
+			while (env_value[n])
+				exp_token[j++] = env_value[n++];
+			free(env_value);
+			n = 0;
+		}
+		else if (*token != '"')
+			exp_token[j++] = *(token++);
+		else if (*token == '"')
+			token++;
+	}
+	exp_token[j] = '\0';
+	return (exp_token);
+}
+
+char	*expand(t_minishell *minishell, char *token, int i)
+{
+	char	*expanded_token;
+	size_t	len;
+
+	(void)i;
+	if (ft_strnstr(token, "$?", ft_strlen(token)))
+		return (expand_question_mark(minishell, token));
+	len = expanded_line_len(minishell, token);
+	expanded_token = allocate_string(len, "Expanded_token in expand");
+	expanded_token = substitute(minishell, token, expanded_token);
+	free(token);
+	return (expanded_token);
+}
+
 void	expander_main(t_minishell *minishell, char **tokens)
 {
-	char	*token_cp;
-	size_t	new_line_len;
+	int			i;
+	t_cmd		*cur;
 
-	new_line_len = 0;
-	while (*tokens)
+	i = 0;
+	cur = minishell->cmd;
+	(void)tokens;
+	while (cur)
 	{
-		token_cp = *tokens;
-		if (ft_strnstr(*tokens, "$?", ft_strlen(*tokens))
-			&& !ft_strchr(*tokens, '\''))
-			*tokens = expand_question_mark(minishell, *tokens);
-		else if (ft_strchr(*tokens, '"') || ft_strchr(*tokens, '\''))
+		while (cur->cmd[i])
 		{
-			new_line_len = expanded_line_len(minishell, token_cp);
-			*tokens = expand_quoted_line(minishell, *tokens, new_line_len);
+			cur->cmd[i] = expand(minishell, cur->cmd[i], i);
+			i++;
 		}
-		else if (ft_strchr(*tokens, '$') && ft_strlen(*tokens) > 1)
-		{
-			if (**tokens != '$')
-				new_line_len += count_to_dollar(&token_cp);
-			new_line_len += env_value_len(minishell, &token_cp);
-			*tokens = expand_dollar_line(minishell, *tokens, new_line_len);
-		}
-		tokens++;
+		i = 0;
+		cur = cur->next;
 	}
-	token_cp = NULL;
 }

@@ -28,61 +28,52 @@ char	*find_env_value(char **env_array, char *var_name)
 	return (NULL);
 }
 
+char	*env_var_copy(char **token)
+{
+	char	*variable_name;
+	char	*variable_tmp;
+	char	*token_tmp;
+	int		i;
+
+	i = 0;
+	token_tmp = *token;
+	(*token)++;
+	while (**token && !(**token == ' ' || **token == '"' || **token == '\''
+			|| **token == '/' || **token == '$' || **token == '='))
+	{
+		i++;
+		(*token)++;
+		if (ft_isdigit(*(*token - 1)))
+			break ;
+	}
+	variable_name = allocate_string(i, "Variable_name in env_var_copy");
+	ft_strlcpy(variable_name, token_tmp + 1, i + 1);
+	variable_tmp = variable_name;
+	variable_name = ft_strjoin(variable_name, "=");
+	if (!variable_name)
+		exit_fail("Memmory allocation for variable_name failed.");
+	free(variable_tmp);
+	return (variable_name);
+}
+
 char	*get_env_value(t_minishell *minishell, char **token)
 {
 	char	*var_name;
 	char	*value;
 	char	*env_value;
 
-	var_name = env_var_copy(token);
-	value = find_env_value(minishell->env->envp_var, var_name);
-	if (value)
-		env_value = allocate_dup(value, "Env_value in get_env_value.");
+	env_value = NULL;
+	if (*(*token + 1))
+	{
+		var_name = env_var_copy(token);
+		value = find_env_value(minishell->env->envp_var, var_name);
+		if (value)
+			env_value = allocate_dup(value, "Env_value in get_env_value.");
+		free(var_name);
+	}
 	else
-		env_value = NULL;
-	free(var_name);
-	return (env_value);
-}
-
-char	*env_var_copy(char **token)
-{
-	char	*variable_name;
-	char	*c_token;
-	size_t	var_len;
-
-	var_len = 0;
-	(*token)++;
-	c_token = *token;
-	while (**token && !(**token == ' ' || **token == '"' || **token == '\''
-			|| **token == '/' || **token == '$' || **token == '='))
-	{
-		var_len++;
 		(*token)++;
-	}
-	variable_name = (char *)malloc((var_len + 2) * sizeof(char));
-	if (!variable_name)
-		exit_fail("Memmory allocation for variable_name failed.");
-	strlcpy_eq(variable_name, c_token, var_len + 1);
-	return (variable_name);
-}
-
-void	substitute_env(t_minishell *minishell, char **token, char **result,
-		int *i)
-{
-	char	*env_value;
-	char	*cp_env_value;
-
-	if (*(*token + 1) && ft_isdigit(*(*token + 1)))
-		return (digit_env_var_substitute(token, result, i));
-	env_value = get_env_value(minishell, token);
 	if (!env_value)
-		return ;
-	cp_env_value = env_value;
-	while (*env_value)
-	{
-		(*result)[*i] = *env_value;
-		(*i)++;
-		env_value++;
-	}
-	free(cp_env_value);
+		env_value = allocate_dup("", "Env_value in get_env_value.");
+	return (env_value);
 }

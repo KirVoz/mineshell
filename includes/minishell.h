@@ -53,6 +53,8 @@ typedef struct s_mem
 	char	***heredoc_tmp;
 	int		current_heredoc;
 	int		i;
+	size_t	env_var_len;
+	size_t 	env_value_len;
 }			t_mem;
 
 
@@ -99,6 +101,7 @@ void    	no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
 int			syntax_quote_error(t_minishell *minishell, char *token);
 void    	arg_count_error(t_minishell *minishell, char *command);
+void		exe_binary_error(t_minishell *minishell, char *path);
 //path.c
 char		*get_path(t_minishell *minishell, char *cmd);
 

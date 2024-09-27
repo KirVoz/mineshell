@@ -70,3 +70,12 @@ int    syntax_quote_error(t_minishell *minishell, char *token)
     minishell->exit_code = 258;
     return (0);
 }
+
+void    exe_binary_error(t_minishell *minishell, char *path)
+{
+    ft_putstr_fd(path, 2);
+    ft_putstr_fd(": ", 2);
+    ft_putstr_fd(path, 2);
+    ft_putstr_fd(": cannot execute binary file\n", 2);
+    minishell->exit_code = 126;
+}

@@ -51,35 +51,48 @@ char	**procees_heredoc_lines(char *delimiter);
 void	add_line_to_heredoc(char ***heredoc_tokens, size_t *size,
 			size_t *capacity, char *line);
 char	**merge_tokens(char **tokens, char **new_tokens);
-char	*expand_question_mark_heredoc(t_minishell *minishell, char *token);
-char	*substitute_heredoc_env(t_minishell *minishell,
-			char *token, char *result);
+char	*expand_question_mark_hd(t_minishell *minishell, char *token);
+char	*substitute_hd(t_minishell *minishell, char *token, char *exp_token);
+size_t	expanded_line_len_hd(t_minishell *minishell, char *token);
+char	*expand_hd(t_minishell *minishell, char *token);
 void	heredoc_expander(t_minishell *minishell, char **tokens);
 // EXPANDER //del
-void	processing_quoted_line(t_minishell *minishell, char **token,
-			char *result, char *current_quote);
-char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len);
-char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len);
-size_t	exit_len_hc(char *token, char *exit_code);
 char	*expand_question_mark(t_minishell *minishell, char *token);
+char	*substitute(t_minishell *minishell, char *token, char *exp_token);
+char	*expand(t_minishell *minishell, char *token, int i);
 void	expander_main(t_minishell *minishell, char **tokens);
-size_t	strlcpy_eq(char *dst, const char *src, size_t dstsize);
+int		expand_to_env(t_minishell *minishell, char **cur_ptr, char cur_quote);
 char	*allocate_dup(char *dup, char *error);
-char	set_quote(char c, int *in_quote);
 void	write_exit_code(char **result, char *exit_code, int *i);
-void	digit_env_var_substitute(char **token, char **result, int *i);
 size_t	expanded_line_len(t_minishell *minishell, char *token);
-size_t	env_value_len(t_minishell *minishell, char **token);
-size_t	digit_env_var_len(char **token);
-size_t	additional_len(char *token);
-size_t	expanded_env_var_len(char *line);
-size_t	count_to_dollar(char **line);
 size_t	exit_len(char *token, char *exit_code);
 char	*find_env_value(char **env_array, char *var_name);
-char	*get_env_value(t_minishell *minishell, char **token);
 char	*env_var_copy(char **token);
-void	substitute_env(t_minishell *minishell, char **token, char **result,
-			int *i);
+char	*get_env_value(t_minishell *minishell, char **token);
+// void	processing_quoted_line(t_minishell *minishell, char **token,
+// 			char *result, char *current_quote);
+// char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len);
+// char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len);
+// size_t	exit_len_hc(char *token, char *exit_code);
+// char	*expand_question_mark(t_minishell *minishell, char *token);
+// void	expander_main(t_minishell *minishell, char **tokens);
+// size_t	strlcpy_eq(char *dst, const char *src, size_t dstsize);
+// char	*allocate_dup(char *dup, char *error);
+// char	set_quote(char c, int *in_quote);
+// void	write_exit_code(char **result, char *exit_code, int *i);
+// void	digit_env_var_substitute(char **token, char **result, int *i);
+// size_t	expanded_line_len(t_minishell *minishell, char *token);
+// size_t	env_value_len(t_minishell *minishell, char **token);
+// size_t	digit_env_var_len(char **token);
+// size_t	additional_len(char *token);
+// size_t	expanded_env_var_len(char *line);
+// size_t	count_to_dollar(char **line);
+// size_t	exit_len(char *token, char *exit_code);
+// char	*find_env_value(char **env_array, char *var_name);
+// char	*get_env_value(t_minishell *minishell, char **token);
+// char	*env_var_copy(char **token);
+// void	substitute_env(t_minishell *minishell, char **token, char **result,
+// 			int *i);
 // VALIDATOR //del
 int		hanging_tokens(char **tokens);
 int		is_valid_token(char *token);
@@ -94,9 +107,7 @@ void	process_token(t_minishell **minishell, t_cmd *current, char *token,
 void	parser_main(t_minishell **minishell, char ***tokens);
 void	process_node(t_cmd **current, t_cmd **cmd_list,
 			char *token, int cmd_count);
-void	proccess_whitespace(t_minishell *minishell,
-			t_cmd *current, char **token, int i);
-void	add_command(t_minishell *minishell, t_cmd *current, char *token, int i);
+void	add_command(t_cmd *current, char *token);
 int		is_pipe(char *token);
 int		is_redirection(char *token);
 void	store_skipped_infiles(t_cmd **current);

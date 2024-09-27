@@ -13,26 +13,7 @@
 #include "lexer.h"
 #include "minishell.h"
 
-size_t	exit_len_hc(char *token, char *exit_code)
-{
-	size_t	len;
-
-	len = 0;
-	while (*token)
-	{
-		if (*token == '$' && *(token + 1) && *(token + 1) == '?')
-		{
-			len += ft_strlen(exit_code);
-			token++;
-		}
-		else
-			len++;
-		token++;
-	}
-	return (len);
-}
-
-char	*expand_question_mark_heredoc(t_minishell *minishell, char *token)
+char	*expand_question_mark_hd(t_minishell *minishell, char *token)
 {
 	char	*result;
 	char	*token_cp;
@@ -42,7 +23,7 @@ char	*expand_question_mark_heredoc(t_minishell *minishell, char *token)
 	i = 0;
 	token_cp = token;
 	exit_code = ft_itoa(minishell->exit_code);
-	result = allocate_string(exit_len_hc(token, exit_code), "Expand_question");
+	result = allocate_string(exit_len(token, exit_code), "Expand_question");
 	while (*token)
 	{
 		if (*token == '$' && *(token + 1) && *(token + 1) == '?')
@@ -59,53 +40,73 @@ char	*expand_question_mark_heredoc(t_minishell *minishell, char *token)
 	return (result);
 }
 
-char	*substitute_heredoc_env(t_minishell *minishell,
-		char *token, char *result)
+char	*substitute_hd(t_minishell *minishell, char *token, char *exp_token)
 {
-	char	*token_cp;
-	int		i;
+	int		j;
+	int		n;
+	char	*env_value;
 
-	token_cp = token;
-	i = 0;
-	while (*token_cp)
+	j = 0;
+	n = 0;
+	while (*token)
 	{
-		if (*token_cp == '$' && *(token_cp + 1))
+		if (*token == '$' && *(token + 1) && *(token + 1) != '$')
 		{
-			substitute_env(minishell, &token_cp, &result, &i);
+			env_value = get_env_value(minishell, &token);
+			while (env_value[n])
+				exp_token[j++] = env_value[n++];
+			free(env_value);
+			n = 0;
+		}
+		else
+			exp_token[j++] = *(token++);
+	}
+	exp_token[j] = '\0';
+	return (exp_token);
+}
+
+size_t	expanded_line_len_hd(t_minishell *minishell, char *token)
+{
+	size_t	len;
+	char	*env_value;
+
+	len = 0;
+	while (*token)
+	{
+		if (*token == '$' && *(token + 1) && *(token + 1) != '$')
+		{
+			env_value = get_env_value(minishell, &token);
+			len += ft_strlen(env_value);
+			free(env_value);
 			continue ;
 		}
 		else
 		{
-			result[i] = *token_cp;
-			i++;
+			token++;
+			len++;
 		}
-		token_cp++;
 	}
-	result[i] = '\0';
-	return (result);
+	return (len);
+}
+
+char	*expand_hd(t_minishell *minishell, char *token)
+{
+	char	*expanded_token;
+	size_t	len;
+
+	if (ft_strnstr(token, "$?", ft_strlen(token)))
+		return (expand_question_mark_hd(minishell, token));
+	len = expanded_line_len_hd(minishell, token);
+	expanded_token = allocate_string(len, "Expanded_token in expand");
+	token = substitute_hd(minishell, token, expanded_token);
+	return (token);
 }
 
 void	heredoc_expander(t_minishell *minishell, char **tokens)
 {
-	size_t	len;
-	int		i;
-	char	*tmp_token;
-
-	i = 0;
-	while (tokens[i])
+	while (*tokens)
 	{
-		tmp_token = tokens[i];
-		if (ft_strnstr(tokens[i], "$?", ft_strlen(tokens[i])))
-			tokens[i] = expand_question_mark_heredoc(minishell, tokens[i]);
-		else if (ft_strchr(tokens[i], '$') && ft_strlen(tokens[i]) > 1)
-		{
-			len = count_to_dollar(&tokens[i])
-				+ env_value_len(minishell, &tokens[i]) + ft_strlen(tokens[i]);
-			tokens[i] = allocate_string(len, "Heredoc_expander");
-			tokens[i] = substitute_heredoc_env(minishell, tmp_token, tokens[i]);
-			free(tmp_token);
-		}
-		i++;
+		*tokens = expand_hd(minishell, *tokens);
+		tokens++;
 	}
-	tmp_token = NULL;
 }

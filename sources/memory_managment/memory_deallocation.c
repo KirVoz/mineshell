@@ -75,8 +75,6 @@ void	free_minishell(t_minishell *minishell)
 		free_heredoc_tmp(minishell->tmp->heredoc_tmp);
 		minishell->tmp->heredoc_tmp = NULL;
 	}
-	minishell->tmp->current_heredoc = 0;
-	minishell->tmp->i = 0;
 	if (minishell->cmd)
 	{
 		free_cmd(minishell->cmd);
@@ -87,6 +85,8 @@ void	free_minishell(t_minishell *minishell)
 		free(minishell->tmp->line);
 		minishell->tmp->line = NULL;
 	}
+	minishell->tmp->current_heredoc = 0;
+	minishell->tmp->i = 0;
 }
 
 void	exit_free(t_minishell *minishell, int exit_code)
@@ -95,5 +95,6 @@ void	exit_free(t_minishell *minishell, int exit_code)
 	free(minishell->tmp);
 	free_tokens(minishell->env->envp_var);
 	free(minishell->env);
+	rl_clear_history();
 	exit(exit_code);
 }

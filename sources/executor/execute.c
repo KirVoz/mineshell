@@ -154,7 +154,7 @@ static int path_present(t_minishell *minishell)
     }
     if (minishell->env->envp_var[i])
         return (1);
-    return (0);
+    exit(EXIT_FAILURE);
 }
 
 static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, int i, int num_cmd, char **env)
@@ -170,15 +170,17 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
     }
     else
     {
-        if (execve(get_path(minishell, current->cmd[0]), current->cmd, env) == -1)
+        /* Поменял порядок проверки условий. Если мы пытаемся проверить, исполнился ли экзекве,
+        когда команды не сущесвует (то есть нет пути к ней), мы передаем в него NULL в качестве первого аргумента.
+        Хотя он возвращает -1, он пытается дерефернсить NULL, что есть плохо */
+        if (!path_present(minishell))
+                return(no_path_file(minishell, current->cmd[0]));
+        if (!get_path(minishell, current->cmd[0]))
         {
-            if (!path_present(minishell))
-                no_path_file(minishell, current->cmd[0]);
-            else
-                not_found(minishell, current->cmd[0]);
-            free(current->cmd[0]);
+            not_found(minishell, current->cmd[0]);
             exit(EXIT_FAILURE);
         }
+        execve(get_path(minishell, current->cmd[0]), current->cmd, env);
     }
 }
 

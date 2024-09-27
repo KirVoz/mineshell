@@ -17,7 +17,10 @@ void execute_exit(t_minishell *minishell, int fd)
     int exit_code;
 
     (void)fd;
-    if (minishell->cmd->cmd[2])
+    /* Сначала надо проверить существование первого аргмента. Если первого нет, второго тоже не будет. 
+    В ином случае, если у нас есть только комманда (то есть 0 - команда, 1 - NULL),
+    условия попытается получить доступ к второму, которого нет, и выйдет за пределы памяти */
+    if (minishell->cmd->cmd[1] && minishell->cmd->cmd[2])
     {
         arg_count_error(minishell, "exit");
         return ;
@@ -27,7 +30,6 @@ void execute_exit(t_minishell *minishell, int fd)
     else
         exit_code = 0;
     ft_putstr_fd("exit\n", 1);
-    free_minishell(minishell);
     exit_free(minishell, exit_code);
 }
 
