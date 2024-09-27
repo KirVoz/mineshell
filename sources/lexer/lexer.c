@@ -33,6 +33,8 @@ char	**tokenizator(char *line)
 		result[i] = extract_token(&line, i, &token_flag);
 		if (!result[i])
 			error_array_allocation(result, i, "Result[i] in tokenizator");
+		if (ft_strchr(DELIMS, result[i][0]) && i > 0)
+			delete_whitespace_before_token(&(result[i - 1]));
 		i++;
 	}
 	result[token_count] = NULL;
@@ -47,16 +49,16 @@ int	lexer_main(t_minishell *minishell, char *line)
 		minishell->tmp->tokens = pipe_heredoc_main(minishell, line);
 	else
 		minishell->tmp->tokens = tokenizator(line);
-	// print_tokens_state(minishell->tmp->tokens, "after tokenizator, before validator"); 
+	// print_tokens_state_v(minishell->tmp->tokens, "after tokenizator, before validator"); 
 	if (!validator_main(minishell, &minishell->tmp->tokens))
 	{
 		free_minishell(minishell);
 		return (0);
 	}
-	// print_tokens_state(minishell->tmp->tokens, "after validator"); 
+	// print_tokens_state_v(minishell->tmp->tokens, "after validator"); 
 	parser_main(&minishell, &minishell->tmp->tokens);
-	// print_list_state(minishell, "after parser"); 
+	// print_list_state_v(minishell, "after parser"); 
 	expander_main(minishell, minishell->tmp->tokens);
-	// print_list_state(minishell, "after expander"); 
+	// print_list_state_v(minishell, "after expander"); 
 	return (1);
 }

@@ -1,37 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_utils.c                                   :+:      :+:    :+:   */
+/*   memory_allocation.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 06:24:54 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/25 06:24:55 by aaleksee         ###   ########.fr       */
+/*   Created: 2024/09/27 16:00:55 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/09/27 16:01:22 by aaleksee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
 #include "minishell.h"
 
-int	expand_to_env(t_minishell *minishell, char **cur_ptr, char cur_quote)
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 {
-	char	*env_value;
+	void	*new_ptr;
+	size_t	size;
 
-	env_value = get_env_value(minishell, cur_ptr);
-	if (env_value || cur_quote == '"')
+	if (old_size < new_size && old_size != 0)
+		size = old_size;
+	else
+		size = new_size;
+	if (!ptr)
+		return (malloc(new_size));
+	if (new_size == 0)
 	{
-		free(env_value);
-		return (1);
+		free(ptr);
+		return (NULL);
 	}
-	return (0);
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	ft_bzero(new_ptr, new_size);
+	ft_memcpy(new_ptr, ptr, size);
+	free(ptr);
+	return (new_ptr);
 }
 
-void	write_exit_code(char **result, char *exit_code, int *i)
-{
-	while (*exit_code)
-	{
-		(*result)[*i] = *exit_code;
-		(*i)++;
-		exit_code++;
-	}
-}

@@ -53,9 +53,6 @@ void	init_tmp(t_mem *tmp)
 	tmp->tokens = NULL;
 	tmp->heredoc_tmp = NULL;
 	tmp->current_heredoc = 0;
-	tmp->i = 0;
-	tmp->env_var_len = 0;
-	tmp->env_value_len = 0;
 }
 
 t_cmd	*init_cmd_node(int cmd_count)

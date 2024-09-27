@@ -22,6 +22,7 @@ int		lexer_main(t_minishell *minishell, char *line);
 char	**tokenizator(char *line);
 char	*quote_counter(char *line);
 char	hanging_pipe_heredoc(char *line);
+void	delete_whitespace_before_token(char **token);
 
 // TOKENIZATOR //del
 char	*extract_token(char **line, int i, int *token_flag);
@@ -60,9 +61,9 @@ void	heredoc_expander(t_minishell *minishell, char **tokens);
 char	*expand_question_mark(t_minishell *minishell, char *token);
 char	*substitute(t_minishell *minishell, char *token, char *exp_token);
 char	*expand(t_minishell *minishell, char *token, int i);
+void	delete_last_whitespace(t_minishell *minishell);
 void	expander_main(t_minishell *minishell, char **tokens);
 int		expand_to_env(t_minishell *minishell, char **cur_ptr, char cur_quote);
-char	*allocate_dup(char *dup, char *error);
 void	write_exit_code(char **result, char *exit_code, int *i);
 size_t	expanded_line_len(t_minishell *minishell, char *token);
 size_t	exit_len(char *token, char *exit_code);
@@ -114,9 +115,9 @@ void	store_skipped_infiles(t_cmd **current);
 void	store_skipped_outfiles(t_cmd **current);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
 // MEMORY_MANAGEMENT //del
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 char	**array_init(void);
 char	*allocate_string(size_t len, char *error);
+char	*allocate_dup(char *dup, char *error);
 char	**allocate_array(size_t len, char *error);
 void	error_array_allocation(char **result, int i, char *error);
 void	free_tokens(char **tokens);
@@ -124,9 +125,13 @@ void	free_heredoc_tmp(char ***heredoc_tmp);
 void	free_cmd(t_cmd *cmd);
 void	free_minishell(t_minishell *minishell);
 void	exit_free(t_minishell *minishell, int exit_code);
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 // GENERAL_UTILS //del
 size_t	array_len(char **array);
 // DEBUG //del
+void	print_visible(char *str);
+void	print_list_state_v(t_minishell *minishell, char *name);
+void	print_tokens_state_v(char **tokens, char *name);
 void	print_list_state(t_minishell *minishell, char *name);
 void	print_tokens_state(char **tokens, char *name);
 

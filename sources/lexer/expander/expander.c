@@ -86,6 +86,32 @@ char	*expand(t_minishell *minishell, char *token, int i)
 	return (expanded_token);
 }
 
+void	delete_last_whitespace(t_minishell *minishell)
+{
+	t_cmd	*cur;
+	char	*cmd_tmp;
+	int		flag;
+	int		i;
+
+	cur = minishell->cmd;
+	flag = 0;
+	while (cur)
+	{
+		i = array_len(cur->cmd) - 1;
+		while (cur->cmd[i][0] == '\0' && i--)
+			flag = 1;
+		if (flag && cur->cmd[i][ft_strlen(cur->cmd[i]) - 1] == ' ')
+		{
+			cmd_tmp = cur->cmd[i];
+			cur->cmd[i] = ft_strtrim(cur->cmd[i], " ");
+			if (!cur->cmd[i])
+				exit_fail("Token in delete_whitespace");
+			free(cmd_tmp);
+		}
+		cur = cur->next;
+	}
+}
+
 void	expander_main(t_minishell *minishell, char **tokens)
 {
 	int			i;
@@ -104,4 +130,5 @@ void	expander_main(t_minishell *minishell, char **tokens)
 		i = 0;
 		cur = cur->next;
 	}
+	delete_last_whitespace(minishell);
 }

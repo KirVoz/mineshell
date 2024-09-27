@@ -52,9 +52,6 @@ typedef struct s_mem
 	char	**tokens;
 	char	***heredoc_tmp;
 	int		current_heredoc;
-	int		i;
-	size_t	env_var_len;
-	size_t 	env_value_len;
 }			t_mem;
 
 

@@ -180,6 +180,17 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
             not_found(minishell, current->cmd[0]);
             exit(EXIT_FAILURE);
         }
+        // printf("path ="); //del
+        // print_visible(get_path(minishell, current->cmd[0])); //del
+        // printf("\n"); //del
+        // int i = 0;
+        // while (current->cmd[i])
+        // {
+        //     printf("cmd[%d] =", i); //del
+        //     print_visible(current->cmd[i]); //del
+        //     printf("\n"); //del
+        //     i++;
+        // }
         execve(get_path(minishell, current->cmd[0]), current->cmd, env);
     }
 }

@@ -86,7 +86,6 @@ void	free_minishell(t_minishell *minishell)
 		minishell->tmp->line = NULL;
 	}
 	minishell->tmp->current_heredoc = 0;
-	minishell->tmp->i = 0;
 }
 
 void	exit_free(t_minishell *minishell, int exit_code)

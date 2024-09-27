@@ -13,31 +13,6 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
-{
-	void	*new_ptr;
-	size_t	size;
-
-	if (old_size < new_size && old_size != 0)
-		size = old_size;
-	else
-		size = new_size;
-	if (!ptr)
-		return (malloc(new_size));
-	if (new_size == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	ft_bzero(new_ptr, new_size);
-	ft_memcpy(new_ptr, ptr, size);
-	free(ptr);
-	return (new_ptr);
-}
-
 char	**array_init(void)
 {
 	char	**empty_array;
@@ -55,6 +30,16 @@ char	*allocate_string(size_t len, char *error)
 	char	*result;
 
 	result = (char *)malloc((len + 1) * sizeof(char));
+	if (!result)
+		exit_fail(error);
+	return (result);
+}
+
+char	*allocate_dup(char *dup, char *error)
+{
+	char	*result;
+
+	result = ft_strdup(dup);
 	if (!result)
 		exit_fail(error);
 	return (result);
