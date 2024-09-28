@@ -98,8 +98,11 @@ void	delete_last_whitespace(t_cmd *cur)
 
 	flag = 0;
 	i = array_len(cur->cmd) - 1;
-	while (cur->cmd[i][0] == '\0' && i--)
+	while (cur->cmd[i][0] == '\0' && i > 0)
+	{
 		flag = 1;
+		i--;
+	}
 	if (flag && cur->whitespace[i] == 1)
 		cur->whitespace[i] = 0;
 }
