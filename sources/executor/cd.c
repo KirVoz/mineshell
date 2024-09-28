@@ -46,11 +46,11 @@ static void change_to_home_directory(t_minishell *minishell)
     change_directory(minishell, minishell->env->envp_var[home_index] + 5);
 }
 
-void execute_cd(t_minishell *minishell, int fd)
+void execute_cd(t_minishell *minishell, int fd, t_cmd *cur)
 {
     (void)fd;
-    if (minishell->cmd->cmd[1] == NULL)
+    if (cur->cmd[1] == NULL)
         change_to_home_directory(minishell);
     else
-        change_directory(minishell, minishell->cmd->cmd[1]);
+        change_directory(minishell, cur->cmd[1]);
 }

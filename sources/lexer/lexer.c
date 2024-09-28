@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 06:22:25 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/25 06:22:28 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:35:13 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	lexer_main(t_minishell *minishell, char *line)
 	parser_main(&minishell, &minishell->tmp->tokens);
 	// print_list_state_v(minishell, "after parser"); 
 	expander_main(minishell, minishell->tmp->tokens);
-	print_list_state_v(minishell, "after expander"); 
+	// print_list_state_v(minishell, "after expander"); 
 	return (1);
 }
 

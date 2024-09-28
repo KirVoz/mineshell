@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 06:24:31 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/25 06:24:33 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:37:38 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ void	delete_last_whitespace(t_cmd *cur)
 
 	flag = 0;
 	i = array_len(cur->cmd) - 1;
+	if (cur->whitespace[i] == 1)
+		cur->whitespace[i] = 0;
 	while (cur->cmd[i][0] == '\0' && i > 0)
 	{
 		flag = 1;
