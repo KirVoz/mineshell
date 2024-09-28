@@ -67,4 +67,6 @@ void	set_token_flag(char *token, int *flag)
 {
 	if (ft_strchr(DELIMS, *token))
 		*flag = 1;
+	else
+		*flag = 0;
 }

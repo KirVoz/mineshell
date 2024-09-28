@@ -53,6 +53,8 @@ void	init_tmp(t_mem *tmp)
 	tmp->tokens = NULL;
 	tmp->heredoc_tmp = NULL;
 	tmp->current_heredoc = 0;
+	tmp->ws_tmp = NULL;
+	tmp->ws_pipe_tmp = NULL;
 }
 
 t_cmd	*init_cmd_node(int cmd_count)
@@ -68,9 +70,8 @@ t_cmd	*init_cmd_node(int cmd_count)
 	empty_node->outfile = NULL;
 	empty_node->skipped_in = NULL;
 	empty_node->skipped_out = NULL;
-	empty_node->whitespace = (int *)ft_calloc(cmd_count, sizeof(int));
-	if (!empty_node->whitespace)
-		exit_fail("Failed to allocate memory for whitespace");
+	empty_node->whitespace = allocate_whitespaces
+		(cmd_count, "Whitespace in init_cmd_node");
 	empty_node->append = 0;
 	empty_node->inpipe = 0;
 	empty_node->outpipe = 0;

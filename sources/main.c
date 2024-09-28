@@ -1,7 +1,7 @@
 #include "minishell.h"
 #include "lexer.h"
 
-static int check_line(t_minishell minishell)
+static int	check_line(t_minishell minishell)
 {
 	if (minishell.tmp->line[0] == '\0')
 	{
@@ -15,6 +15,8 @@ static void	handle_incorrect_arguments(t_minishell *minishell, char *av)
 {
 	if (get_path(minishell, av))
 		exe_binary_error(minishell, get_path(minishell, av));
+	else if (access(av, F_OK) == 0)
+		is_a_directory(minishell, av);
 	else
 		no_path_file(minishell, av);
 }
@@ -38,7 +40,7 @@ int	main(int ac, char **av, char **env)
 		else if (check_line(minishell))
 			continue ;
 		add_history(minishell.tmp->line);
-    	if (!lexer_main(&minishell, minishell.tmp->line))
+		if (!lexer_main(&minishell, minishell.tmp->line))
 			continue ;
 		execute(&minishell);
 	}

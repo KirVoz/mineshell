@@ -52,6 +52,8 @@ typedef struct s_mem
 	char	**tokens;
 	char	***heredoc_tmp;
 	int		current_heredoc;
+	int		*ws_tmp;
+	int		*ws_pipe_tmp;
 }			t_mem;
 
 
@@ -99,6 +101,7 @@ int			syntax_error(t_minishell *minishell, char *token);
 int			syntax_quote_error(t_minishell *minishell, char *token);
 void    	arg_count_error(t_minishell *minishell, char *command);
 void		exe_binary_error(t_minishell *minishell, char *path);
+void		is_a_directory(t_minishell *minishell, char *path);
 //path.c
 char		*get_path(t_minishell *minishell, char *cmd);
 

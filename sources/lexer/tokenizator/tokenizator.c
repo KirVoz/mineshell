@@ -13,11 +13,10 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*extract_token(char **line, int i, int *token_flag)
+char	*extract_token(char **line, int i, int **ws_array, int *token_flag)
 {
 	char	*start;
 	char	*token;
-	char	*token_tmp;
 	int		len;
 
 	start = *line;
@@ -29,15 +28,10 @@ char	*extract_token(char **line, int i, int *token_flag)
 	if (!ft_strchr(DELIMS, *token) && *(*line - 1) && !*token_flag
 		&& *(*line - 1) == ' ' && i != 0)
 	{
-		token_tmp = token;
-		token = ft_strjoin(token, " ");
-		if (!token)
-			exit_fail("Tokens in extract_token");
-		free(token_tmp);
-		token_flag = 0;
+		(*ws_array)[i] = 1;
+		*token_flag = 0;
 	}
 	set_token_flag(token, token_flag);
-	token_tmp = NULL;
 	return (token);
 }
 

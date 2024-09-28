@@ -38,3 +38,12 @@ void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
 	return (new_ptr);
 }
 
+int	*allocate_whitespaces(int count, char *error)
+{
+	int	*ws_array;
+
+	ws_array = (int *)ft_calloc(count + 1, sizeof(int));
+	if (!ws_array)
+		exit_fail(error);
+	return (ws_array);
+}

@@ -26,12 +26,35 @@ int	expand_to_env(t_minishell *minishell, char **cur_ptr, char cur_quote)
 	return (0);
 }
 
-void	write_exit_code(char **result, char *exit_code, int *i)
+void	write_exit_code(char **result, char *exit_code, int *i, char **token)
 {
 	while (*exit_code)
 	{
 		(*result)[*i] = *exit_code;
 		(*i)++;
 		exit_code++;
+		*token += 2;
+	}
+}
+
+void	set_current_quote(char *current_quote, char quote, char **token)
+{
+	static int	quote_counter;
+
+	if (ft_strchr(QUOTES, quote))
+	{
+		if (!*current_quote)
+		{
+			*current_quote = quote;
+			quote_counter++;
+		}
+		else if (*current_quote == quote)
+			quote_counter++;
+		if (quote_counter % 2 == 0)
+		{
+			quote_counter = 0;
+			*current_quote = 0;
+			(*token)++;
+		}
 	}
 }

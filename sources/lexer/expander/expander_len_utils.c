@@ -13,7 +13,8 @@
 #include "lexer.h"
 #include "minishell.h"
 
-size_t	expanded_line_len(t_minishell *minishell, char *token)
+size_t	expanded_line_len(t_minishell *minishell,
+		char *token, char *current_quote)
 {
 	size_t	len;
 	char	*env_value;
@@ -21,27 +22,49 @@ size_t	expanded_line_len(t_minishell *minishell, char *token)
 	len = 0;
 	while (*token)
 	{
-		if (*token == '$' && *(token + 1) && *(token + 1) != '$')
+		set_current_quote(current_quote, *token, &token);
+		if (*token == '$' && *(token + 1) && ft_isalnum(*(token + 1))
+			&& *current_quote != '\'')
 		{
 			env_value = get_env_value(minishell, &token);
 			len += ft_strlen(env_value);
-			if (len == 0 && *token == ' ')
-				len--;
 			free(env_value);
 			continue ;
 		}
-		else if (*token != '"')
+		else if (*token != *current_quote)
 		{
 			token++;
 			len++;
 		}
-		else if (*token == '"')
+		else if (*token && *token == *current_quote)
 			token++;
 	}
 	return (len);
 }
 
 size_t	exit_len(char *token, char *exit_code)
+{
+	size_t	len;
+	char	current_quote;
+
+	len = 0;
+	while (*token)
+	{
+		set_current_quote(&current_quote, *token, &token);
+		if (*token == '$' && *(token + 1) && *(token + 1) == '?'
+			&& current_quote != '\'')
+		{
+			len += ft_strlen(exit_code);
+			token++;
+		}
+		else if (*token != current_quote)
+			len++;
+		token++;
+	}
+	return (len);
+}
+
+size_t	exit_len_hd(char *token, char *exit_code)
 {
 	size_t	len;
 
@@ -53,7 +76,7 @@ size_t	exit_len(char *token, char *exit_code)
 			len += ft_strlen(exit_code);
 			token++;
 		}
-		else if (*token != '"')
+		else if (*token)
 			len++;
 		token++;
 	}

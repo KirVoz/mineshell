@@ -37,7 +37,8 @@ void	process_node(t_cmd **current, t_cmd **cmd_list,
 	}
 }
 
-void	add_command(t_cmd *current, char *token)
+void	add_command(t_minishell **minishell, t_cmd *current,
+		char *token, int *i)
 {
 	int		command_len;
 	char	**command;
@@ -56,6 +57,8 @@ void	add_command(t_cmd *current, char *token)
 		exit_fail("Failed to allocate memory for command");
 	current->cmd = command;
 	current->cmd[command_len] = ft_strdup(token);
+	if ((*minishell)->tmp->ws_tmp[*i] == 1)
+		current->whitespace[command_len] = 1;
 	if (!current->cmd[command_len])
 		exit_fail("Failed to duplicate token in add_command");
 	current->cmd[command_len + 1] = NULL;

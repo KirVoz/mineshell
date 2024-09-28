@@ -54,7 +54,7 @@ char	**handle_heredoc(t_minishell *minishell, char **tokens)
 	return (tokens);
 }
 
-char	**handle_pipe(char **tokens)
+char	**handle_pipe(t_minishell *minishell, char **tokens)
 {
 	char	**merged_tokens;
 	char	**new_tokens;
@@ -62,7 +62,7 @@ char	**handle_pipe(char **tokens)
 
 	merged_tokens = NULL;
 	new_line = readline(PROMPT_HEREDOC);
-	new_tokens = tokenizator(new_line);
+	new_tokens = tokenizator(&(minishell->tmp->ws_pipe_tmp), new_line);
 	merged_tokens = merge_tokens(tokens, new_tokens);
 	free(new_line);
 	free_tokens(tokens);
@@ -74,10 +74,10 @@ char	**pipe_heredoc_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
 
-	tokens = tokenizator(line);
+	tokens = tokenizator(&(minishell->tmp->ws_tmp), line);
 	if (hanging_pipe_heredoc(line) == 'h')
 		tokens = handle_heredoc(minishell, tokens);
 	else if (hanging_pipe_heredoc(line) == 'p')
-		tokens = handle_pipe(tokens);
+		tokens = handle_pipe(minishell, tokens);
 	return (tokens);
 }

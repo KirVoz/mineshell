@@ -84,7 +84,7 @@ void	print_list_state_v(t_minishell *minishell, char *name)
 	printf("\n");
 }
 
-void	print_tokens_state_v(char **tokens, char *name)
+void	print_tokens_state_v(t_minishell *minishell, char **tokens, char *name, char mode)
 {
 	int	i;
 
@@ -92,13 +92,15 @@ void	print_tokens_state_v(char **tokens, char *name)
 	printf("\n*TOKENS STATE %s:\n", name);
 	while (*tokens)
 	{
-		printf("  Token %d: ", i++);
+		printf(" Token %d: ", i);
 		print_visible(*(tokens++));
 		printf("\n");
+		if (mode == 'w')
+			printf(" W-space: %d\n", minishell->tmp->ws_tmp[i]);
+		i++;
 	}
 	printf("\n");
 }
-
 
 void	print_list_state(t_minishell *minishell, char *name)
 {

@@ -13,7 +13,8 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*expand_question_mark(t_minishell *minishell, char *token)
+char	*expand_question_mark(t_minishell *minishell, char *token,
+			char *current_quote)
 {
 	char	*result;
 	char	*token_cp;
@@ -26,15 +27,14 @@ char	*expand_question_mark(t_minishell *minishell, char *token)
 	result = allocate_string(exit_len(token, exit_code), "Expand_question");
 	while (*token)
 	{
-		if (*token == '$' && *(token + 1) && *(token + 1) == '?')
-		{
-			write_exit_code(&result, exit_code, &i);
-			token += 2;
-		}
-		else if (*token == '"')
-			token++;
-		else
+		set_current_quote(current_quote, *token, &token);
+		if (*token == '$' && *(token + 1) && *(token + 1) == '?'
+			&& *current_quote != '\'')
+			write_exit_code(&result, exit_code, &i, &token);
+		else if (*token != *current_quote)
 			result[i++] = *(token++);
+		else if (*token && *token == *current_quote)
+			token++;
 	}
 	result[i] = '\0';
 	free(exit_code);
@@ -42,7 +42,8 @@ char	*expand_question_mark(t_minishell *minishell, char *token)
 	return (result);
 }
 
-char	*substitute(t_minishell *minishell, char *token, char *exp_token)
+char	*substitute(t_minishell *minishell, char *token,
+		char *exp_token, char *current_quote)
 {
 	int		j;
 	int		n;
@@ -52,19 +53,19 @@ char	*substitute(t_minishell *minishell, char *token, char *exp_token)
 	n = 0;
 	while (*token)
 	{
-		if (*token == '$' && *(token + 1) && *(token + 1) != '$')
+		set_current_quote(current_quote, *token, &token);
+		if (*token == '$' && *(token + 1) && ft_isalnum(*(token + 1))
+			&& *current_quote != '\'')
 		{
 			env_value = get_env_value(minishell, &token);
-			if (*env_value == '\0' && *token == ' ')
-				token++;
 			while (env_value[n])
 				exp_token[j++] = env_value[n++];
 			free(env_value);
 			n = 0;
 		}
-		else if (*token != '"')
+		else if (*token != *current_quote)
 			exp_token[j++] = *(token++);
-		else if (*token == '"')
+		else if (*token && *token == *current_quote)
 			token++;
 	}
 	exp_token[j] = '\0';
@@ -74,42 +75,33 @@ char	*substitute(t_minishell *minishell, char *token, char *exp_token)
 char	*expand(t_minishell *minishell, char *token, int i)
 {
 	char	*expanded_token;
+	char	current_quote;
 	size_t	len;
 
-	(void)i;
+	current_quote = 0;
 	if (ft_strnstr(token, "$?", ft_strlen(token)))
-		return (expand_question_mark(minishell, token));
-	len = expanded_line_len(minishell, token);
+		token = expand_question_mark(minishell, token, &current_quote);
+	len = expanded_line_len(minishell, token, &current_quote);
 	expanded_token = allocate_string(len, "Expanded_token in expand");
-	expanded_token = substitute(minishell, token, expanded_token);
+	expanded_token = substitute(minishell, token,
+			expanded_token, &current_quote);
+	if (*expanded_token == '\0')
+		minishell->cmd->whitespace[i] = 0;
 	free(token);
 	return (expanded_token);
 }
 
-void	delete_last_whitespace(t_minishell *minishell)
+void	delete_last_whitespace(t_cmd *cur)
 {
-	t_cmd	*cur;
-	char	*cmd_tmp;
 	int		flag;
 	int		i;
 
-	cur = minishell->cmd;
 	flag = 0;
-	while (cur)
-	{
-		i = array_len(cur->cmd) - 1;
-		while (cur->cmd[i][0] == '\0' && i--)
-			flag = 1;
-		if (flag && cur->cmd[i][ft_strlen(cur->cmd[i]) - 1] == ' ')
-		{
-			cmd_tmp = cur->cmd[i];
-			cur->cmd[i] = ft_strtrim(cur->cmd[i], " ");
-			if (!cur->cmd[i])
-				exit_fail("Token in delete_whitespace");
-			free(cmd_tmp);
-		}
-		cur = cur->next;
-	}
+	i = array_len(cur->cmd) - 1;
+	while (cur->cmd[i][0] == '\0' && i--)
+		flag = 1;
+	if (flag && cur->whitespace[i] == 1)
+		cur->whitespace[i] = 0;
 }
 
 void	expander_main(t_minishell *minishell, char **tokens)
@@ -128,7 +120,7 @@ void	expander_main(t_minishell *minishell, char **tokens)
 			i++;
 		}
 		i = 0;
+		delete_last_whitespace(cur);
 		cur = cur->next;
 	}
-	delete_last_whitespace(minishell);
 }

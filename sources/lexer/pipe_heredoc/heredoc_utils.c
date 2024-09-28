@@ -68,10 +68,6 @@ char	**procees_heredoc_lines(char *delimiter)
 		free(new_line);
 	}
 	heredoc_tokens[size] = NULL;
-	heredoc_tokens = (char **)ft_realloc(heredoc_tokens, (size + 1)
-			* sizeof(char *), (size + 1) * sizeof(char *));
-	if (!heredoc_tokens)
-		exit_fail("Failed to reallocate memory for heredoc tokens");
 	free(delimiter);
 	delimiter = NULL;
 	return (heredoc_tokens);
