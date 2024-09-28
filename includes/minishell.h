@@ -43,7 +43,7 @@ typedef struct s_cmd
 typedef struct s_blin
 {
 	char	*name;
-	void	(*func)(t_minishell *, int);
+	void	(*func)(t_minishell *, int, t_cmd *);
 }			t_blin;
 
 typedef struct s_mem
@@ -77,14 +77,14 @@ void		init_minishell(t_minishell *minishell, char **env);
 void		*ft_realloc_exe(void *ptr, size_t size);
 /*emulated comms*/
 int			find_string_in_array(char **array, const char *str, size_t n);
-void		execute_cd(t_minishell *minishell, int fd);
-void		execute_echo(t_minishell *minishell, int fd);
-void		execute_pwd(t_minishell *minishell, int fd);
-void		execute_export(t_minishell *minishell, int fd);
-void		execute_unset(t_minishell *minishell, int fd);
-void		execute_env(t_minishell *minishell, int fd);
-void		execute_exit(t_minishell *minishell, int fd);
-void		execute_command(char *cmd, t_minishell *minishell, int fd);
+void		execute_cd(t_minishell *minishell, int fd, t_cmd *cur);
+void		execute_echo(t_minishell *minishell, int fd, t_cmd *cur);
+void		execute_pwd(t_minishell *minishell, int fd, t_cmd *cur);
+void		execute_export(t_minishell *minishell, int fd, t_cmd *cur);
+void		execute_unset(t_minishell *minishell, int fd, t_cmd *cur);
+void		execute_env(t_minishell *minishell, int fd, t_cmd *cur);
+void		execute_exit(t_minishell *minishell, int fd, t_cmd *cur);
+void 		execute_command(t_minishell *minishell, int fd, t_cmd *cur);
 //exe
 void		execute(t_minishell *minishell);
 //signals

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 06:24:31 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/25 06:24:33 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:37:38 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

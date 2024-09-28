@@ -1,6 +1,15 @@
 #include "lexer.h"
 #include "minishell.h"
 
+static int solo_builtin(char *cmd)
+{
+    if (ft_strncmp(cmd, "cd", 2) == 0 || ft_strncmp(cmd, "export", 6) == 0 || 
+        ft_strncmp(cmd, "unset", 5) == 0 || ft_strncmp(cmd, "env", 3) == 0 ||
+        ft_strncmp(cmd, "exit", 4) == 0)
+        return (1);
+    return (0);
+}
+
 static int  is_builtin(char *cmd)
 {
     if (ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 || 
@@ -76,6 +85,14 @@ static void heredoc_fd(t_cmd *cmd)
 
 static void redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, int i)
 {
+    t_list *tmp;
+
+    tmp = current->skipped_in;
+    while (tmp)
+    {
+        open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO);
+        tmp = tmp->next;
+    }
     if (current->heredoc)
         heredoc_fd(current);
     else if (current->infile)
@@ -94,6 +111,14 @@ static void redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, 
 
 static void redirect_output(t_minishell *minishell, t_cmd *current, int **pipes, int i, int num_cmd)
 {
+    t_list *tmp;
+
+    tmp = current->skipped_out;
+    while (tmp)
+    {
+        open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC, STDOUT_FILENO);
+        tmp = tmp->next;
+    }
     if (current->outfile)
     {
         int flags;
@@ -125,23 +150,6 @@ static void close_pipes(int **pipes, int num_cmd)
     }
 }
 
-static void execute_single_command(t_minishell *minishell, t_cmd *cmd, char **env)
-{
-    if (is_builtin(cmd->cmd[0]))
-    {
-        execute_command(cmd->cmd[0], minishell, STDOUT_FILENO);
-    }
-    else
-    {
-        if (execve(get_path(minishell, cmd->cmd[0]), cmd->cmd, env) == -1)
-        {
-            not_found(minishell, cmd->cmd[0]);
-            free(cmd->cmd[0]);
-            exit(EXIT_FAILURE);
-        }
-    }
-}
-
 static int path_present(t_minishell *minishell)
 {
     int i;
@@ -162,36 +170,23 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
     redirect_input(minishell, current, pipes, i);
     redirect_output(minishell, current, pipes, i, num_cmd);
     close_pipes(pipes, num_cmd);
-
     if (is_builtin(current->cmd[0]))
     {
-        execute_command(current->cmd[0], minishell, STDOUT_FILENO);
+        execute_command(minishell, STDOUT_FILENO, current); 
         exit(EXIT_SUCCESS);
     }
     else
     {
-        /* Поменял порядок проверки условий. Если мы пытаемся проверить, исполнился ли экзекве,
-        когда команды не сущесвует (то есть нет пути к ней), мы передаем в него NULL в качестве первого аргумента.
-        Хотя он возвращает -1, он пытается дерефернсить NULL, что есть плохо */
         if (!path_present(minishell))
-                return(no_path_file(minishell, current->cmd[0]));
+            return(no_path_file(minishell, current->cmd[0]));
         if (!get_path(minishell, current->cmd[0]))
         {
             not_found(minishell, current->cmd[0]);
-            exit(EXIT_FAILURE);
+            exit(minishell->exit_code);
         }
-        // printf("path ="); //del
-        // print_visible(get_path(minishell, current->cmd[0])); //del
-        // printf("\n"); //del
-        // int i = 0;
-        // while (current->cmd[i])
-        // {
-        //     printf("cmd[%d] =", i); //del
-        //     print_visible(current->cmd[i]); //del
-        //     printf("\n"); //del
-        //     i++;
-        // }
         execve(get_path(minishell, current->cmd[0]), current->cmd, env);
+        perror("execve");
+        exit(minishell->exit_code);
     }
 }
 
@@ -286,9 +281,9 @@ static void execute_commands(t_minishell *minishell, char **env)
     pipes = NULL;
     pids = NULL;
 
-    if (num_cmd == 1 && is_builtin(minishell->cmd->cmd[0]))
+    if (num_cmd == 1 && solo_builtin(minishell->cmd->cmd[0]))
     {
-        execute_single_command(minishell, minishell->cmd, env);
+        execute_command(minishell, STDOUT_FILENO, minishell->cmd);
     }
     else
     {

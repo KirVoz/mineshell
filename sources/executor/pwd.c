@@ -14,11 +14,12 @@ int find_string_in_array(char **array, const char *str, size_t n)
     return -1;
 }
 
-void    execute_pwd(t_minishell *minishell, int fd)
+void    execute_pwd(t_minishell *minishell, int fd, t_cmd *cur)
 {
     int i;
     char *pwd;
 
+    (void)cur;
     i = find_string_in_array(minishell->env->envp_var, "PWD=", 4);
     pwd = minishell->env->envp_var[i] + 4;
     ft_putstr_fd(pwd, fd);

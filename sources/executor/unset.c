@@ -30,21 +30,21 @@ static void remove_env_var(char **env_array, int index)
     env_array[j] = env_array[j + 1]; // Ensure the last element is NULL
 }
 
-void execute_unset(t_minishell *minishell, int fd)
+void execute_unset(t_minishell *minishell, int fd, t_cmd *cur)
 {
     int i;
     int index;
 
-    if (minishell->cmd->cmd[1] == NULL)
+    if (cur->cmd[1] == NULL)
     {
         ft_putstr_fd("unset: not enough arguments\n", fd);
         return;
     }
     i = 1;
-    while (minishell->cmd->cmd[i] != NULL)
+    while (cur->cmd[i] != NULL)
     {
-        index = find_env_index(minishell->env->envp_var, minishell->cmd->cmd[i]);
-        printf("index: %d\n", index); //del
+        index = find_env_index(minishell->env->envp_var, cur->cmd[i]);
+        //printf("index: %d\n", index); //del
         if (index != -1)
         {
             remove_env_var(minishell->env->envp_var, index);

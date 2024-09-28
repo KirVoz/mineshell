@@ -21,7 +21,7 @@ static void add_or_update_env_var(t_minishell *minishell, const char *new_var)
 
     env_count = count_str(minishell->env->envp_var);
     var_name_len = ft_strchr(new_var, '=') - new_var;
-    printf("var_name_len: %zu\n", var_name_len);
+    // printf("var_name_len: %zu\n", var_name_len); //del
 
     i = -1;
     while (++i < env_count)
@@ -40,16 +40,16 @@ static void add_or_update_env_var(t_minishell *minishell, const char *new_var)
     update(minishell, new_var, env_count);
 }
 
-void execute_export(t_minishell *minishell, int fd)
+void execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 {
     int i;
     char *new_var;
     int env_count;
 
     env_count = count_str(minishell->env->envp_var);
-    if (minishell->cmd->cmd[1] != NULL)
+    if (cur->cmd[1] != NULL)
     {
-        new_var = minishell->cmd->cmd[1];
+        new_var = cur->cmd[1];
         if (ft_strchr(new_var, '=') == NULL)
         {
             ft_putstr_fd("export: not a valid identifier\n", fd);

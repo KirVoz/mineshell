@@ -1,5 +1,25 @@
 #include "minishell.h"
 
+static int open_output_file(t_minishell *minishell, t_cmd *cur)
+{
+    int flags;
+    int file_fd;
+
+    if (cur->append)
+        flags = O_WRONLY | O_CREAT | O_APPEND;
+    else
+        flags = O_WRONLY | O_CREAT | O_TRUNC;
+
+    file_fd = open(cur->outfile, flags, 0644);
+    if (file_fd == -1)
+    {
+        perror("open");
+        minishell->exit_code = 1;
+    }
+    return file_fd;
+}
+#include "minishell.h"
+
 int is_valid_n(char *str, int ws, int cur_i)
 {
     int i;
@@ -11,7 +31,8 @@ int is_valid_n(char *str, int ws, int cur_i)
         i = 1;
         if (str[0] == '-' || str[1] == 'n')
         {
-            while (str[i++] == 'n')
+            while (str[i] == 'n')
+                i++;
             if (str[i] == '\0')
                 return (1);
             return (0);
@@ -20,7 +41,8 @@ int is_valid_n(char *str, int ws, int cur_i)
     else if (ws == 0)
     {
         i = 0;
-        while (str[i++] == 'n')
+        while (str[i] == 'n')
+            i++;
         if (str[i] == '\0')
             return (1);
         return (0);
@@ -48,8 +70,8 @@ int check_n(t_minishell *minishell, char **cmd, int *i)
             j++;
             continue ;
         }
-        else if (((is_valid == 2 && is_valid != 3)
-            || (is_valid == 0 && previous_is_valid == 1 && ws != 0)))
+        else if (((is_valid == 2 && is_valid != 3) || (is_valid == 0
+                && previous_is_valid == 1 && ws != 0)))
             break ;
         return (1);
     }
@@ -57,21 +79,31 @@ int check_n(t_minishell *minishell, char **cmd, int *i)
     return (0);
 }
 
-void execute_echo(t_minishell *minishell, int fd)
+void execute_echo(t_minishell *minishell, int fd, t_cmd *cur)
 {
-    int i = 1;
-    int newline = -1;
+    int i;
+    int newline;
+    int file_fd;
 
-    newline = check_n(minishell, minishell->cmd->cmd, &i);
-    while (minishell->cmd->cmd[i] != NULL)
+    i = 1;
+    if (cur->outfile)
     {
-        ft_putstr_fd(minishell->cmd->cmd[i], fd);
-        if (minishell->cmd->whitespace[i])
+        file_fd = open_output_file(minishell, cur);
+        if (file_fd == -1)
+            return;
+        fd = file_fd;
+    }
+    newline = check_n(minishell, minishell->cmd->cmd, &i);
+    while (cur->cmd[i] != NULL)
+    {
+        ft_putstr_fd(cur->cmd[i], fd);
+        if (cur->whitespace[i])
             ft_putstr_fd(" ", fd);
         i++;
     }
     if (newline)
         ft_putstr_fd("\n", fd);
-
+    if (file_fd != -1)
+        close(file_fd);
     minishell->exit_code = 0;
 }

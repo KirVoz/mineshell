@@ -1,11 +1,12 @@
 #include "minishell.h"
 
-void execute_env(t_minishell *minishell, int fd)
+void execute_env(t_minishell *minishell, int fd, t_cmd *cur)
 {
     int i;
 
+    (void)fd;
     i = 0;
-    if (minishell->cmd->cmd[1])
+    if (cur->cmd[1])
     {
         arg_count_error(minishell, "env");
         return ;
