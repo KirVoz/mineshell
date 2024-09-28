@@ -1,0 +1,3 @@
+current->cmd[1] hello
+execute_echo hello
+hello

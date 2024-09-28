@@ -58,7 +58,7 @@ int	lexer_main(t_minishell *minishell, char *line)
 	parser_main(&minishell, &minishell->tmp->tokens);
 	// print_list_state_v(minishell, "after parser"); 
 	expander_main(minishell, minishell->tmp->tokens);
-	print_list_state_v(minishell, "after expander"); 
+	// print_list_state_v(minishell, "after expander"); 
 	return (1);
 }
 
