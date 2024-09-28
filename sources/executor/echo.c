@@ -103,7 +103,7 @@ void execute_echo(t_minishell *minishell, int fd, t_cmd *cur)
     }
     if (newline)
         ft_putstr_fd("\n", fd);
-    if (file_fd != -1)
+    if (cur->outfile && file_fd != -1)
         close(file_fd);
     minishell->exit_code = 0;
 }
