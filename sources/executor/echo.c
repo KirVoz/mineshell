@@ -18,7 +18,6 @@ static int open_output_file(t_minishell *minishell, t_cmd *cur)
     }
     return file_fd;
 }
-#include "minishell.h"
 
 int is_valid_n(char *str, int ws, int cur_i)
 {
@@ -31,8 +30,7 @@ int is_valid_n(char *str, int ws, int cur_i)
         i = 1;
         if (str[0] == '-' || str[1] == 'n')
         {
-            while (str[i] == 'n')
-                i++;
+            while (str[i++] == 'n')
             if (str[i] == '\0')
                 return (1);
             return (0);
@@ -41,8 +39,7 @@ int is_valid_n(char *str, int ws, int cur_i)
     else if (ws == 0)
     {
         i = 0;
-        while (str[i] == 'n')
-            i++;
+        while (str[i++] == 'n')
         if (str[i] == '\0')
             return (1);
         return (0);
@@ -93,7 +90,10 @@ void execute_echo(t_minishell *minishell, int fd, t_cmd *cur)
             return;
         fd = file_fd;
     }
-    newline = check_n(minishell, minishell->cmd->cmd, &i);
+    if (cur->cmd[1])
+        newline = check_n(minishell, cur->cmd, &i);
+    else
+        newline = 1;
     while (cur->cmd[i] != NULL)
     {
         ft_putstr_fd(cur->cmd[i], fd);

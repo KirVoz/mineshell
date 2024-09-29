@@ -91,6 +91,7 @@ void		execute(t_minishell *minishell);
 void		ft_signals(void);
 //utils.c
 int			count_str(char **str);
+char    	*str_to_lower(char *str);
 //error
 void		exit_fail(const char *exit_message);
 void		error_handler(t_minishell *minishell, char *error);

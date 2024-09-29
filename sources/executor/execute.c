@@ -3,20 +3,43 @@
 
 static int solo_builtin(char *cmd)
 {
-    if (ft_strncmp(cmd, "cd", 2) == 0 || ft_strncmp(cmd, "export", 6) == 0 || 
-        ft_strncmp(cmd, "unset", 5) == 0 || ft_strncmp(cmd, "env", 3) == 0 ||
-        ft_strncmp(cmd, "exit", 4) == 0)
+    int     len;
+    char    *cmd_lower;
+
+    len = ft_strlen(cmd);
+    cmd_lower = str_to_lower(cmd);
+    if (ft_strncmp(cmd_lower, "cd", len) == 0
+        || ft_strncmp(cmd_lower, "export", len) == 0
+        || ft_strncmp(cmd_lower, "unset", len) == 0
+        || ft_strncmp(cmd_lower, "env", len) == 0
+        || ft_strncmp(cmd_lower, "exit", len) == 0)
+    {
+        free(cmd_lower);
         return (1);
+    }
+    free(cmd_lower);
     return (0);
 }
 
 static int  is_builtin(char *cmd)
 {
-    if (ft_strncmp(cmd, "echo", 4) == 0 || ft_strncmp(cmd, "cd", 2) == 0 || 
-        ft_strncmp(cmd, "pwd", 3) == 0 || ft_strncmp(cmd, "export", 6) == 0 || 
-        ft_strncmp(cmd, "unset", 5) == 0 || ft_strncmp(cmd, "env", 3) == 0 || 
-        ft_strncmp(cmd, "exit", 4) == 0)
+    int     len;
+    char    *cmd_lower;
+
+    len = ft_strlen(cmd);
+    cmd_lower = str_to_lower(cmd);
+    if (ft_strncmp(cmd_lower, "echo", len) == 0
+        || ft_strncmp(cmd_lower, "cd", len) == 0
+        || ft_strncmp(cmd_lower, "pwd", len) == 0
+        || ft_strncmp(cmd_lower, "export", len) == 0
+        || ft_strncmp(cmd_lower, "unset", len) == 0
+        || ft_strncmp(cmd_lower, "env", len) == 0
+        || ft_strncmp(cmd_lower, "exit", len) == 0)
+    {
+        free(cmd_lower);
         return (1);
+    }
+    free(cmd_lower);
     return (0);
 }
 
@@ -280,7 +303,6 @@ static void execute_commands(t_minishell *minishell, char **env)
     num_cmd = count_commands(minishell->cmd);
     pipes = NULL;
     pids = NULL;
-
     if (num_cmd == 1 && solo_builtin(minishell->cmd->cmd[0]))
     {
         execute_command(minishell, STDOUT_FILENO, minishell->cmd);

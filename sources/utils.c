@@ -18,6 +18,7 @@ void	*ft_realloc_exe(void *ptr, size_t size)
 	free(ptr);
 	return (new_ptr);
 }
+
 int count_str(char **str)
 {
 	int i;
@@ -26,4 +27,19 @@ int count_str(char **str)
 	while (str[i])
 		i++;
 	return (i);
+}
+
+char    *str_to_lower(char *str)
+{
+	char	*lower_str;
+    int 	i;
+
+	lower_str = ft_strdup(str);
+    i = 0;
+    while (lower_str[i])
+    {
+        lower_str[i] = ft_tolower(lower_str[i]);
+        i++;
+    }
+    return (lower_str);
 }

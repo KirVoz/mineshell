@@ -36,17 +36,21 @@ void execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 
 void execute_command(t_minishell *minishell, int fd, t_cmd *cur)
 {
-    int i;
+    int     i;
+    char    *cmd_lower;
 
     i = 0;
+    cmd_lower = str_to_lower(cur->cmd[0]);
     while (i < 7)
     {
-        if (ft_strncmp(cur->cmd[0], commands[i].name, ft_strlen(commands[i].name)) == 0)
+        if (ft_strncmp(cmd_lower, commands[i].name, ft_strlen(commands[i].name)) == 0)
         {
             commands[i].func(minishell, fd, cur);
+            free(cmd_lower);
             return;
         }
         i++;
     }
+    free(cmd_lower);
     printf("Command not found: %s\n", cur->cmd[0]);
 }
