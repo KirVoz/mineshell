@@ -58,3 +58,47 @@ void	set_current_quote(char *current_quote, char quote, char **token)
 		}
 	}
 }
+
+void	delete_last_whitespace(t_cmd *cur)
+{
+	int		flag;
+	int		i;
+
+	flag = 0;
+	i = array_len(cur->cmd) - 1;
+	if (cur->whitespace[i] == 1)
+		cur->whitespace[i] = 0;
+	while (cur->cmd[i][0] == '\0' && i > 0)
+	{
+		flag = 1;
+		i--;
+	}
+	if (flag && cur->whitespace[i] == 1)
+		cur->whitespace[i] = 0;
+}
+
+void	delete_comment(t_cmd *cur)
+{
+	int		i;
+	int		j;
+	int 	flag;
+
+	i = 0;
+	flag = 0;
+	while (cur->cmd[i])
+	{
+		j = 0;
+		while (cur->cmd[i][j])
+		{
+			if (cur->cmd[i][j] == '#')
+				flag = 1;
+			if (flag)
+			{
+				cur->cmd[i][j] = '\0';
+				cur->whitespace[i] = 0;
+			}
+			j++;
+		}
+		i++;
+	}
+}

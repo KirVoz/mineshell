@@ -65,11 +65,12 @@ char	*expand_question_mark(t_minishell *minishell, char *token,
 char	*substitute(t_minishell *minishell, char *token,
 			char *exp_token, char *current_quote);
 char	*expand(t_minishell *minishell, char *token, int i);
-void	delete_last_whitespace(t_cmd *cur);
 void	expander_main(t_minishell *minishell, char **tokens);
 int		expand_to_env(t_minishell *minishell, char **cur_ptr, char cur_quote);
 void	write_exit_code(char **result, char *exit_code, int *i, char **token);
 void	set_current_quote(char *current_quote, char quote, char **token);
+void	delete_last_whitespace(t_cmd *cur);
+void	delete_comment(t_cmd *cur);
 size_t	expanded_line_len(t_minishell *minishell, char *token,
 			char *current_quote);
 size_t	exit_len(char *token, char *exit_code);

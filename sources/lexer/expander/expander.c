@@ -91,24 +91,6 @@ char	*expand(t_minishell *minishell, char *token, int i)
 	return (expanded_token);
 }
 
-void	delete_last_whitespace(t_cmd *cur)
-{
-	int		flag;
-	int		i;
-
-	flag = 0;
-	i = array_len(cur->cmd) - 1;
-	if (cur->whitespace[i] == 1)
-		cur->whitespace[i] = 0;
-	while (cur->cmd[i][0] == '\0' && i > 0)
-	{
-		flag = 1;
-		i--;
-	}
-	if (flag && cur->whitespace[i] == 1)
-		cur->whitespace[i] = 0;
-}
-
 void	expander_main(t_minishell *minishell, char **tokens)
 {
 	int			i;
@@ -125,6 +107,7 @@ void	expander_main(t_minishell *minishell, char **tokens)
 			i++;
 		}
 		i = 0;
+		delete_comment(cur);
 		delete_last_whitespace(cur);
 		cur = cur->next;
 	}
