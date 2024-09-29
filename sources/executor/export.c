@@ -40,6 +40,28 @@ static void add_or_update_env_var(t_minishell *minishell, const char *new_var)
     update(minishell, new_var, env_count);
 }
 
+static int ft_check_valid_identifier(char *new_var)
+{
+    int i;
+
+    i = 0;
+    // Проверка, начинается ли строка с цифры
+    if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
+        return (1);
+
+    while (new_var[i] != '\0')
+    {
+        // Проверка на недопустимые символы
+        if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#' ||
+            new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$' ||
+            new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~' ||
+            (ft_isalnum(new_var[i]) == 0 && new_var[i] != '_'))
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
 void execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 {
     int i;
@@ -50,7 +72,8 @@ void execute_export(t_minishell *minishell, int fd, t_cmd *cur)
     if (cur->cmd[1] != NULL)
     {
         new_var = cur->cmd[1];
-        if (ft_strchr(new_var, '=') == NULL)
+        printf("new_var: %s\n", new_var); //del
+        if (ft_strchr(new_var, '=') == NULL || ft_check_valid_identifier(new_var) == 1)
         {
             ft_putstr_fd("export: not a valid identifier\n", fd);
             return;
