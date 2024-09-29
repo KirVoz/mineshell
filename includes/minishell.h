@@ -3,8 +3,8 @@
 
 # include "libft.h"
 # include <ctype.h>
-# include <readline/history.h>
-# include <readline/readline.h>
+# include "../libraries/readline_lib/include/readline/readline.h"
+# include "../libraries/readline_lib/include/readline/history.h"
 # include <signal.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -42,29 +42,29 @@ typedef struct s_cmd
 
 typedef struct s_blin
 {
-	char	*name;
-	void	(*func)(t_minishell *, int, t_cmd *);
-}			t_blin;
+	char			*name;
+	void			(*func)(t_minishell *, int, t_cmd *);
+}					t_blin;
 
 typedef struct s_mem
 {
-	char	*line;
-	char	**tokens;
-	char	***heredoc_tmp;
-	int		current_heredoc;
-	int		*ws_tmp;
-	int		*ws_pipe_tmp;
-}			t_mem;
+	char			*line;
+	char			**tokens;
+	char			***heredoc_tmp;
+	int				current_heredoc;
+	int				*ws_tmp;
+	int				*ws_pipe_tmp;
+}					t_mem;
 
 
 typedef struct s_minishell
 {
-	t_env	*env;
-	t_blin	*buildins;
-	t_cmd	*cmd;
-	t_mem	*tmp;
-	int		exit_code;
-}			t_minishell;
+	t_env			*env;
+	t_blin			*buildins;
+	t_cmd			*cmd;
+	t_mem			*tmp;
+	int				exit_code;
+}					t_minishell;
 
 // shlvl.c
 char		*increment_shlvl(const char *shlvl);

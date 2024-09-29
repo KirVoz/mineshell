@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 06:22:25 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/29 14:20:46 by kvoznese         ###   ########.fr       */
+/*   Updated: 2024/09/29 01:35:13 by aaleksee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ char	**tokenizator(int **ws_array, char *line)
 
 int	lexer_main(t_minishell *minishell, char *line)
 {
-	if (quote_counter(line))
-		return (syntax_quote_error(minishell, quote_counter(line)));
+	if (!quote_counter(minishell, line))
+		return (0);
 	if (hanging_pipe_heredoc(line))
 		minishell->tmp->tokens = pipe_heredoc_main(minishell, line);
 	else

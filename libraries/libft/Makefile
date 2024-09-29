@@ -29,27 +29,27 @@ SRCS =	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 	ft_lstnew.c ft_lstadd_back.c ft_lstclear.c
 
 PRINTF_SRCS =	$(PRINTF_DIR)ft_printf.c \
-		$(PRINTF_DIR)ft_printf_utils_str_nbr.c \
-		$(PRINTF_DIR)ft_printf_utils_p_x.c \
-		$(PRINTF_DIR)ft_printf_utils_flags.c
+				$(PRINTF_DIR)ft_printf_utils_str_nbr.c \
+				$(PRINTF_DIR)ft_printf_utils_p_x.c \
+				$(PRINTF_DIR)ft_printf_utils_flags.c
 
-GNL_SRCS =	$(GNL_DIR)get_next_line.c \
-		$(GNL_DIR)get_next_line_utils.c
+GNL_SRCS =		$(GNL_DIR)get_next_line.c \
+				$(GNL_DIR)get_next_line_utils.c
 
-OBJS =		$(SRCS:.c=.o)
+OBJS =			$(SRCS:.c=.o)
 PRINTF_OBJS =	$(PRINTF_SRCS:.c=.o)
-GNL_OBJS =	$(GNL_SRCS:.c=.o)
+GNL_OBJS =		$(GNL_SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS) $(PRINTF_OBJS) $(GNL_OBJS)
-	@ar -r $@ $?
+	@ar -rc $@ $?
 
 %.o: %.c
 	@$(CC) $(CFLAGS) $(INCFLAGS) -c $< -o $@
 
 bonus: $(OSRC) $(OBSRC)
-	ar -r $(NAME) $?
+	@ar -rc $(NAME) $?
 
 clean:
 	@rm -f $(OBJS) $(PRINTF_OBJS) $(GNL_OBJS)

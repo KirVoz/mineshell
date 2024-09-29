@@ -90,7 +90,7 @@ void	free_minishell(t_minishell *minishell)
 		free(minishell->tmp->ws_tmp);
 		minishell->tmp->ws_tmp = NULL;
 	}
-	if (minishell->tmp->ws_tmp)
+	if (minishell->tmp->ws_pipe_tmp)
 	{
 		free(minishell->tmp->ws_pipe_tmp);
 		minishell->tmp->ws_pipe_tmp = NULL;

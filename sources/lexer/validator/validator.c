@@ -26,10 +26,10 @@ int	hanging_tokens(char **tokens)
 				|| ft_strncmp(*tokens, ">>", token_len) == 0
 				|| ft_strncmp(*tokens, "|", token_len) == 0) && !*(tokens + 1)
 			&& token_len != 0)
-			return (0);
+			return (1);
 		tokens++;
 	}
-	return (1);
+	return (0);
 }
 
 int	is_valid_token(char *token)
@@ -60,17 +60,17 @@ int	pipe_redirections_mistake(t_minishell *minishell, char **tokens)
 	{
 		if (is_valid_token(*tokens) && *(tokens + 1)
 			&& **(tokens + 1) == '|')
-			return (syntax_error(minishell, *(tokens + 1)));
+			return (syntax_error(minishell, *(tokens + 1)) + 1);
 		tokens++;
 	}
-	return (1);
+	return (0);
 }
 
 int	validator_main(t_minishell *minishell, char ***tokens)
 {
-	if (!pipe_redirections_mistake(minishell, *tokens))
+	if (pipe_redirections_mistake(minishell, *tokens))
 		return (0);
-	if (!hanging_tokens(*tokens))
+	if (hanging_tokens(*tokens))
 		return (syntax_error(minishell, "newline"));
 	return (1);
 }

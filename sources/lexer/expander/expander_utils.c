@@ -33,8 +33,8 @@ void	write_exit_code(char **result, char *exit_code, int *i, char **token)
 		(*result)[*i] = *exit_code;
 		(*i)++;
 		exit_code++;
-		*token += 2;
 	}
+	*token += 2;
 }
 
 void	set_current_quote(char *current_quote, char quote, char **token)
@@ -81,7 +81,7 @@ void	delete_comment(t_cmd *cur)
 {
 	int		i;
 	int		j;
-	int 	flag;
+	int		flag;
 
 	i = 0;
 	flag = 0;

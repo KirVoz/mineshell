@@ -19,14 +19,10 @@
 
 // LEXER //del
 int		lexer_main(t_minishell *minishell, char *line);
-// char	**tokenizator(char *line);
 char	**tokenizator(int **ws_array, char *line);
-char	*quote_counter(char *line);
+int		quote_counter(t_minishell *minishell, char *line);
 char	hanging_pipe_heredoc(char *line);
-// void	delete_whitespace_before_token(char **token);
-
 // TOKENIZATOR //del
-// char	*extract_token(char **line, int i, int *token_flag);
 char	*extract_token(char **line, int i, int **ws_array, int *token_flag);
 char	*getting_token(char *start, int len);
 char	*getting_start(char **line, char *start, int *len);
@@ -78,30 +74,6 @@ size_t	exit_len_hd(char *token, char *exit_code);
 char	*find_env_value(char **env_array, char *var_name);
 char	*env_var_copy(char **token);
 char	*get_env_value(t_minishell *minishell, char **token);
-// void	processing_quoted_line(t_minishell *minishell, char **token,
-// 			char *result, char *current_quote);
-// char	*expand_quoted_line(t_minishell *minishell, char *token, size_t len);
-// char	*expand_dollar_line(t_minishell *minishell, char *token, size_t len);
-// size_t	exit_len_hc(char *token, char *exit_code);
-// char	*expand_question_mark(t_minishell *minishell, char *token);
-// void	expander_main(t_minishell *minishell, char **tokens);
-// size_t	strlcpy_eq(char *dst, const char *src, size_t dstsize);
-// char	*allocate_dup(char *dup, char *error);
-// char	set_quote(char c, int *in_quote);
-// void	write_exit_code(char **result, char *exit_code, int *i);
-// void	digit_env_var_substitute(char **token, char **result, int *i);
-// size_t	expanded_line_len(t_minishell *minishell, char *token);
-// size_t	env_value_len(t_minishell *minishell, char **token);
-// size_t	digit_env_var_len(char **token);
-// size_t	additional_len(char *token);
-// size_t	expanded_env_var_len(char *line);
-// size_t	count_to_dollar(char **line);
-// size_t	exit_len(char *token, char *exit_code);
-// char	*find_env_value(char **env_array, char *var_name);
-// char	*get_env_value(t_minishell *minishell, char **token);
-// char	*env_var_copy(char **token);
-// void	substitute_env(t_minishell *minishell, char **token, char **result,
-// 			int *i);
 // VALIDATOR //del
 int		hanging_tokens(char **tokens);
 int		is_valid_token(char *token);

@@ -62,6 +62,8 @@ char	**handle_pipe(t_minishell *minishell, char **tokens)
 
 	merged_tokens = NULL;
 	new_line = readline(PROMPT_HEREDOC);
+	if (!new_line)
+		exit(1);
 	new_tokens = tokenizator(&(minishell->tmp->ws_pipe_tmp), new_line);
 	merged_tokens = merge_tokens(tokens, new_tokens);
 	free(new_line);

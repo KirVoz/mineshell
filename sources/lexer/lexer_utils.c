@@ -13,7 +13,7 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*quote_counter(char *line)
+int	quote_counter(t_minishell *minishell, char *line)
 {
 	int		double_quote;
 	int		single_quote;
@@ -28,11 +28,15 @@ char	*quote_counter(char *line)
 			single_quote = !single_quote;
 		line++;
 	}
-	if (double_quote % 2 != 0)
-		return ("\"");
-	else if (single_quote % 2 != 0)
-		return ("'");
-	return (NULL);
+	if (double_quote % 2 != 0 || single_quote % 2 != 0)
+	{
+		free(minishell->tmp->line);
+		if (double_quote % 2 != 0)
+			return (syntax_quote_error(minishell, "\""));
+		else if (single_quote % 2 != 0)
+			return (syntax_quote_error(minishell, "'"));
+	}
+	return (1);
 }
 
 char	hanging_pipe_heredoc(char *line)
@@ -63,20 +67,3 @@ char	hanging_pipe_heredoc(char *line)
 		return ('h');
 	return (0);
 }
-
-// void	delete_whitespace_before_token(char **token)
-// {
-// 	size_t	len;
-// 	char	*token_tmp;
-
-// 	len = ft_strlen(*token);
-// 	token_tmp = *token;
-// 	if ((*token)[len - 1] == ' ')
-// 	{
-// 		*token = ft_strtrim(*token, " ");
-// 		if (!*token)
-// 			exit_fail("Token in delete_whitespace");
-// 		free(token_tmp);
-// 	}
-// 	token_tmp = NULL;
-// }

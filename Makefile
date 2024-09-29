@@ -11,6 +11,7 @@ MEM_PATH = sources/memory_managment
 EXE_PATH = sources/executor
 LIBFT_PATH = libraries/libft
 READLINE_PATH = libraries/readline
+READLINE_LIB_PATH = $(PWD)/libraries/readline_lib
 OBJ_DIR = objects
 
 SRC =	$(SRC_PATH)/main.c \
@@ -57,8 +58,8 @@ OSRC = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
 
-INCFLAGS = -I./includes -I/opt/homebrew/opt/readline/include
-LDFLAGS = -L/opt/homebrew/opt/readline/lib -lreadline
+INCFLAGS = -I./includes -I$(READLINE_LIB_PATH)/readline/include -DREADLINE_LIBRARY
+LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline
 
 CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
 # CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
@@ -67,14 +68,24 @@ LIBFT = $(LIBFT_PATH)/libft.a
 
 all: $(NAME)
 
-$(NAME): $(OSRC) $(LIBFT)
-	@$(CC) $(CFLAGS) ${OSRC} $(LIBFT) -o $(NAME) $(LDFLAGS) 
+$(NAME): $(READLINE_LIB_PATH) $(OSRC) $(LIBFT)
+	@$(CC) $(CFLAGS) ${OSRC} $(LIBFT) -o $(NAME) $(LDFLAGS)
+	@echo "Minishell created"
+
+$(READLINE_LIB_PATH):
+	@echo "Configuring readline ..."
+	@mkdir -p $(READLINE_LIB_PATH)
+	@cd $(READLINE_PATH) && ./configure --prefix=$(READLINE_LIB_PATH) &> /dev/null
+	@echo "Installing readline ..."
+	@make -C $(READLINE_PATH) install &> /dev/null
+	@echo "Readline installed"
 
 $(LIBFT):
 	@make -C $(LIBFT_PATH)
+	@echo "Libft created"
 
-ex: re #to go into file after re 
-	./minishell
+ex: re
+	@./minishell
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(@D)
@@ -83,11 +94,21 @@ $(OBJ_DIR)/%.o: %.c
 clean:
 	@rm -rf $(OBJ_DIR)
 	@make clean -C $(LIBFT_PATH)
+	@make clean -C $(READLINE_PATH) --quiet
+	@echo "Object files cleaned"
 
 fclean: clean
 	@rm -rf $(NAME)
-	@make fclean -C $(LIBFT_PATH)
+	@make fclean -C $(LIBFT_PATH) 
+	@rm -rf $(READLINE_LIB_PATH)
+	@echo "Executable and libraries cleaned"
 
 re: fclean all
 
 .PHONY: all clean fclean re
+
+# По традиции линус любит сложности, поэтому может потребоваться библиотека сurses \
+для этого при конфигурации readline надо указать флаг --with-curses \
+@cd $(READLINE_PATH) && ./configure --prefix=$(READLINE_LIB_PATH) --with-curses &> /dev/null \
+а для флагов линковки -lncurses \
+LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline -lncurses #
