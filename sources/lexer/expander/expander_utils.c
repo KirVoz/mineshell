@@ -90,7 +90,7 @@ void	delete_comment(t_cmd *cur)
 		j = 0;
 		while (cur->cmd[i][j])
 		{
-			if (cur->cmd[i][j] == '#')
+			if (cur->cmd[i][j] == '#' && i > 0 && cur->whitespace[i - 1])
 				flag = 1;
 			if (flag)
 			{
