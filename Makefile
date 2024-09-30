@@ -72,6 +72,7 @@ LIBFT = $(LIBFT_PATH)/libft.a
 all: $(NAME)
 
 $(NAME): $(READLINE_LIB_PATH) $(OSRC) $(LIBFT)
+#$(NAME): $(OSRC) $(LIBFT)
 	@$(CC) $(CFLAGS) ${OSRC} $(LIBFT) -o $(NAME) $(LDFLAGS)
 	@echo "Minishell created"
 

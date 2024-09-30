@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error_handler.c                                    :+:      :+:    :+:   */
+/*   error_handler1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 05:10:15 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/30 05:10:17 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/09/30 19:29:49 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,13 @@ void	no_path_file(t_minishell *minishell, char *filename)
 	ft_putstr_fd(": No such file or directory", 2);
 	ft_putstr_fd("\n", 2);
 	minishell->exit_code = 127;
+}
+
+void	not_valid(t_minishell *minishell, char *cmd)
+{
+	ft_putstr_fd("minishell: export: ", 2);
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(": not a valid identifier", 2);
+	ft_putstr_fd("\n", 2);
+	minishell->exit_code = 1;
 }

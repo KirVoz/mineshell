@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 06:24:54 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/25 06:24:55 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/09/30 16:51:01 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	delete_comment(t_cmd *cur)
 		j = 0;
 		while (cur->cmd[i][j])
 		{
-			if (cur->cmd[i][j] == '#' && i > 0 && cur->whitespace[i - 1])
+			if (cur->cmd[i][j] == '#')
 				flag = 1;
 			if (flag)
 			{
