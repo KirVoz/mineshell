@@ -88,7 +88,6 @@ void	process_token(t_minishell **minishell, t_cmd *current, char *token,
 void	parser_main(t_minishell **minishell, char ***tokens);
 void	process_node(t_cmd **current, t_cmd **cmd_list,
 			char *token, int cmd_count);
-// void	add_command(t_cmd *current, char *token);
 void	add_command(t_minishell **minishell, t_cmd *current,
 			char *token, int *i);
 int		is_pipe(char *token);
@@ -96,19 +95,6 @@ int		is_redirection(char *token);
 void	store_skipped_infiles(t_cmd **current);
 void	store_skipped_outfiles(t_cmd **current);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
-// MEMORY_MANAGEMENT //del
-char	**array_init(void);
-char	*allocate_string(size_t len, char *error);
-char	*allocate_dup(char *dup, char *error);
-char	**allocate_array(size_t len, char *error);
-void	error_array_allocation(char **result, int i, char *error);
-void	free_tokens(char **tokens);
-void	free_heredoc_tmp(char ***heredoc_tmp);
-void	free_cmd(t_cmd *cmd);
-void	free_minishell(t_minishell *minishell);
-void	exit_free(t_minishell *minishell, int exit_code);
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-int		*allocate_whitespaces(int count, char *error);
 // GENERAL_UTILS //del
 size_t	array_len(char **array);
 // DEBUG //del

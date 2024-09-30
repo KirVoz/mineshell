@@ -20,8 +20,8 @@ void    execute_pwd(t_minishell *minishell, int fd, t_cmd *cur)
     char *pwd;
 
     (void)cur;
-    i = find_string_in_array(minishell->env->envp_var, "PWD=", 4);
-    pwd = minishell->env->envp_var[i] + 4;
+    i = find_string_in_array(minishell->env, "PWD=", 4);
+    pwd = minishell->env[i] + 4;
     ft_putstr_fd(pwd, fd);
     ft_putstr_fd("\n", fd);
     minishell->exit_code = 0;

@@ -13,44 +13,13 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	free_tokens(char **tokens)
-{
-	int	i;
-
-	i = 0;
-	if (!tokens)
-		return ;
-	while (tokens[i] != NULL)
-	{
-		free(tokens[i]);
-		tokens[i] = NULL;
-		i++;
-	}
-	free(tokens);
-}
-
-void	free_heredoc_tmp(char ***heredoc_tmp)
-{
-	int	i;
-
-	i = 0;
-	if (!heredoc_tmp)
-		return ;
-	while (heredoc_tmp[i])
-	{
-		free_tokens(heredoc_tmp[i]);
-		i++;
-	}
-	free(heredoc_tmp);
-}
-
 void	free_cmd(t_cmd *cmd)
 {
 	if (cmd == NULL)
 		return ;
 	free(cmd->infile);
 	free(cmd->outfile);
-	free_tokens(cmd->cmd);
+	free_array(cmd->cmd);
 	ft_lstclear(&cmd->skipped_in, free);
 	ft_lstclear(&cmd->skipped_out, free);
 	free(cmd->whitespace);
@@ -61,40 +30,46 @@ void	free_cmd(t_cmd *cmd)
 	free(cmd);
 }
 
+void	free_tmp(t_mem *tmp)
+{
+	if (tmp->line)
+	{
+		free(tmp->line);
+		tmp->line = NULL;
+	}
+	if (tmp->tokens)
+	{
+		free_array(tmp->tokens);
+		tmp->tokens = NULL;
+	}
+	if (tmp->heredoc_tmp)
+	{
+		free_heredoc_tmp(tmp->heredoc_tmp);
+		tmp->heredoc_tmp = NULL;
+	}
+	if (tmp->ws_tmp)
+	{
+		free(tmp->ws_tmp);
+		tmp->ws_tmp = NULL;
+	}
+	if (tmp->ws_pipe_tmp)
+	{
+		free(tmp->ws_pipe_tmp);
+		tmp->ws_pipe_tmp = NULL;
+	}
+}
+
 void	free_minishell(t_minishell *minishell)
 {
 	if (!minishell)
 		return ;
-	if (minishell->tmp->tokens)
-	{
-		free_tokens(minishell->tmp->tokens);
-		minishell->tmp->tokens = NULL;
-	}
-	if (minishell->tmp->heredoc_tmp)
-	{
-		free_heredoc_tmp(minishell->tmp->heredoc_tmp);
-		minishell->tmp->heredoc_tmp = NULL;
-	}
 	if (minishell->cmd)
 	{
 		free_cmd(minishell->cmd);
 		minishell->cmd = NULL;
 	}
-	if (minishell->tmp->line)
-	{
-		free(minishell->tmp->line);
-		minishell->tmp->line = NULL;
-	}
-	if (minishell->tmp->ws_tmp)
-	{
-		free(minishell->tmp->ws_tmp);
-		minishell->tmp->ws_tmp = NULL;
-	}
-	if (minishell->tmp->ws_pipe_tmp)
-	{
-		free(minishell->tmp->ws_pipe_tmp);
-		minishell->tmp->ws_pipe_tmp = NULL;
-	}
+	if (minishell->tmp)
+		free_tmp(minishell->tmp);
 	minishell->tmp->current_heredoc = 0;
 }
 
@@ -102,8 +77,10 @@ void	exit_free(t_minishell *minishell, int exit_code)
 {
 	free_minishell(minishell);
 	free(minishell->tmp);
-	free_tokens(minishell->env->envp_var);
-	free(minishell->env);
+	minishell->tmp = NULL;
+	free_array(minishell->env);
+	minishell->env = NULL;
+	minishell = NULL;
 	rl_clear_history();
 	exit(exit_code);
 }

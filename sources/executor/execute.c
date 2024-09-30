@@ -178,12 +178,12 @@ static int path_present(t_minishell *minishell)
     int i;
 
     i = -1;
-    while (minishell->env->envp_var[++i] != NULL)
+    while (minishell->env[++i] != NULL)
     {
-        if (ft_strncmp(minishell->env->envp_var[i], "PATH=", 5) == 0)
+        if (ft_strncmp(minishell->env[i], "PATH=", 5) == 0)
             break;
     }
-    if (minishell->env->envp_var[i])
+    if (minishell->env[i])
         return (1);
     exit(EXIT_FAILURE);
 }
@@ -326,7 +326,7 @@ void execute(t_minishell *minishell)
 {
     char **env;
 
-    env = minishell->env->envp_var;
+    env = minishell->env;
     execute_commands(minishell, env);
     free_minishell(minishell);
 }

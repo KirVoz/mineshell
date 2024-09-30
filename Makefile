@@ -1,6 +1,7 @@
 NAME = minishell
 
 SRC_PATH = sources
+ERR_PATH = sources/error_handler
 LXR_PATH = sources/lexer
 TKN_PATH = sources/lexer/tokenizator
 PHD_PATH = sources/lexer/pipe_heredoc
@@ -26,7 +27,8 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/unset.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
-		$(SRC_PATH)/error_handler.c \
+		$(ERR_PATH)/error_handler1.c \
+		$(ERR_PATH)/error_handler2.c \
 		$(LXR_PATH)/lexer.c \
 		$(LXR_PATH)/lexer_utils.c \
 		$(TKN_PATH)/tokenizator.c \
@@ -47,9 +49,10 @@ SRC =	$(SRC_PATH)/main.c \
 		$(VLD_PATH)/validator.c \
 		$(VLD_PATH)/validator_utils.c \
 		$(MEM_PATH)/shlvl.c \
-		$(MEM_PATH)/memory_allocation.c \
+		$(MEM_PATH)/memory_allocation1.c \
 		$(MEM_PATH)/memory_allocation2.c \
-		$(MEM_PATH)/memory_deallocation.c \
+		$(MEM_PATH)/memory_deallocation1.c \
+		$(MEM_PATH)/memory_deallocation2.c \
 		$(MEM_PATH)/minishell_init.c \
 		$(LXR_PATH)/general_utils.c \
 		$(LXR_PATH)/debug_functions.c 

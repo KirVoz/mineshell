@@ -43,11 +43,11 @@ void execute_unset(t_minishell *minishell, int fd, t_cmd *cur)
     i = 1;
     while (cur->cmd[i] != NULL)
     {
-        index = find_env_index(minishell->env->envp_var, cur->cmd[i]);
+        index = find_env_index(minishell->env, cur->cmd[i]);
         //printf("index: %d\n", index); //del
         if (index != -1)
         {
-            remove_env_var(minishell->env->envp_var, index);
+            remove_env_var(minishell->env, index);
         }
         i++;
     }

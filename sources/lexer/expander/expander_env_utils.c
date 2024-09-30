@@ -66,7 +66,7 @@ char	*get_env_value(t_minishell *minishell, char **token)
 	if (*(*token + 1))
 	{
 		var_name = env_var_copy(token);
-		value = find_env_value(minishell->env->envp_var, var_name);
+		value = find_env_value(minishell->env, var_name);
 		if (value)
 			env_value = allocate_dup(value, "Env_value in get_env_value.");
 		free(var_name);

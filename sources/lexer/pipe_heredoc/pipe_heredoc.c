@@ -67,8 +67,8 @@ char	**handle_pipe(t_minishell *minishell, char **tokens)
 	new_tokens = tokenizator(&(minishell->tmp->ws_pipe_tmp), new_line);
 	merged_tokens = merge_tokens(tokens, new_tokens);
 	free(new_line);
-	free_tokens(tokens);
-	free_tokens(new_tokens);
+	free_array(tokens);
+	free_array(new_tokens);
 	return (merged_tokens);
 }
 

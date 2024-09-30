@@ -1,16 +1,6 @@
 #include "minishell.h"
 #include "lexer.h"
 
-static int	check_line(t_minishell minishell)
-{
-	if (minishell.tmp->line[0] == '\0')
-	{
-		free(minishell.tmp->line);
-		return (1);
-	}
-	return (0);
-}
-
 static void	handle_incorrect_arguments(t_minishell *minishell, char *av)
 {
 	if (get_path(minishell, av))
@@ -19,6 +9,16 @@ static void	handle_incorrect_arguments(t_minishell *minishell, char *av)
 		is_a_directory(minishell, av);
 	else
 		no_path_file(minishell, av);
+}
+
+static int	check_line(t_minishell minishell)
+{
+	if (minishell.tmp->line[0] == '\0')
+	{
+		free(minishell.tmp->line);
+		return (1);
+	}
+	return (0);
 }
 
 int	main(int ac, char **av, char **env)

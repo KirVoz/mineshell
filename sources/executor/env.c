@@ -11,9 +11,9 @@ void execute_env(t_minishell *minishell, int fd, t_cmd *cur)
         arg_count_error(minishell, "env");
         return ;
     }
-    while (minishell->env->envp_var[i] != NULL)
+    while (minishell->env[i] != NULL)
     {
-        ft_putstr_fd(minishell->env->envp_var[i], fd);
+        ft_putstr_fd(minishell->env[i], fd);
         ft_putstr_fd("\n", fd);
         i++;
     }

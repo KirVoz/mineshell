@@ -22,29 +22,25 @@ void	init_envp(t_minishell *minishell, char **env)
 	len = 0;
 	while (env[len])
 		len++;
-	minishell->env->envp_var = (char **)malloc(sizeof(char *) * (len + 1));
-	if (minishell->env->envp_var == NULL)
-		exit_fail("Failed to allocate memory for envp_var");
+	minishell->env = allocate_array(len, "Env in init_envp");
 	i = 0;
 	j = 0;
 	while (env[i] != NULL)
 	{
 		if (ft_strncmp(env[i], "SHLVL=", 6) == 0)
 		{
-			minishell->env->envp_var[j] = increment_shlvl(env[i]);
-			if (minishell->env->envp_var[j] == NULL)
+			minishell->env[j] = increment_shlvl(env[i]);
+			if (minishell->env[j] == NULL)
 				exit_fail("Failed to allocate memory for incremented SHLVL");
 			j++;
 			i++;
 			continue ;
 		}
-		minishell->env->envp_var[j] = ft_strdup(env[i]);
-		if (minishell->env->envp_var[j] == NULL)
-			exit_fail("Failed to allocate memory for envp_var[i]");
+		minishell->env[j] = allocate_dup(env[i], "Env[j] in init_envp");
 		j++;
 		i++;
 	}
-	minishell->env->envp_var[j] = NULL;
+	minishell->env[j] = NULL;
 }
 
 void	init_tmp(t_mem *tmp)
@@ -63,15 +59,15 @@ t_cmd	*init_cmd_node(int cmd_count)
 
 	empty_node = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!empty_node)
-		exit_fail("Failed to create new command node");
+		exit_fail("Empty_node in init_cmd_node");
 	empty_node->cmd = NULL;
 	empty_node->heredoc = NULL;
 	empty_node->infile = NULL;
 	empty_node->outfile = NULL;
 	empty_node->skipped_in = NULL;
 	empty_node->skipped_out = NULL;
-	empty_node->whitespace = allocate_whitespaces
-		(cmd_count, "Whitespace in init_cmd_node");
+	empty_node->whitespace = allocate_whitespaces(cmd_count,
+			"Whitespace in init_cmd_node");
 	empty_node->append = 0;
 	empty_node->inpipe = 0;
 	empty_node->outpipe = 0;
@@ -81,15 +77,12 @@ t_cmd	*init_cmd_node(int cmd_count)
 
 void	init_minishell(t_minishell *minishell, char **env)
 {
-	minishell->env = (t_env *)malloc(sizeof(t_env));
-	if (minishell->env == NULL)
-		exit_fail("Failed to allocate memory for env");
-	minishell->env->envp_var = NULL;
+	minishell->env = NULL;
 	init_envp(minishell, env);
 	minishell->cmd = NULL;
 	minishell->tmp = (t_mem *)malloc(sizeof(t_mem));
 	if (!minishell->tmp)
-		exit_fail("Failed to allocate memory for tmp");
+		exit_fail("Minishell->tmp in init_minishell");
 	init_tmp(minishell->tmp);
 	minishell->exit_code = 0;
 }

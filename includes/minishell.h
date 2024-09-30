@@ -19,11 +19,6 @@
 
 typedef struct s_minishell	t_minishell;
 
-typedef struct s_env
-{
-	char			**envp_var;
-}					t_env;
-
 typedef struct s_cmd
 {
 	char			**cmd;
@@ -59,7 +54,7 @@ typedef struct s_mem
 
 typedef struct s_minishell
 {
-	t_env			*env;
+	char			**env;
 	t_blin			*buildins;
 	t_cmd			*cmd;
 	t_mem			*tmp;
@@ -68,8 +63,19 @@ typedef struct s_minishell
 
 // shlvl.c
 char		*increment_shlvl(const char *shlvl);
-// minishell_init.c
-void		init_envp(t_minishell *minishell, char **env);
+// MEMORY MANAGMENT
+char		**array_init(void);
+char		*allocate_string(size_t len, char *error);
+char		*allocate_dup(char *dup, char *error);
+char		**allocate_array(size_t len, char *error);
+void		error_array_allocation(char **result, int i, char *error);
+void		free_array(char **tokens);
+void		free_heredoc_tmp(char ***heredoc_tmp);
+void		free_cmd(t_cmd *cmd);
+void		free_minishell(t_minishell *minishell);
+void		exit_free(t_minishell *minishell, int exit_code);
+void		*ft_realloc(void *ptr, size_t old_size, size_t new_size);
+int			*allocate_whitespaces(int count, char *error);void		init_envp(t_minishell *minishell, char **env);
 void		init_tmp(t_mem *tmp);
 t_cmd		*init_cmd_node(int cmd_count);
 void		init_minishell(t_minishell *minishell, char **env);
@@ -90,16 +96,13 @@ void		execute(t_minishell *minishell);
 //signals
 void		ft_signals(void);
 //utils.c
-int			count_str(char **str);
 char    	*str_to_lower(char *str);
 //error
 void		exit_fail(const char *exit_message);
-void		error_handler(t_minishell *minishell, char *error);
 void		not_found(t_minishell *minishell, char *cmd);
 void   		no_file(t_minishell *minishell, char *filename);
 void    	no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
-int			syntax_quote_error(t_minishell *minishell, char *token);
 void    	arg_count_error(t_minishell *minishell, char *command);
 void		exe_binary_error(t_minishell *minishell, char *path);
 void		is_a_directory(t_minishell *minishell, char *path);

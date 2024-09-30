@@ -61,25 +61,3 @@ int	lexer_main(t_minishell *minishell, char *line)
 	// print_list_state_v(minishell, "after expander"); 
 	return (1);
 }
-
-// int	lexer_main(t_minishell *minishell, char *line)
-// {
-// 	if (quote_counter(line))
-// 		return (syntax_quote_error(minishell, quote_counter(line)));
-// 	if (hanging_pipe_heredoc(line))
-// 		minishell->tmp->tokens = pipe_heredoc_main(minishell, line);
-// 	else
-// 		minishell->tmp->tokens = tokenizator(&(minishell->tmp->ws_tmp), line);
-// 	print_tokens_state_v(minishell, minishell->tmp->tokens, "after tokenizator, before validator", 'n'); 
-// 	if (!validator_main(minishell, &minishell->tmp->tokens))
-// 	{
-// 		free_minishell(minishell);
-// 		return (0);
-// 	}
-// 	print_tokens_state_v(minishell->tmp->tokens, "after validator", 'n'); 
-// 	parser_main(&minishell, &minishell->tmp->tokens);
-// 	print_list_state_v(minishell, "after parser"); 
-// 	expander_main(minishell, minishell->tmp->tokens);
-// 	print_list_state_v(minishell, "after expander"); 
-// 	return (1);
-// }

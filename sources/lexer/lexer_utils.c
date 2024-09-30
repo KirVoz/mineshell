@@ -32,9 +32,9 @@ int	quote_counter(t_minishell *minishell, char *line)
 	{
 		free(minishell->tmp->line);
 		if (double_quote % 2 != 0)
-			return (syntax_quote_error(minishell, "\""));
+			return (syntax_error(minishell, "\""));
 		else if (single_quote % 2 != 0)
-			return (syntax_quote_error(minishell, "'"));
+			return (syntax_error(minishell, "'"));
 	}
 	return (1);
 }
