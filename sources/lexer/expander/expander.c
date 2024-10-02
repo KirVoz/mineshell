@@ -27,14 +27,12 @@ char	*expand_question_mark(t_minishell *minishell, char *token,
 	result = allocate_string(exit_len(token, exit_code), "Expand_question");
 	while (*token)
 	{
-		set_current_quote(current_quote, *token, &token);
+		set_current_quote_question(current_quote, *token);
 		if (*token && *token == '$' && *(token + 1) && *(token + 1) == '?'
 			&& *current_quote != '\'')
 			write_exit_code(&result, exit_code, &i, &token);
-		else if (*token && *token != *current_quote)
+		else if (*token)
 			result[i++] = *(token++);
-		else if (*token && *token == *current_quote)
-			token++;
 	}
 	result[i] = '\0';
 	free(exit_code);
@@ -72,43 +70,36 @@ char	*substitute(t_minishell *minishell, char *token,
 	return (exp_token);
 }
 
-char	*expand(t_minishell *minishell, char *token, int i)
+char	*expand(t_minishell *minishell, char *token, int *comment_flag)
 {
 	char	*expanded_token;
 	char	current_quote;
 	size_t	len;
 
 	current_quote = 0;
+	if (ft_strnstr(token, "#", ft_strlen(token)) || *comment_flag == 1)
+		delete_comment(token, &current_quote, comment_flag);
 	if (ft_strnstr(token, "$?", ft_strlen(token)))
 		token = expand_question_mark(minishell, token, &current_quote);
 	len = expanded_line_len(minishell, token, &current_quote);
 	expanded_token = allocate_string(len, "Expanded_token in expand");
 	expanded_token = substitute(minishell, token,
 			expanded_token, &current_quote);
-	if (*expanded_token == '\0')
-		minishell->cmd->whitespace[i] = 0;
 	free(token);
 	return (expanded_token);
 }
 
 void	expander_main(t_minishell *minishell, char **tokens)
 {
-	int			i;
-	t_cmd		*cur;
+	int		i;
+	int		comment_flag;
 
 	i = 0;
-	cur = minishell->cmd;
-	(void)tokens;
-	while (cur)
+	comment_flag = 0;
+	while (tokens[i])
 	{
-		while (cur->cmd[i])
-		{
-			cur->cmd[i] = expand(minishell, cur->cmd[i], i);
-			i++;
-		}
-		i = 0;
-		delete_comment(cur);
-		delete_last_whitespace(cur);
-		cur = cur->next;
+		tokens[i] = expand(minishell, tokens[i], &comment_flag);
+		i++;
 	}
+	minishell->tmp->tokens = del_empty(tokens);
 }

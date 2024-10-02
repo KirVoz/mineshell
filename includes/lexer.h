@@ -26,9 +26,9 @@ char	hanging_pipe_heredoc(char *line);
 char	*extract_token(char **line, int i, int **ws_array, int *token_flag);
 char	*getting_token(char *start, int len);
 char	*getting_start(char **line, char *start, int *len);
-void	redirection_handle(char **line, int *count, int *in_token);
+void	delim_handler(char **line, int *len, int *in_token, char mode);
 int		count_tokens(char *line);
-char	*find_end_quote(char *line, int *count);
+int		set_quote(char **line, int *count, int in_token, char mode);
 char	*find_end_quote_len(char *line, int *len);
 int		find_quotation_len(char *line);
 int		is_delimiter(char *line);
@@ -60,13 +60,14 @@ char	*expand_question_mark(t_minishell *minishell, char *token,
 			char *current_quote);
 char	*substitute(t_minishell *minishell, char *token,
 			char *exp_token, char *current_quote);
-char	*expand(t_minishell *minishell, char *token, int i);
+char	*expand(t_minishell *minishell, char *token, int *comment_flag);
 void	expander_main(t_minishell *minishell, char **tokens);
 int		expand_to_env(t_minishell *minishell, char **cur_ptr, char cur_quote);
 void	write_exit_code(char **result, char *exit_code, int *i, char **token);
 void	set_current_quote(char *current_quote, char quote, char **token);
+void	set_current_quote_question(char *current_quote, char quote);
 void	delete_last_whitespace(t_cmd *cur);
-void	delete_comment(t_cmd *cur);
+void	delete_comment(char *token, char *current_quote, int *comment_flag);
 size_t	expanded_line_len(t_minishell *minishell, char *token,
 			char *current_quote);
 size_t	exit_len(char *token, char *exit_code);
@@ -97,6 +98,7 @@ void	store_skipped_outfiles(t_cmd **current);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
 // GENERAL_UTILS //del
 size_t	array_len(char **array);
+size_t	int_array_len(int *array);
 // DEBUG //del
 void	print_visible(char *str);
 void	print_list_state_v(t_minishell *minishell, char *name);
@@ -104,5 +106,7 @@ void	print_tokens_state_v(t_minishell *minishell, char **tokens,
 			char *name, char mode);
 void	print_list_state(t_minishell *minishell, char *name);
 void	print_tokens_state(char **tokens, char *name);
+
+char	**del_empty(char **tokens);
 
 #endif

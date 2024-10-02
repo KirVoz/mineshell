@@ -48,13 +48,20 @@ static int	ft_check_valid_identifier(char *new_var)
 	i = 0;
 	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
 		return (1);
-	while (new_var[i] != '\0')
+	while (new_var[i] == '=' || new_var[i] == '\0')
 	{
-		// Проверка на недопустимые символы
+		i++;
+		return (1);
+	}
+	while (new_var[i] != '=')
+	{
+		// Проверка на недопустимые символы до знака равно
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
 			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
 			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~')
 			return (1);
+		if (new_var[i] == '\0')
+			return (0);
 		i++;
 	}
 	return (0);
@@ -66,7 +73,7 @@ static void declare_env_var(t_minishell *minishell, int fd)
 	size_t	i;
 
 	env_count = array_len(minishell->env);
-	printf("env_count: %zu\n", env_count); //del
+	// printf("env_count: %zu\n", env_count); //del
 	i = -1;
 	while (++i < env_count)
 	{
@@ -108,15 +115,14 @@ void execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 	if (validation_check(minishell, cur, fd, &i) == 1)
 	{
 		new_var = cur->cmd[i];
-        printf("new_var: %s\n", new_var); //del
-        if (ft_strchr(new_var, '=') == NULL)
-			return;
 		if (ft_check_valid_identifier(new_var) == 1)
         {
             not_valid(minishell, new_var);
             return;
         }
         add_or_update_env_var(minishell, new_var);
+		minishell->exit_code = 0;
+		exit(minishell->exit_code);
 	}
 	return ;
 }

@@ -54,6 +54,34 @@ char	**handle_heredoc(t_minishell *minishell, char **tokens)
 	return (tokens);
 }
 
+int	*merge_ws(int *ws, int *ws_pipe)
+{
+	int		*result;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	result = allocate_whitespaces(int_array_len(ws) + int_array_len(ws_pipe),
+			"Result in merge_ws");
+	while (ws[i])
+	{
+		result[j] = ws[i];
+		i++;
+		j++;
+	}
+	i = 0;
+	while (ws_pipe[i])
+	{
+		result[j] = ws_pipe[i];
+		i++;
+		j++;
+	}
+	result[j] = 0;
+	free(ws);
+	return (result);
+}
+
 char	**handle_pipe(t_minishell *minishell, char **tokens)
 {
 	char	**merged_tokens;
@@ -66,6 +94,8 @@ char	**handle_pipe(t_minishell *minishell, char **tokens)
 		exit(1);
 	new_tokens = tokenizator(&(minishell->tmp->ws_pipe_tmp), new_line);
 	merged_tokens = merge_tokens(tokens, new_tokens);
+	minishell->tmp->ws_tmp = merge_ws(minishell->tmp->ws_tmp,
+			minishell->tmp->ws_pipe_tmp);
 	free(new_line);
 	free_array(tokens);
 	free_array(new_tokens);

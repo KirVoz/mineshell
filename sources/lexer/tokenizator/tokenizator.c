@@ -48,44 +48,48 @@ char	*getting_token(char *start, int len)
 
 char	*getting_start(char **line, char *start, int *len)
 {
-	while (*line)
+	int	in_token;
+
+	in_token = 0;
+	while (**line)
 	{
 		if (ft_strchr(QUOTES, **line))
+			in_token = set_quote(line, len, in_token, 's');
+		else if (is_delimiter(*line) && in_token != 2)
 		{
 			if (*len == 0)
-				*line = find_end_quote_len(*line, len);
+				delim_handler(line, len, &in_token, 'g');
 			break ;
 		}
-		else if (is_delimiter(*line))
+		else if (!in_token)
+			in_token = 1;
+		else
 		{
-			if (*len == 0)
-				redirection_handle(line, len, NULL);
-			break ;
+			(*len)++;
+			(*line)++;
 		}
-		(*len)++;
-		(*line)++;
 	}
 	return (start);
 }
 
-void	redirection_handle(char **line, int *count, int *in_token)
+void	delim_handler(char **line, int *len, int *in_token, char mode)
 {
 	if (in_token && *in_token)
 		*in_token = 0;
 	if (**line == '|')
 	{
-		(*count)++;
+		(*len)++;
 		(*line)++;
 	}
 	else if (**line == '<' || **line == '>')
 	{
-		(*count)++;
+		(*len)++;
 		(*line)++;
 		if (**line && (**line == '<' || **line == '>'))
 		{
+			if (mode == 'g')
+				(*len)++;
 			(*line)++;
-			if (!in_token)
-				(*count)++;
 		}
 	}
 	else if (**line == ' ')
@@ -102,18 +106,15 @@ int	count_tokens(char *line)
 	while (*line)
 	{
 		if (ft_strchr(QUOTES, *line))
-		{
-			line = find_end_quote(line, &count);
-			in_token = 0;
-		}
-		else if (is_delimiter(line))
-			redirection_handle(&line, &count, &in_token);
+			in_token = set_quote(&line, &count, in_token, 'c');
+		else if ((ft_strchr(DELIMS, *line) || *line == ' ') && in_token != 2)
+			delim_handler(&line, &count, &in_token, 'c');
 		else if (!in_token)
 		{
 			in_token = 1;
 			count++;
 		}
-		else if (*line && !is_delimiter(line))
+		else
 			line++;
 	}
 	return (count);

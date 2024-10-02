@@ -119,9 +119,7 @@ static void redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, 
     if (current->heredoc)
         heredoc_fd(current);
     else if (current->infile)
-    {
         open_file(minishell, current->infile, O_RDONLY, STDIN_FILENO);
-    }
     else if (i > 0)
     {
         if (dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
@@ -187,6 +185,35 @@ static int path_present(t_minishell *minishell)
         return (1);
     exit(EXIT_FAILURE);
 }
+static int  file_dir_check(char *cmd)
+{
+    while (ft_isspace(*cmd))
+        cmd++;
+    if (*cmd == '.' || *cmd == '/'
+        || (*cmd == '.' && *(cmd + 1) == '/')
+        || (*cmd == '.' && *(cmd + 1) == '.' && *(cmd + 2) == '/'))
+        return (1);
+    return (0);
+}
+
+static void handle_file_dir(t_minishell *minishell, char **cmd)
+{
+    if (access(*cmd, F_OK) == -1)
+    {
+        no_path_file(minishell, *cmd);
+        exit(minishell->exit_code);
+    }
+    if (access(*cmd, X_OK) == -1)
+    {
+        permission_denied(minishell, *cmd);
+        exit(minishell->exit_code);
+    }
+    if (access(*cmd, F_OK) == 0)
+    {
+        is_a_directory(minishell, *cmd, 'e');
+        exit(minishell->exit_code);
+    }
+}
 
 static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, int i, int num_cmd, char **env)
 {
@@ -202,6 +229,8 @@ static void execute_child(t_minishell *minishell, t_cmd *current, int **pipes, i
     {
         if (!path_present(minishell))
             return(no_path_file(minishell, current->cmd[0]));
+        if (file_dir_check(current->cmd[0]))
+            return(handle_file_dir(minishell, current->cmd));
         if (!get_path(minishell, current->cmd[0]))
         {
             not_found(minishell, current->cmd[0]);

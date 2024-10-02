@@ -25,11 +25,16 @@ void execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
         arg_count_error(minishell, "exit");
         return ;
     }
-    if (cur->cmd[1])
+    ft_putstr_fd("exit\n", 1);
+    if (cur->cmd[1] && ft_isalpha(cur->cmd[1][0]))
+    {
+        numeric_error(minishell, "exit",  cur->cmd[1]);
+        exit_code = minishell->exit_code;
+    }
+    else if (cur->cmd[1])
         exit_code = ft_atoi(cur->cmd[1]);
     else
         exit_code = 0;
-    ft_putstr_fd("exit\n", 1);
     exit_free(minishell, exit_code);
 }
 

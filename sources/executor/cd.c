@@ -14,7 +14,7 @@ static void update_pwd_vars(t_minishell *minishell, const char *old_pwd, const c
 {
     update_env_var(minishell, "OLDPWD=", old_pwd);
     update_env_var(minishell, "PWD=", new_path);
-    printf("%s\n", new_path);
+    // printf("%s\n", new_path); //del
 }
 
 static void change_directory(t_minishell *minishell, const char *new_path)
@@ -22,10 +22,7 @@ static void change_directory(t_minishell *minishell, const char *new_path)
     char cwd[1024];
     char *old_pwd = ft_strdup(minishell->env[find_string_in_array(minishell->env, "PWD=", 4)] + 4);
     if (chdir(new_path) || getcwd(cwd, sizeof(cwd)) == NULL)
-    {
-        printf("minishell: cd: %s: No such file or directory\n", new_path);
-        minishell->exit_code = 1;
-    }
+        no_file(minishell, (char *)new_path);
     else
     {
         update_pwd_vars(minishell, old_pwd, cwd);

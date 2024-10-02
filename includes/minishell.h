@@ -75,7 +75,8 @@ void		free_cmd(t_cmd *cmd);
 void		free_minishell(t_minishell *minishell);
 void		exit_free(t_minishell *minishell, int exit_code);
 void		*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-int			*allocate_whitespaces(int count, char *error);void		init_envp(t_minishell *minishell, char **env);
+int			*allocate_whitespaces(int count, char *error);
+void		init_envp(t_minishell *minishell, char **env);
 void		init_tmp(t_mem *tmp);
 t_cmd		*init_cmd_node(int cmd_count);
 void		init_minishell(t_minishell *minishell, char **env);
@@ -96,17 +97,20 @@ void		execute(t_minishell *minishell);
 //signals
 void		ft_signals(void);
 //utils.c
-char    	*str_to_lower(char *str);
+char		*str_to_lower(char *str);
+int			ft_isspace(char c);
 //error
 void		exit_fail(const char *exit_message);
 void		not_found(t_minishell *minishell, char *cmd);
-void   		no_file(t_minishell *minishell, char *filename);
-void    	no_path_file(t_minishell *minishell, char *filename);
+void		no_file(t_minishell *minishell, char *filename);
+void		no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
-void    	arg_count_error(t_minishell *minishell, char *command);
+void		arg_count_error(t_minishell *minishell, char *command);
 void		exe_binary_error(t_minishell *minishell, char *path);
-void		is_a_directory(t_minishell *minishell, char *path);
+void		is_a_directory(t_minishell *minishell, char *path, char mode);
 void		not_valid(t_minishell *minishell, char *cmd);
+void		permission_denied(t_minishell *minishell, char *path);
+void		numeric_error(t_minishell *minishell, char *cmd, char *arg);
 //path.c
 char		*get_path(t_minishell *minishell, char *cmd);
 

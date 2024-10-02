@@ -29,6 +29,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(SRC_PATH)/utils.c \
 		$(ERR_PATH)/error_handler1.c \
 		$(ERR_PATH)/error_handler2.c \
+		$(ERR_PATH)/error_handler3.c \
 		$(LXR_PATH)/lexer.c \
 		$(LXR_PATH)/lexer_utils.c \
 		$(TKN_PATH)/tokenizator.c \
@@ -41,11 +42,11 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXP_PATH)/expander.c \
 		$(EXP_PATH)/expander_utils.c \
 		$(EXP_PATH)/expander_len_utils.c \
-		$(EXP_PATH)/expander_len_utils2.c \
 		$(EXP_PATH)/expander_env_utils.c \
 		$(PRS_PATH)/parser.c \
 		$(PRS_PATH)/parser_utils.c \
 		$(PRS_PATH)/parser_list_utils.c \
+		$(PRS_PATH)/parser_postprocessing.c \
 		$(VLD_PATH)/validator.c \
 		$(VLD_PATH)/validator_utils.c \
 		$(MEM_PATH)/shlvl.c \
@@ -62,7 +63,7 @@ OSRC = $(SRC:%.c=$(OBJ_DIR)/%.o)
 CC = cc
 
 INCFLAGS = -I./includes -I$(READLINE_LIB_PATH)/readline/include -DREADLINE_LIBRARY
-LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline
+LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline -lncurses
 
 CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
 # CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
@@ -79,7 +80,7 @@ $(NAME): $(READLINE_LIB_PATH) $(OSRC) $(LIBFT)
 $(READLINE_LIB_PATH):
 	@echo "Configuring readline ..."
 	@mkdir -p $(READLINE_LIB_PATH)
-	@cd $(READLINE_PATH) && ./configure --prefix=$(READLINE_LIB_PATH) &> /dev/null
+	@cd $(READLINE_PATH) && ./configure --prefix=$(READLINE_LIB_PATH) --with-curses &> /dev/null
 	@echo "Installing readline ..."
 	@make -C $(READLINE_PATH) install &> /dev/null
 	@echo "Readline installed"

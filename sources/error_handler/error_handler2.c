@@ -40,11 +40,28 @@ void	exe_binary_error(t_minishell *minishell, char *path)
 	minishell->exit_code = 126;
 }
 
-void	is_a_directory(t_minishell *minishell, char *path)
+void	is_a_directory(t_minishell *minishell, char *path, char mode)
 {
+	if (mode == 'm')
+	{
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd("/: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd("/: is a directory\n", 2);
+	}
+	else if (mode == 'e')
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": is a directory\n", 2);		
+	}
+	minishell->exit_code = 126;
+}
+
+void	permission_denied(t_minishell *minishell, char *path)
+{
+	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(path, 2);
-	ft_putstr_fd("/: ", 2);
-	ft_putstr_fd(path, 2);
-	ft_putstr_fd("/: is a directory\n", 2);
+	ft_putstr_fd(": Permission denied\n", 2);
 	minishell->exit_code = 126;
 }

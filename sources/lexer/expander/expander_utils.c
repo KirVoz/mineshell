@@ -59,46 +59,23 @@ void	set_current_quote(char *current_quote, char quote, char **token)
 	}
 }
 
-void	delete_last_whitespace(t_cmd *cur)
+void	set_current_quote_question(char *current_quote, char quote)
 {
-	int		flag;
-	int		i;
+	static int	quote_counter;
 
-	flag = 0;
-	i = array_len(cur->cmd) - 1;
-	if (cur->whitespace[i] == 1)
-		cur->whitespace[i] = 0;
-	while (cur->cmd[i][0] == '\0' && i > 0)
+	if (ft_strchr(QUOTES, quote))
 	{
-		flag = 1;
-		i--;
-	}
-	if (flag && cur->whitespace[i] == 1)
-		cur->whitespace[i] = 0;
-}
-
-void	delete_comment(t_cmd *cur)
-{
-	int		i;
-	int		j;
-	int		flag;
-
-	i = 0;
-	flag = 0;
-	while (cur->cmd[i])
-	{
-		j = 0;
-		while (cur->cmd[i][j])
+		if (!*current_quote)
 		{
-			if (cur->cmd[i][j] == '#')
-				flag = 1;
-			if (flag)
-			{
-				cur->cmd[i][j] = '\0';
-				cur->whitespace[i] = 0;
-			}
-			j++;
+			*current_quote = quote;
+			quote_counter++;
 		}
-		i++;
+		else if (*current_quote == quote)
+			quote_counter++;
+		if (quote_counter % 2 == 0)
+		{
+			quote_counter = 0;
+			*current_quote = 0;
+		}
 	}
 }

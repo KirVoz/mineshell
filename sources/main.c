@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/02 15:22:48 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/10/02 15:22:49 by aaleksee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include "lexer.h"
 
@@ -6,7 +18,7 @@ static void	handle_incorrect_arguments(t_minishell *minishell, char *av)
 	if (get_path(minishell, av))
 		exe_binary_error(minishell, get_path(minishell, av));
 	else if (access(av, F_OK) == 0)
-		is_a_directory(minishell, av);
+		is_a_directory(minishell, av, 'm');
 	else
 		no_path_file(minishell, av);
 }
@@ -26,7 +38,7 @@ int	main(int ac, char **av, char **env)
 	t_minishell	minishell;
 
 	ft_signals();
-	init_minishell(&minishell, env); // в экзит хендлере не освобождается память для envp_var
+	init_minishell(&minishell, env);
 	while (1)
 	{
 		if (ac > 1)

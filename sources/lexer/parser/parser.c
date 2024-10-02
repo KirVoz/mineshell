@@ -55,4 +55,5 @@ void	parser_main(t_minishell **minishell, char ***tokens)
 			current->cmd = array_init();
 	}
 	(*minishell)->cmd = cmd_list;
+	delete_last_whitespace((*minishell)->cmd);
 }

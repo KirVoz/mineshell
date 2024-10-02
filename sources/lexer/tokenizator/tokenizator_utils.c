@@ -13,18 +13,28 @@
 #include "lexer.h"
 #include "minishell.h"
 
-char	*find_end_quote(char *line, int *count)
+int	set_quote(char **line, int *count, int in_token, char mode)
 {
-	char	quote;
-	int		i;
+	static char	quote;
 
-	quote = *line;
-	i = 1;
-	while (line[i] && line[i] != quote)
-		i++;
-	if (count)
+	if (quote == 0)
+		quote = **line;
+	if (in_token != 2)
+	{
 		(*count)++;
-	return (&(line[i + 1]));
+		in_token = 2;
+	}
+	else if (in_token == 2 && **line == quote)
+	{
+		in_token = 1;
+		quote = 0;
+		if (mode == 's')
+			(*count)++;
+	}
+	else if (mode == 's')
+		(*count)++;
+	(*line)++;
+	return (in_token);
 }
 
 char	*find_end_quote_len(char *line, int *len)
@@ -62,6 +72,13 @@ int	is_delimiter(char *line)
 		return (1);
 	return (0);
 }
+
+// int	is_delimiter(char *line)
+// {
+// 	if (*line == ' ' || ft_strchr(DELIMS, *line))
+// 		return (1);
+// 	return (0);
+// }
 
 void	set_token_flag(char *token, int *flag)
 {

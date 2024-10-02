@@ -51,17 +51,18 @@ size_t	exit_len(char *token, char *exit_code)
 	current_quote = 0;
 	while (*token)
 	{
-		set_current_quote(&current_quote, *token, &token);
+		set_current_quote_question(&current_quote, *token);
 		if (*token && *token == '$' && *(token + 1) && *(token + 1) == '?'
 			&& current_quote != '\'')
 		{
 			len += ft_strlen(exit_code);
 			token++;
 		}
-		else if (*token && *token != current_quote)
-			len++;
 		if (*token)
+		{
 			token++;
+			len++;
+		}
 	}
 	return (len);
 }

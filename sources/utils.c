@@ -19,17 +19,25 @@ void	*ft_realloc_exe(void *ptr, size_t size)
 	return (new_ptr);
 }
 
-char    *str_to_lower(char *str)
+char	*str_to_lower(char *str)
 {
 	char	*lower_str;
-    int 	i;
+	int		i;
 
 	lower_str = allocate_dup(str, "Lower_str in str_to_lower");
-    i = 0;
-    while (lower_str[i])
-    {
-        lower_str[i] = ft_tolower(lower_str[i]);
-        i++;
-    }
-    return (lower_str);
+	i = 0;
+	while (lower_str[i])
+	{
+		lower_str[i] = ft_tolower(lower_str[i]);
+		i++;
+	}
+	return (lower_str);
+}
+
+int	ft_isspace(char c)
+{
+	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'
+		|| c == ' ')
+		return (1);
+	return (0);
 }
