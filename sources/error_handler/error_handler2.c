@@ -19,6 +19,8 @@ void	arg_count_error(t_minishell *minishell, char *command)
 	ft_putstr_fd(": too many arguments", 2);
 	ft_putstr_fd("\n", 2);
 	minishell->exit_code = 1;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 }
 
 int	syntax_error(t_minishell *minishell, char *token)
@@ -28,6 +30,8 @@ int	syntax_error(t_minishell *minishell, char *token)
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
 	minishell->exit_code = 258;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 	return (0);
 }
 
@@ -38,6 +42,7 @@ void	exe_binary_error(t_minishell *minishell, char *path)
 	ft_putstr_fd(path, 2);
 	ft_putstr_fd(": cannot execute binary file\n", 2);
 	minishell->exit_code = 126;
+	
 }
 
 void	is_a_directory(t_minishell *minishell, char *path, char mode)

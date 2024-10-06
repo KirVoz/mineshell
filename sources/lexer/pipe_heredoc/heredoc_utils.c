@@ -20,7 +20,7 @@ char	*find_delimiter(char **tokens, size_t *i)
 	delimiter = NULL;
 	while (tokens[*i])
 	{
-		if (strchr(tokens[*i], '<')
+		if (strchr(tokens[*i], '<') && (tokens[*i + 1])
 			&& ft_strncmp(strchr(tokens[*i], '<'), "<<", 2) == 0)
 		{
 			*i += 1;

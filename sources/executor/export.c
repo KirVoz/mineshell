@@ -39,6 +39,7 @@ static void	add_or_update_env_var(t_minishell *minishell, const char *new_var)
 		}
 	}
 	update(minishell, new_var, env_count);
+	minishell->exit_code = 0; 
 }
 
 static int	ft_check_valid_identifier(char *new_var)
@@ -48,6 +49,8 @@ static int	ft_check_valid_identifier(char *new_var)
 	i = 0;
 	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
 		return (1);
+	if (!ft_strchr(new_var, '='))
+		return (3);
 	while (new_var[i] == '=' || new_var[i] == '\0')
 	{
 		i++;
@@ -81,7 +84,6 @@ static void declare_env_var(t_minishell *minishell, int fd)
 		ft_putstr_fd(minishell->env[i], fd);
 		ft_putstr_fd("\n", 1);
 	}
-	minishell->exit_code = 0;
 }
 
 static int	validation_check(t_minishell *minishell, t_cmd *cur, int fd, int *i)
@@ -106,23 +108,27 @@ static int	validation_check(t_minishell *minishell, t_cmd *cur, int fd, int *i)
 	}
 }
 
-void execute_export(t_minishell *minishell, int fd, t_cmd *cur)
+void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 {
-	char    *new_var;
-	int    	i;
+	char	*new_var;
+	int		i;
 
 	i = 1;
 	if (validation_check(minishell, cur, fd, &i) == 1)
 	{
 		new_var = cur->cmd[i];
 		if (ft_check_valid_identifier(new_var) == 1)
-        {
-            not_valid(minishell, new_var);
-            return;
+		{
+			not_valid(minishell, new_var);
+			if (minishell->tmp->is_child != 0)
+				exit(minishell->exit_code);
+            return ;
         }
-        add_or_update_env_var(minishell, new_var);
+		else if (ft_check_valid_identifier(new_var) != 3)
+        	add_or_update_env_var(minishell, new_var);
 		minishell->exit_code = 0;
-		exit(minishell->exit_code);
+		// if (minishell->tmp->is_child != 0)
+		// 	exit(minishell->exit_code);
 	}
 	return ;
 }

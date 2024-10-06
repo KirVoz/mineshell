@@ -55,12 +55,13 @@ int	is_valid_token(char *token)
 int	pipe_redirections_mistake(t_minishell *minishell, char **tokens)
 {
 	if (**tokens == '|')
-		return (syntax_error(minishell, "|"));
+		return (!syntax_error(minishell, "|"));
 	while (*tokens)
 	{
 		if (is_valid_token(*tokens) && *(tokens + 1)
 			&& **(tokens + 1) == '|')
-			return (syntax_error(minishell, *(tokens + 1)) + 1);
+		// if (is_valid_token(*tokens) && *(tokens + 1))
+			return (!syntax_error(minishell, *(tokens + 1)) + 1);
 		tokens++;
 	}
 	return (0);

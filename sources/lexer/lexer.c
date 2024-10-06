@@ -54,9 +54,9 @@ int	lexer_main(t_minishell *minishell, char *line)
 		free_minishell(minishell);
 		return (0);
 	}
-	// print_tokens_state_v(minishell, minishell->tmp->tokens, "after validator, before expander", 'n'); 
+	print_tokens_state_v(minishell, minishell->tmp->tokens, "after validator, before expander", 'n'); 
 	expander_main(minishell, minishell->tmp->tokens);
-	// print_tokens_state_v(minishell, minishell->tmp->tokens, "after expander, before parser", 'n'); 
+	print_tokens_state_v(minishell, minishell->tmp->tokens, "after expander, before parser", 'n'); 
 	parser_main(&minishell, &minishell->tmp->tokens);
 	// print_list_state_v(minishell, "after parser"); 
 	return (1);

@@ -51,6 +51,7 @@ void	init_tmp(t_mem *tmp)
 	tmp->current_heredoc = 0;
 	tmp->ws_tmp = NULL;
 	tmp->ws_pipe_tmp = NULL;
+	tmp->is_child = -1;
 }
 
 t_cmd	*init_cmd_node(int cmd_count)

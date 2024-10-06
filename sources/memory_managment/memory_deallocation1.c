@@ -71,6 +71,7 @@ void	free_minishell(t_minishell *minishell)
 	if (minishell->tmp)
 		free_tmp(minishell->tmp);
 	minishell->tmp->current_heredoc = 0;
+	minishell->tmp->is_child = -1;
 }
 
 void	exit_free(t_minishell *minishell, int exit_code)

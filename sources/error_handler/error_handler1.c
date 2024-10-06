@@ -25,6 +25,8 @@ void	not_found(t_minishell *minishell, char *cmd)
 	ft_putstr_fd(": command not found", 2);
 	ft_putstr_fd("\n", 2);
 	minishell->exit_code = 127;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 }
 
 void	no_file(t_minishell *minishell, char *filename)
@@ -34,6 +36,8 @@ void	no_file(t_minishell *minishell, char *filename)
 	ft_putstr_fd(": ", 2);
 	perror("");
 	minishell->exit_code = 1;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 }
 
 void	no_path_file(t_minishell *minishell, char *filename)
@@ -43,6 +47,8 @@ void	no_path_file(t_minishell *minishell, char *filename)
 	ft_putstr_fd(": No such file or directory", 2);
 	ft_putstr_fd("\n", 2);
 	minishell->exit_code = 127;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 }
 
 void	not_valid(t_minishell *minishell, char *cmd)
@@ -52,4 +58,6 @@ void	not_valid(t_minishell *minishell, char *cmd)
 	ft_putstr_fd(": not a valid identifier", 2);
 	ft_putstr_fd("\n", 2);
 	minishell->exit_code = 1;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 }

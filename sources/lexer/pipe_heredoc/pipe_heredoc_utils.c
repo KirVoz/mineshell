@@ -49,6 +49,8 @@ int	incorrect_delimiter(char **delimiter)
 	char	**tokens;
 	int		i;
 
+	if (!*delimiter)
+		return (0);
 	tokens = get_valid_tokens();
 	i = 0;
 	while (tokens[i])

@@ -49,6 +49,7 @@ typedef struct s_mem
 	int				current_heredoc;
 	int				*ws_tmp;
 	int				*ws_pipe_tmp;
+	int				is_child;
 }					t_mem;
 
 

@@ -57,5 +57,4 @@ void execute_command(t_minishell *minishell, int fd, t_cmd *cur)
         i++;
     }
     free(cmd_lower);
-    printf("Command not found: %s\n", cur->cmd[0]);
 }

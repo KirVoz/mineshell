@@ -21,4 +21,7 @@ void	numeric_error(t_minishell *minishell, char *cmd, char *arg)
 	ft_putstr_fd(": numeric argument required", 2);
 	ft_putstr_fd("\n", 2);
 	minishell->exit_code = 255;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
 }
+
