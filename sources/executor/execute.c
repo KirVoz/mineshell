@@ -130,14 +130,12 @@ static void	redirect_input(t_minishell *minishell, t_cmd *current, int **pipes,
 		}
 	}
 }
-
 static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 		int i, int num_cmd)
 {
 	t_list	*tmp;
 		int flags;
 
-	// printf("Entering redirect_output: %s\n", current->cmd[0]);
 	tmp = current->skipped_out;
 	while (tmp)
 	{
@@ -155,10 +153,8 @@ static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 	}
 	else if (i < num_cmd - 1)
 	{
-		// printf("Entering redirect_output dup2 for %d: %s - write pipe %d\n", i, current->cmd[0], pipes[i][1]);
 		if (dup2(pipes[i][1], STDOUT_FILENO) == -1)
 		{
-			printf("!!!!!!");
 			perror("dup2 stdout");
 			exit(EXIT_FAILURE);
 		}
@@ -167,10 +163,7 @@ static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 			perror("dup2 stderr");
 			exit(EXIT_FAILURE);
 		}
-		// printf("Exiting redirect_output dup2 for %d: %s - write pipe %d\n", i, current->cmd[0], pipes[i][1]);
 	}
-	// printf("Exiting redirect_output: %s\n", current->cmd[0]);
-	
 }
 
 static void	close_pipes(int **pipes, int num_cmd)

@@ -37,7 +37,7 @@ void	no_file(t_minishell *minishell, char *filename)
 		exit(minishell->exit_code);
 }
 
-void	no_path_file(t_minishell *minishell, char *filename, char m)
+void	no_path_file(t_minishell *minishell, char *filename)
 {
 	char	*error;
 
