@@ -25,7 +25,8 @@ void execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
         arg_count_error(minishell, "exit");
         return ;
     }
-    ft_putstr_fd("exit\n", 1);
+    if (minishell->tmp->is_child == 0)
+        ft_putstr_fd("exit\n", 1);
     if (cur->cmd[1] && ft_isalpha(cur->cmd[1][0]))
     {
         numeric_error(minishell, "exit",  cur->cmd[1]);

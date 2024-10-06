@@ -137,6 +137,7 @@ static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 	t_list	*tmp;
 		int flags;
 
+	// printf("Entering redirect_output: %s\n", current->cmd[0]);
 	tmp = current->skipped_out;
 	while (tmp)
 	{
@@ -154,12 +155,22 @@ static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 	}
 	else if (i < num_cmd - 1)
 	{
+		// printf("Entering redirect_output dup2 for %d: %s - write pipe %d\n", i, current->cmd[0], pipes[i][1]);
 		if (dup2(pipes[i][1], STDOUT_FILENO) == -1)
 		{
+			printf("!!!!!!");
 			perror("dup2 stdout");
 			exit(EXIT_FAILURE);
 		}
+		if (dup2(STDERR_FILENO, STDERR_FILENO) == -1)
+		{
+			perror("dup2 stderr");
+			exit(EXIT_FAILURE);
+		}
+		// printf("Exiting redirect_output dup2 for %d: %s - write pipe %d\n", i, current->cmd[0], pipes[i][1]);
 	}
+	// printf("Exiting redirect_output: %s\n", current->cmd[0]);
+	
 }
 
 static void	close_pipes(int **pipes, int num_cmd)
@@ -186,14 +197,16 @@ static int	path_present(t_minishell *minishell)
 	}
 	if (minishell->env[i])
 		return (1);
-	exit(EXIT_FAILURE);
+	return (0);
+	// exit(EXIT_FAILURE); //del
 }
+
 static int	file_dir_check(char *cmd)
 {
 	while (ft_isspace(*cmd))
 		cmd++;
 	if ((*cmd == '.' || *cmd == '/' || (*cmd == '.' && *(cmd + 1) == '/')
-		|| (*cmd == '.' && *(cmd + 1) == '.' && *(cmd + 2) == '/')) 
+			|| (*cmd == '.' && *(cmd + 1) == '.' && *(cmd + 2) == '/'))
 		&& ft_strncmp(cmd, "./minishell", ft_strlen(cmd)) != 0)
 		return (1);
 	return (0);
@@ -202,14 +215,14 @@ static int	file_dir_check(char *cmd)
 static void	handle_file_dir(t_minishell *minishell, char **cmd)
 {
 	struct stat	stat_buf;
-	
+
 	stat(*cmd, &stat_buf);
 	if (access(*cmd, F_OK) == -1)
 	{
 		no_path_file(minishell, *cmd);
 		exit(minishell->exit_code);
 	}
-	else if (S_ISDIR(stat_buf.st_mode))
+	else if (access(*cmd, F_OK) == 0 && S_ISDIR(stat_buf.st_mode))
 	{
 		is_a_directory(minishell, *cmd, 'e');
 		exit(minishell->exit_code);
@@ -244,7 +257,6 @@ static void	execute_child(t_minishell *minishell, t_cmd *current, int **pipes,
 			exit(minishell->exit_code);
 		}
 		execve(get_path(minishell, current->cmd[0]), current->cmd, env);
-		perror("execve");
 		exit(minishell->exit_code);
 	}
 }
@@ -320,14 +332,7 @@ static void	wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
 	{
 		waitpid(pids[i], &status, 0);
 		if (WIFEXITED(status))
-		{
 			exit_code = WEXITSTATUS(status);
-			if (exit_code != 0)
-			{
-				// printf("Command failed with exit code: %d\n", exit_code); //del
-				// printf("structs exit code in wait_for_processes = %d\n", minishell->exit_code); //del
-			}
-		}
 		i++;
 	}
 	minishell->exit_code = exit_code;
@@ -344,7 +349,7 @@ static void	execute_commands(t_minishell *minishell, char **env)
 	pids = NULL;
 	if (num_cmd == 1 && solo_builtin(minishell->cmd->cmd[0]))
 	{
-        minishell->tmp->is_child = 0;
+		minishell->tmp->is_child = 0;
 		execute_command(minishell, STDOUT_FILENO, minishell->cmd);
 	}
 	else

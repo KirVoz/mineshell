@@ -61,6 +61,8 @@ int	pipe_redirections_mistake(t_minishell *minishell, char **tokens)
 		if (**tokens != '|' && is_valid_token(*tokens) && *(tokens + 1)
 			&& is_valid_token(*(tokens + 1)))
 			return (!syntax_error(minishell, *(tokens + 1)) + 1);
+		if (**tokens == '|' && *(tokens + 1) && **(tokens + 1) == '|')
+			return (!syntax_error(minishell, "|"));
 		tokens++;
 	}
 	return (0);

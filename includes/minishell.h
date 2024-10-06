@@ -14,6 +14,7 @@
 # include <sys/stat.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <errno.h>
 
 # define PROMPT "minishell$ "
 # define PROMPT_HEREDOC "> "
@@ -103,6 +104,7 @@ char		*str_to_lower(char *str);
 int			ft_isspace(char c);
 //error
 void		exit_fail(const char *exit_message);
+char		*construct_error(char *arg1, char *arg2, char *arg3, char mode);
 void		not_found(t_minishell *minishell, char *cmd);
 void		no_file(t_minishell *minishell, char *filename);
 void		no_path_file(t_minishell *minishell, char *filename);
@@ -113,6 +115,7 @@ void		is_a_directory(t_minishell *minishell, char *path, char mode);
 void		not_valid(t_minishell *minishell, char *cmd);
 void		permission_denied(t_minishell *minishell, char *path);
 void		numeric_error(t_minishell *minishell, char *cmd, char *arg);
+void		deleted_dir(t_minishell *minishell);
 //path.c
 char		*get_path(t_minishell *minishell, char *cmd);
 

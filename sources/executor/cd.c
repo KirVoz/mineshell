@@ -30,7 +30,11 @@ static void	change_directory(t_minishell *minishell, const char *new_path)
 	old_pwd = ft_strdup(minishell->env[find_string_in_array(minishell->env,
 			"PWD=", 4)] + 4);
 	if (chdir(new_path) || getcwd(cwd, sizeof(cwd)) == NULL)
-		no_file(minishell, (char *)new_path);
+	{
+  		if (minishell->tmp->is_child != 0)
+   			free(old_pwd);
+  		deleted_dir(minishell);
+	}
 	else
 	{
 		update_pwd_vars(minishell, old_pwd, cwd);

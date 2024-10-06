@@ -12,18 +12,13 @@
 
 #include "minishell.h"
 
-void	exit_fail(const char *exit_message)
-{
-	perror(exit_message);
-	exit(EXIT_FAILURE);
-}
-
 void	not_found(t_minishell *minishell, char *cmd)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": command not found", 2);
-	ft_putstr_fd("\n", 2);
+	char	*error;
+
+	error = construct_error(cmd, ": command not found\n", NULL, 0);
+	ft_putstr_fd(error, 2);
+	free(error);
 	minishell->exit_code = 127;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);
@@ -31,21 +26,24 @@ void	not_found(t_minishell *minishell, char *cmd)
 
 void	no_file(t_minishell *minishell, char *filename)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(filename, 2);
-	ft_putstr_fd(": ", 2);
-	perror("");
+	char	*error;
+
+	error = construct_error(filename,
+			": No such file or directory\n", NULL, 's');
+	ft_putstr_fd(error, 2);
+	free(error);
 	minishell->exit_code = 1;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);
 }
 
-void	no_path_file(t_minishell *minishell, char *filename)
+void	no_path_file(t_minishell *minishell, char *filename, char m)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(filename, 2);
-	ft_putstr_fd(": No such file or directory", 2);
-	ft_putstr_fd("\n", 2);
+	char	*error;
+
+	error = construct_error(filename, ": No such file or directory\n", NULL, 0);
+	ft_putstr_fd(error, 2);
+	free(error);
 	minishell->exit_code = 127;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);
@@ -53,10 +51,11 @@ void	no_path_file(t_minishell *minishell, char *filename)
 
 void	not_valid(t_minishell *minishell, char *cmd)
 {
-	ft_putstr_fd("minishell: export: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": not a valid identifier", 2);
-	ft_putstr_fd("\n", 2);
+	char	*error;
+
+	error = construct_error("export: ", cmd, ": not a valid identifier\n", 0);
+	ft_putstr_fd(error, 2);
+	free(error);
 	minishell->exit_code = 1;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);

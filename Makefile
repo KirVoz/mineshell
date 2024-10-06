@@ -30,6 +30,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(ERR_PATH)/error_handler1.c \
 		$(ERR_PATH)/error_handler2.c \
 		$(ERR_PATH)/error_handler3.c \
+		$(ERR_PATH)/error_handler_utils.c \
 		$(LXR_PATH)/lexer.c \
 		$(LXR_PATH)/lexer_utils.c \
 		$(TKN_PATH)/tokenizator.c \

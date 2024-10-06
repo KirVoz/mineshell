@@ -14,14 +14,26 @@
 
 void	numeric_error(t_minishell *minishell, char *cmd, char *arg)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd(": numeric argument required", 2);
-	ft_putstr_fd("\n", 2);
+	char	*error;
+
+	error = construct_error(cmd, arg, ": numeric argument required\n", 's');
+	ft_putstr_fd(error, 2);
+	free(error);
 	minishell->exit_code = 255;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);
 }
 
+void	deleted_dir(t_minishell *minishell)
+{
+	char	*error;
+
+	error = construct_error("cd: error retrieving current directory: ",
+			"getcwd: cannot access parent directories: ",
+			"No such file or directory\n", 'e');
+	ft_putstr_fd(error, 2);
+	free(error);
+	minishell->exit_code = 1;
+	if (minishell->tmp->is_child != 0)
+		exit(minishell->exit_code);
+}
