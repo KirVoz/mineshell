@@ -192,27 +192,31 @@ static int	file_dir_check(char *cmd)
 {
 	while (ft_isspace(*cmd))
 		cmd++;
-	if (*cmd == '.' || *cmd == '/' || (*cmd == '.' && *(cmd + 1) == '/')
-		|| (*cmd == '.' && *(cmd + 1) == '.' && *(cmd + 2) == '/'))
+	if ((*cmd == '.' || *cmd == '/' || (*cmd == '.' && *(cmd + 1) == '/')
+		|| (*cmd == '.' && *(cmd + 1) == '.' && *(cmd + 2) == '/')) 
+		&& ft_strncmp(cmd, "./minishell", ft_strlen(cmd)) != 0)
 		return (1);
 	return (0);
 }
 
 static void	handle_file_dir(t_minishell *minishell, char **cmd)
 {
+	struct stat	stat_buf;
+	
+	stat(*cmd, &stat_buf);
 	if (access(*cmd, F_OK) == -1)
 	{
 		no_path_file(minishell, *cmd);
 		exit(minishell->exit_code);
 	}
-	if (access(*cmd, X_OK) == -1)
-	{
-		permission_denied(minishell, *cmd);
-		exit(minishell->exit_code);
-	}
-	if (access(*cmd, F_OK) == 0)
+	else if (S_ISDIR(stat_buf.st_mode))
 	{
 		is_a_directory(minishell, *cmd, 'e');
+		exit(minishell->exit_code);
+	}
+	else if (access(*cmd, X_OK) == -1)
+	{
+		permission_denied(minishell, *cmd);
 		exit(minishell->exit_code);
 	}
 }

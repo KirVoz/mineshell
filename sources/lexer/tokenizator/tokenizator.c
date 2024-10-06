@@ -23,10 +23,10 @@ char	*extract_token(char **line, int i, int **ws_array, int *token_flag)
 	len = 0;
 	start = getting_start(line, start, &len);
 	token = getting_token(start, len);
-	while (**line && **line == ' ')
+	while (**line && ft_isspace(**line))
 		(*line)++;
 	if (!ft_strchr(DELIMS, *token) && *(*line - 1) && !*token_flag
-		&& *(*line - 1) == ' ' && i != 0)
+		&& ft_isspace(*(*line - 1)) && i != 0)
 	{
 		(*ws_array)[i] = 1;
 		*token_flag = 0;
@@ -92,7 +92,7 @@ void	delim_handler(char **line, int *len, int *in_token, char mode)
 			(*line)++;
 		}
 	}
-	else if (**line == ' ')
+	else if (ft_isspace(**line))
 		(*line)++;
 }
 
@@ -107,7 +107,7 @@ int	count_tokens(char *line)
 	{
 		if (ft_strchr(QUOTES, *line))
 			in_token = set_quote(&line, &count, in_token, 'c');
-		else if ((ft_strchr(DELIMS, *line) || *line == ' ') && in_token != 2)
+		else if ((ft_strchr(DELIMS, *line) || ft_isspace(*line)) && in_token != 2)
 			delim_handler(&line, &count, &in_token, 'c');
 		else if (!in_token)
 		{

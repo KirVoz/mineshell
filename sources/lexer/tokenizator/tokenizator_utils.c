@@ -67,7 +67,7 @@ int	find_quotation_len(char *line)
 
 int	is_delimiter(char *line)
 {
-	if (*line == ' ' || ft_strchr(DELIMS, *line) != NULL || ((*line == '<'
+	if (ft_isspace(*line) || ft_strchr(DELIMS, *line) != NULL || ((*line == '<'
 				|| *line == '>') && *(line + 1) == *line))
 		return (1);
 	return (0);
