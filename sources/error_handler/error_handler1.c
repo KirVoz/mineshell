@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 05:10:15 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/30 19:29:49 by kvoznese         ###   ########.fr       */
+/*   Updated: 2024/10/06 23:08:38 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	no_file(t_minishell *minishell, char *filename)
 		exit(minishell->exit_code);
 }
 
-void	no_path_file(t_minishell *minishell, char *filename, char m)
+void	no_path_file(t_minishell *minishell, char *filename)
 {
 	char	*error;
 

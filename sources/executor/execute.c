@@ -105,42 +105,47 @@ static void	heredoc_fd(t_cmd *cmd)
 	close(heredoc_fd[0]);
 }
 
-static void	redirect_input(t_minishell *minishell, t_cmd *current, int **pipes,
-		int i)
+static void	redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, int i)
 {
-	t_list	*tmp;
+    t_list	*tmp;
+    char	*last_input_file = NULL;
 
-	tmp = current->skipped_in;
-	while (tmp)
-	{
-		open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC,
-			STDOUT_FILENO);
-		tmp = tmp->next;
-	}
-	if (current->heredoc)
-		heredoc_fd(current);
-	else if (current->infile)
-		open_file(minishell, current->infile, O_RDONLY, STDIN_FILENO);
-	else if (i > 0)
-	{
-		if (dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
-		{
-			perror("dup2 stdin");
-			exit(EXIT_FAILURE);
-		}
-	}
+    tmp = current->skipped_in;
+    while (tmp)
+    {
+        last_input_file = tmp->content;
+        tmp = tmp->next;
+    }
+    if (current->heredoc)
+        heredoc_fd(current);
+    else if (current->infile)
+        last_input_file = current->infile;
+    if (last_input_file)
+        open_file(minishell, last_input_file, O_RDONLY, STDIN_FILENO);
+    else if (i > 0)
+    {
+        if (dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
+        {
+            perror("dup2 stdin");
+            exit(EXIT_FAILURE);
+        }
+    }
 }
 
 static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 		int i, int num_cmd)
 {
 	t_list	*tmp;
-		int flags;
+	int 	flags;
 
-	// printf("Entering redirect_output: %s\n", current->cmd[0]);
 	tmp = current->skipped_out;
 	while (tmp)
 	{
+		if (access(tmp->content, W_OK) == -1)
+		{
+			permission_denied(minishell, tmp->content);
+			exit(minishell->exit_code);
+		}
 		open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC,
 			STDOUT_FILENO);
 		tmp = tmp->next;
@@ -155,22 +160,12 @@ static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 	}
 	else if (i < num_cmd - 1)
 	{
-		// printf("Entering redirect_output dup2 for %d: %s - write pipe %d\n", i, current->cmd[0], pipes[i][1]);
 		if (dup2(pipes[i][1], STDOUT_FILENO) == -1)
 		{
-			printf("!!!!!!");
 			perror("dup2 stdout");
 			exit(EXIT_FAILURE);
 		}
-		if (dup2(STDERR_FILENO, STDERR_FILENO) == -1)
-		{
-			perror("dup2 stderr");
-			exit(EXIT_FAILURE);
-		}
-		// printf("Exiting redirect_output dup2 for %d: %s - write pipe %d\n", i, current->cmd[0], pipes[i][1]);
 	}
-	// printf("Exiting redirect_output: %s\n", current->cmd[0]);
-	
 }
 
 static void	close_pipes(int **pipes, int num_cmd)
