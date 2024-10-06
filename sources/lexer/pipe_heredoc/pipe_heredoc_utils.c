@@ -35,11 +35,11 @@ char	**get_valid_tokens(void)
 	char	**tokens;
 
 	tokens = allocate_array(5, "Get valid tokens");
-	tokens[0] = "|";
-	tokens[1] = "<";
-	tokens[2] = ">";
-	tokens[3] = "<<";
-	tokens[4] = ">>";
+	tokens[0] = "<";
+	tokens[1] = ">";
+	tokens[2] = "<<";
+	tokens[3] = ">>";
+	tokens[4] = "|";
 	tokens[5] = NULL;
 	return (tokens);
 }

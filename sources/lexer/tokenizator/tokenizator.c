@@ -74,6 +74,8 @@ char	*getting_start(char **line, char *start, int *len)
 
 void	delim_handler(char **line, int *len, int *in_token, char mode)
 {
+	char	sign;
+
 	if (in_token && *in_token)
 		*in_token = 0;
 	if (**line == '|')
@@ -83,9 +85,10 @@ void	delim_handler(char **line, int *len, int *in_token, char mode)
 	}
 	else if (**line == '<' || **line == '>')
 	{
+		sign = **line;
 		(*len)++;
 		(*line)++;
-		if (**line && (**line == '<' || **line == '>'))
+		if (**line && (**line == '<' || **line == '>') && sign == **line)
 		{
 			if (mode == 'g')
 				(*len)++;
@@ -107,7 +110,8 @@ int	count_tokens(char *line)
 	{
 		if (ft_strchr(QUOTES, *line))
 			in_token = set_quote(&line, &count, in_token, 'c');
-		else if ((ft_strchr(DELIMS, *line) || ft_isspace(*line)) && in_token != 2)
+		else if ((ft_strchr(DELIMS, *line) || ft_isspace(*line))
+			&& in_token != 2)
 			delim_handler(&line, &count, &in_token, 'c');
 		else if (!in_token)
 		{

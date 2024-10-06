@@ -30,8 +30,6 @@ int	syntax_error(t_minishell *minishell, char *token)
 	ft_putstr_fd(token, 2);
 	ft_putstr_fd("'\n", 2);
 	minishell->exit_code = 258;
-	if (minishell->tmp->is_child != 0)
-		exit(minishell->exit_code);
 	return (0);
 }
 

@@ -55,9 +55,9 @@ char	hanging_pipe_heredoc(char *line)
 	if (ft_strrchr(line, '|') && valid)
 	{
 		line = ft_strrchr(line, '|') + 1;
-		while (*line && isspace(*line))
+		while (*(line - 2) != '|' && *line && isspace(*line))
 			line++;
-		if (!*line)
+		if (!*line && *(line - 2) != '|')
 			return ('p');
 	}
 	line = tmp;
