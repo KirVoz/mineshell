@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:22:48 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/10/02 15:22:49 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/10/06 12:46:57 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ int	main(int ac, char **av, char **env)
 		}
 		minishell.tmp->line = readline(PROMPT);
 		if (!minishell.tmp->line)
+		{
+			printf("exit\n");
+			exit_free(&minishell, 0);
 			break ;
+		}
 		else if (check_line(minishell))
 			continue ;
 		add_history(minishell.tmp->line);
