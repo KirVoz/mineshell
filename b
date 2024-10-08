@@ -1,0 +1,11 @@
+CHANGELOG.md
+Makefile
+README.md
+a
+b
+includes
+libraries
+minishell
+minishell_tester
+objects
+sources
