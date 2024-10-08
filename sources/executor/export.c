@@ -42,6 +42,26 @@ static void	add_or_update_env_var(t_minishell *minishell, const char *new_var)
 	minishell->exit_code = 0; 
 }
 
+static int	ft_check_valid_simbol(char *new_var)
+{
+	int	i;
+
+	i = 0;
+	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
+		return (1);
+	while (new_var[i] != '=')
+	{
+		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
+			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
+			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~')
+			return (1);
+		if (new_var[i] == '\0')
+			return (0);
+		i++;
+	}
+	return (0);
+}
+
 static int	ft_check_valid_identifier(char *new_var)
 {
 	int	i;
@@ -117,7 +137,16 @@ void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 	if (validation_check(minishell, cur, fd, &i) == 1)
 	{
 		new_var = cur->cmd[i];
-		if (ft_check_valid_identifier(new_var) == 1)
+		if (ft_strchr(new_var, '=') == NULL && ft_check_valid_simbol(new_var) == 0)
+			return ;
+		else if (ft_check_valid_identifier(new_var) == 1)
+		{
+			not_valid(minishell, new_var);
+			if (minishell->tmp->is_child != 0)
+				exit(minishell->exit_code);
+            return ;
+        }
+		else if (ft_check_valid_identifier(new_var) == 3)
 		{
 			not_valid(minishell, new_var);
 			if (minishell->tmp->is_child != 0)
