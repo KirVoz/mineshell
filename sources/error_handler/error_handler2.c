@@ -29,7 +29,7 @@ int	syntax_error(t_minishell *minishell, char *token)
 	char	*error;
 
 	error = construct_error("syntax error near unexpected token `",
-			token, "\n", 0);
+			token, "'\n", 0);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 258;

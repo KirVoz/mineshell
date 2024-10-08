@@ -41,7 +41,7 @@ int	quote_counter(t_minishell *minishell, char *line)
 
 int	heredoc_check(char *line)
 {
-	while (ft_strchr(line, '<') && ft_strchr(line, '<') + 1)
+	while (ft_strchr(line, '<') && *(ft_strchr(line, '<') + 1))
 	{
 		if (ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
 			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
