@@ -55,22 +55,44 @@ static void	free_pipes(int **pipes, int num_cmd)
 }
 
 static void	open_file(t_minishell *minishell, const char *filename, int flags,
-		int std_fd)
+        int std_fd)
 {
-	int	fd;
+    int	fd;
 
-	fd = open(filename, flags, 0644);
-	if (fd == -1)
-	{
-		no_file(minishell, (char *)filename);
-		exit(EXIT_FAILURE);
-	}
-	if (dup2(fd, std_fd) == -1)
-	{
-		perror("dup2 file");
-		exit(EXIT_FAILURE);
-	}
-	close(fd);
+    (void)minishell;
+    if (flags & O_RDONLY)
+    {
+        if (access(filename, F_OK) == -1)
+        {
+			no_file(minishell, (char *)filename);
+			exit(minishell->exit_code);
+		}
+        else if (access(filename, R_OK) == -1)
+        {
+			permission_denied(minishell, (char *)filename, 1);
+			exit(minishell->exit_code);
+		}
+    }
+    else if (flags & (O_WRONLY | O_CREAT | O_APPEND | O_TRUNC))
+    {
+        if (access(filename, F_OK) != -1 && access(filename, W_OK) == -1)
+        {
+			permission_denied(minishell, (char *)filename, 1);
+			exit(minishell->exit_code);
+		}
+    }
+    fd = open(filename, flags, 0644);
+    if (fd == -1)
+    {
+        perror("open file");
+        exit(EXIT_FAILURE);
+    }
+    if (dup2(fd, std_fd) == -1)
+    {
+        perror("dup2 file");
+        exit(EXIT_FAILURE);
+    }
+    close(fd);
 }
 
 static void	write_heredoc_to_fd(t_cmd *cmd, int fd)
@@ -140,11 +162,6 @@ static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
 	tmp = current->skipped_out;
 	while (tmp)
 	{
-		if (access(tmp->content, W_OK) == -1)
-		{
-			permission_denied(minishell, tmp->content);
-			exit(minishell->exit_code);
-		}
 		open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC,
 			STDOUT_FILENO);
 		tmp = tmp->next;
@@ -223,7 +240,7 @@ static void	handle_file_dir(t_minishell *minishell, char **cmd)
 	}
 	else if (access(*cmd, X_OK) == -1)
 	{
-		permission_denied(minishell, *cmd);
+		permission_denied(minishell, *cmd, 0);
 		exit(minishell->exit_code);
 	}
 }

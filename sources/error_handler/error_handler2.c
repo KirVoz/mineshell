@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 05:09:58 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/30 05:10:00 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/10/08 05:14:57 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,22 @@ void	is_a_directory(t_minishell *minishell, char *path, char mode)
 	}
 	else if (mode == 'e')
 	{
-		error = construct_error(path, ": is a directory\n", NULL, 0);
+		error = construct_error(path, ": Is a directory\n", NULL, 0);
 		ft_putstr_fd(error, 2);
 		free(error);
 	}
 	minishell->exit_code = 126;
 }
 
-void	permission_denied(t_minishell *minishell, char *path)
+void	permission_denied(t_minishell *minishell, char *path, int redirs_or_file)
 {
 	char	*error;
 
 	error = construct_error(path, ": Permission denied\n", NULL, 0);
 	ft_putstr_fd(error, 2);
 	free(error);
-	minishell->exit_code = 126;
+	if (redirs_or_file == 1)
+		minishell->exit_code = 1;
+	else
+		minishell->exit_code = 126;
 }
