@@ -17,15 +17,9 @@ void	free_cmd(t_cmd *cmd)
 {
 	if (cmd == NULL)
 		return ;
-	free(cmd->infile);
-	free(cmd->outfile);
 	free_array(cmd->cmd);
-	ft_lstclear(&cmd->skipped_in, free);
-	ft_lstclear(&cmd->skipped_out, free);
+	ft_lstclear(&cmd->files, free);
 	free(cmd->whitespace);
-	cmd->append = 0;
-	cmd->inpipe = 0;
-	cmd->outpipe = 0;
 	free_cmd(cmd->next);
 	free(cmd);
 }

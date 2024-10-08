@@ -88,13 +88,11 @@ void	process_token(t_minishell **minishell, t_cmd *current, char *token,
 			int *i);
 void	parser_main(t_minishell **minishell, char ***tokens);
 void	process_node(t_cmd **current, t_cmd **cmd_list,
-			char *token, int cmd_count);
+			char *token, size_t ws_count);
 void	add_command(t_minishell **minishell, t_cmd *current,
 			char *token, int *i);
 int		is_pipe(char *token);
 int		is_redirection(char *token);
-void	store_skipped_infiles(t_cmd **current);
-void	store_skipped_outfiles(t_cmd **current);
 void	handle_redirections(t_cmd *current, char *delimiter, char *file);
 // GENERAL_UTILS //del
 size_t	array_len(char **array);
@@ -104,8 +102,6 @@ void	print_visible(char *str);
 void	print_list_state_v(t_minishell *minishell, char *name);
 void	print_tokens_state_v(t_minishell *minishell, char **tokens,
 			char *name, char mode);
-void	print_list_state(t_minishell *minishell, char *name);
-void	print_tokens_state(char **tokens, char *name);
 
 char	**del_empty(char **tokens);
 

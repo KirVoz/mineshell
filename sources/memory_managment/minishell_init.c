@@ -54,7 +54,7 @@ void	init_tmp(t_mem *tmp)
 	tmp->is_child = -1;
 }
 
-t_cmd	*init_cmd_node(int cmd_count)
+t_cmd	*init_cmd_node(size_t ws_count)
 {
 	t_cmd	*empty_node;
 
@@ -63,15 +63,9 @@ t_cmd	*init_cmd_node(int cmd_count)
 		exit_fail("Empty_node in init_cmd_node");
 	empty_node->cmd = NULL;
 	empty_node->heredoc = NULL;
-	empty_node->infile = NULL;
-	empty_node->outfile = NULL;
-	empty_node->skipped_in = NULL;
-	empty_node->skipped_out = NULL;
-	empty_node->whitespace = allocate_whitespaces(cmd_count,
+	empty_node->files = NULL;
+	empty_node->whitespace = allocate_whitespaces(ws_count,
 			"Whitespace in init_cmd_node");
-	empty_node->append = 0;
-	empty_node->inpipe = 0;
-	empty_node->outpipe = 0;
 	empty_node->next = NULL;
 	return (empty_node);
 }

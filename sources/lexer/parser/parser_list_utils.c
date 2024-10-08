@@ -14,14 +14,14 @@
 #include "minishell.h"
 
 void	process_node(t_cmd **current, t_cmd **cmd_list,
-		char *token, int cmd_count)
+		char *token, size_t ws_count)
 {
 	t_cmd	*command_node;
 	t_cmd	*last;
 
 	if (!*current || is_pipe(token))
 	{
-		command_node = init_cmd_node(cmd_count);
+		command_node = init_cmd_node(ws_count);
 		if (!*cmd_list)
 			*cmd_list = command_node;
 		else
@@ -30,8 +30,6 @@ void	process_node(t_cmd **current, t_cmd **cmd_list,
 			while (last->next)
 				last = last->next;
 			last->next = command_node;
-			command_node->inpipe = 1;
-			last->outpipe = 1;
 		}
 		*current = command_node;
 	}

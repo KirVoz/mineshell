@@ -58,7 +58,7 @@ void	is_a_directory(t_minishell *minishell, char *path, char mode)
 	}
 	else if (mode == 'e')
 	{
-		error = construct_error(path, ": Is a directory\n", NULL, 0);
+		error = construct_error(path, ": is a directory\n", NULL, 0);
 		ft_putstr_fd(error, 2);
 		free(error);
 	}

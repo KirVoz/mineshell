@@ -36,38 +36,18 @@ int	is_redirection(char *token)
 	return (0);
 }
 
-void	store_skipped_infiles(t_cmd **current)
-{
-	ft_lstadd_back(&(*current)->skipped_in,
-		ft_lstnew(ft_strdup((*current)->infile)));
-	free((*current)->infile);
-}
-
-void	store_skipped_outfiles(t_cmd **current)
-{
-	ft_lstadd_back(&(*current)->skipped_out,
-		ft_lstnew(ft_strdup((*current)->outfile)));
-	free((*current)->outfile);
-}
-
 void	handle_redirections(t_cmd *current, char *delimiter, char *file)
 {
 	size_t	delimiter_len;
 
 	delimiter_len = ft_strlen(delimiter);
 	if (ft_strncmp(delimiter, "<", delimiter_len) == 0)
-	{
-		if (current->infile)
-			store_skipped_infiles(&current);
-		current->infile = ft_strdup(file);
-	}
-	else if (ft_strncmp(delimiter, ">", delimiter_len) == 0
-		|| ft_strncmp(delimiter, ">>", delimiter_len) == 0)
-	{
-		if (current->outfile)
-			store_skipped_outfiles(&current);
-		current->outfile = ft_strdup(file);
-		if (ft_strncmp(delimiter, ">>", 2) == 0)
-			current->append = 1;
-	}
+		ft_lstadd_back(&current->files,
+			ft_lstnew(ft_strdup(file), 'i'));
+	else if (ft_strncmp(delimiter, ">", delimiter_len) == 0)
+		ft_lstadd_back(&current->files,
+			ft_lstnew(ft_strdup(file), 'o'));
+	else if (ft_strncmp(delimiter, ">>", delimiter_len) == 0)
+		ft_lstadd_back(&current->files,
+			ft_lstnew(ft_strdup(file), 'a'));
 }

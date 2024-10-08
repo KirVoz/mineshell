@@ -54,135 +54,136 @@ static void	free_pipes(int **pipes, int num_cmd)
 	free(pipes);
 }
 
-static void	open_file(t_minishell *minishell, const char *filename, int flags,
-        int std_fd)
-{
-    int	fd;
+// static void	open_file(t_minishell *minishell, const char *filename, int flags,
+//         int std_fd)
+// {
+//     int	fd;
 
-    (void)minishell;
-    if (flags & O_RDONLY)
-    {
-        if (access(filename, F_OK) == -1)
-        {
-			no_file(minishell, (char *)filename);
-			exit(minishell->exit_code);
-		}
-        else if (access(filename, R_OK) == -1)
-        {
-			permission_denied(minishell, (char *)filename, 1);
-			exit(minishell->exit_code);
-		}
-    }
-    else if (flags & (O_WRONLY | O_CREAT | O_APPEND | O_TRUNC))
-    {
-        if (access(filename, F_OK) != -1 && access(filename, W_OK) == -1)
-        {
-			permission_denied(minishell, (char *)filename, 1);
-			exit(minishell->exit_code);
-		}
-    }
-    fd = open(filename, flags, 0644);
-    if (fd == -1)
-    {
-        perror("open file");
-        exit(EXIT_FAILURE);
-    }
-    if (dup2(fd, std_fd) == -1)
-    {
-        perror("dup2 file");
-        exit(EXIT_FAILURE);
-    }
-    close(fd);
-}
+//     (void)minishell;
+//     if (flags & O_RDONLY)
+//     {
+//         if (access(filename, F_OK) == -1)
+//         {
+// 			no_file(minishell, (char *)filename);
+// 			exit(minishell->exit_code);
+// 		}
+//         else if (access(filename, R_OK) == -1)
+//         {
+// 			permission_denied(minishell, (char *)filename, 1);
+// 			exit(minishell->exit_code);
+// 		}
+//     }
+//     else if (flags & (O_WRONLY | O_CREAT | O_APPEND | O_TRUNC))
+//     {
+//         if (access(filename, F_OK) != -1 && access(filename, W_OK) == -1)
+//         {
+// 			permission_denied(minishell, (char *)filename, 1);
+// 			exit(minishell->exit_code);
+// 		}
+//     }
+//     fd = open(filename, flags, 0644);
+//     if (fd == -1)
+//     {
+//         perror("open file");
+//         exit(EXIT_FAILURE);
+//     }
+//     if (dup2(fd, std_fd) == -1)
+//     {
+//         perror("dup2 file");
+//         exit(EXIT_FAILURE);
+//     }
+//     close(fd);
+// }
 
-static void	write_heredoc_to_fd(t_cmd *cmd, int fd)
-{
-	int	j;
+// static void	write_heredoc_to_fd(t_cmd *cmd, int fd)
+// {
+// 	int	j;
 
-	j = 0;
-	while (cmd->heredoc[j] != NULL)
-	{
-		write(fd, cmd->heredoc[j], ft_strlen(cmd->heredoc[j]));
-		write(fd, "\n", 1);
-		j++;
-	}
-}
+// 	j = 0;
+// 	while (cmd->heredoc[j] != NULL)
+// 	{
+// 		write(fd, cmd->heredoc[j], ft_strlen(cmd->heredoc[j]));
+// 		write(fd, "\n", 1);
+// 		j++;
+// 	}
+// }
 
-static void	heredoc_fd(t_cmd *cmd)
-{
-	int	heredoc_fd[2];
+// static void	heredoc_fd(t_cmd *cmd)
+// {
+// 	int	heredoc_fd[2];
 
-	if (pipe(heredoc_fd) == -1)
-	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	write_heredoc_to_fd((cmd), heredoc_fd[1]);
-	close(heredoc_fd[1]);
-	if (dup2(heredoc_fd[0], STDIN_FILENO) == -1)
-	{
-		perror("dup2 file");
-		exit(EXIT_FAILURE);
-	}
-	close(heredoc_fd[0]);
-}
+// 	if (pipe(heredoc_fd) == -1)
+// 	{
+// 		perror("pipe");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	write_heredoc_to_fd((cmd), heredoc_fd[1]);
+// 	close(heredoc_fd[1]);
+// 	if (dup2(heredoc_fd[0], STDIN_FILENO) == -1)
+// 	{
+// 		perror("dup2 file");
+// 		exit(EXIT_FAILURE);
+// 	}
+// 	close(heredoc_fd[0]);
+// }
 
-static void	redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, int i)
-{
-    t_list	*tmp;
-    char	*last_input_file = NULL;
+// static void	redirect_input(t_minishell *minishell, t_cmd *current, int **pipes, int i)
+// {
+//     t_list	*tmp;
+//     char	*last_input_file = NULL;
 
-    tmp = current->skipped_in;
-    while (tmp)
-    {
-        last_input_file = tmp->content;
-        tmp = tmp->next;
-    }
-    if (current->heredoc)
-        heredoc_fd(current);
-    else if (current->infile)
-        last_input_file = current->infile;
-    if (last_input_file)
-        open_file(minishell, last_input_file, O_RDONLY, STDIN_FILENO);
-    else if (i > 0)
-    {
-        if (dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
-        {
-            perror("dup2 stdin");
-            exit(EXIT_FAILURE);
-        }
-    }
-}
-static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
-		int i, int num_cmd)
-{
-	t_list	*tmp;
-	int 	flags;
+//     tmp = current->skipped_in;
+//     while (tmp)
+//     {
+//         last_input_file = tmp->content;
+//         tmp = tmp->next;
+//     }
+//     if (current->heredoc)
+//         heredoc_fd(current);
+//     else if (current->infile)
+//         last_input_file = current->infile;
+//     if (last_input_file)
+//         open_file(minishell, last_input_file, O_RDONLY, STDIN_FILENO);
+//     else if (i > 0)
+//     {
+//         if (dup2(pipes[i - 1][0], STDIN_FILENO) == -1)
+//         {
+//             perror("dup2 stdin");
+//             exit(EXIT_FAILURE);
+//         }
+//     }
+// }
 
-	tmp = current->skipped_out;
-	while (tmp)
-	{
-		open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC,
-			STDOUT_FILENO);
-		tmp = tmp->next;
-	}
-	if (current->outfile)
-	{
-		if (current->append)
-			flags = O_WRONLY | O_CREAT | O_APPEND;
-		else
-			flags = O_WRONLY | O_CREAT | O_TRUNC;
-		open_file(minishell, current->outfile, flags, STDOUT_FILENO);
-	}
-	else if (i < num_cmd - 1)
-	{
-		if (dup2(pipes[i][1], STDOUT_FILENO) == -1)
-		{
-			perror("dup2 stdout");
-			exit(EXIT_FAILURE);
-		}
-	}
-}
+// static void	redirect_output(t_minishell *minishell, t_cmd *current, int **pipes,
+// 		int i, int num_cmd)
+// {
+// 	t_list	*tmp;
+// 	int 	flags;
+
+// 	tmp = current->skipped_out;
+// 	while (tmp)
+// 	{
+// 		open_file(minishell, tmp->content, O_WRONLY | O_CREAT | O_TRUNC,
+// 			STDOUT_FILENO);
+// 		tmp = tmp->next;
+// 	}
+// 	if (current->outfile)
+// 	{
+// 		if (current->append)
+// 			flags = O_WRONLY | O_CREAT | O_APPEND;
+// 		else
+// 			flags = O_WRONLY | O_CREAT | O_TRUNC;
+// 		open_file(minishell, current->outfile, flags, STDOUT_FILENO);
+// 	}
+// 	else if (i < num_cmd - 1)
+// 	{
+// 		if (dup2(pipes[i][1], STDOUT_FILENO) == -1)
+// 		{
+// 			perror("dup2 stdout");
+// 			exit(EXIT_FAILURE);
+// 		}
+// 	}
+// }
 
 static void	close_pipes(int **pipes, int num_cmd)
 {
@@ -248,8 +249,9 @@ static void	handle_file_dir(t_minishell *minishell, char **cmd)
 static void	execute_child(t_minishell *minishell, t_cmd *current, int **pipes,
 		int i, int num_cmd, char **env)
 {
-	redirect_input(minishell, current, pipes, i);
-	redirect_output(minishell, current, pipes, i, num_cmd);
+	(void)i;
+	// redirect_input(minishell, current, pipes, i);
+	// redirect_output(minishell, current, pipes, i, num_cmd);
 	close_pipes(pipes, num_cmd);
 	if (is_builtin(current->cmd[0]))
 	{

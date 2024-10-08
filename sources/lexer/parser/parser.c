@@ -35,16 +35,14 @@ void	parser_main(t_minishell **minishell, char ***tokens)
 {
 	t_cmd	*current;
 	t_cmd	*cmd_list;
-	int		cmd_count;
 	int		i;
 
 	current = NULL;
 	cmd_list = NULL;
-	cmd_count = array_len(*tokens);
 	i = 0;
 	while ((*tokens)[i])
 	{
-		process_node(&current, &cmd_list, (*tokens)[i], cmd_count);
+		process_node(&current, &cmd_list, (*tokens)[i], array_len(*tokens));
 		if (is_pipe((*tokens)[i]))
 		{
 			i++;

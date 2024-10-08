@@ -12,14 +12,15 @@
 
 #include "libft.h"
 
-t_list	*ft_lstnew(void *content)
+t_list	*ft_lstnew(char *filename, char mode)
 {
 	t_list	*node;
 
 	node = (t_list *)malloc(sizeof(t_list));
 	if (!node)
 		return (NULL);
-	node -> content = content;
+	node -> filename = filename;
+	node -> mode = mode;
 	node -> next = NULL;
 	return (node);
 }
