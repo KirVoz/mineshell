@@ -21,6 +21,7 @@
 int		lexer_main(t_minishell *minishell, char *line);
 char	**tokenizator(int **ws_array, char *line);
 int		quote_counter(t_minishell *minishell, char *line);
+int		heredoc_check(char *line);
 char	hanging_pipe_heredoc(char *line);
 // TOKENIZATOR //del
 char	*extract_token(char **line, int i, int **ws_array, int *token_flag);

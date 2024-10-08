@@ -39,14 +39,24 @@ int	quote_counter(t_minishell *minishell, char *line)
 	return (1);
 }
 
+int	heredoc_check(char *line)
+{
+	while (ft_strchr(line, '<') && ft_strchr(line, '<') + 1)
+	{
+		if (ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
+			&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
+			return (1);
+		line = ft_strchr(line, '<') + 1;
+	}
+	return (0);
+}
+
 char	hanging_pipe_heredoc(char *line)
 {
 	int		valid;
-	char	*tmp;
 
 	valid = 0;
-	tmp = line;
-	while (*line && *line != '|')
+	while (*line && ft_strrchr(line, '|') && *line != '|')
 	{
 		if (!isspace(*line) && *line != '<' && *line != '>')
 			valid = 1;
@@ -60,10 +70,7 @@ char	hanging_pipe_heredoc(char *line)
 		if (!*line && *(line - 2) != '|')
 			return ('p');
 	}
-	line = tmp;
-	if (ft_strchr(line, '<')
-		&& ft_strncmp(ft_strchr(line, '<'), "<<", 2) == 0
-		&& ft_strncmp(ft_strchr(line, '<') + 2, "<", 1) != 0)
+	if (heredoc_check(line))
 		return ('h');
 	return (0);
 }
