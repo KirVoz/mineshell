@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 06:25:42 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/09/25 06:25:43 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/10/08 18:49:41 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,4 +50,7 @@ void	handle_redirections(t_cmd *current, char *delimiter, char *file)
 	else if (ft_strncmp(delimiter, ">>", delimiter_len) == 0)
 		ft_lstadd_back(&current->files,
 			ft_lstnew(ft_strdup(file), 'a'));
+	else if (ft_strncmp(delimiter, "<<", delimiter_len) == 0)
+		ft_lstadd_back(&current->files,
+			ft_lstnew(ft_strdup(""), 'h'));
 }

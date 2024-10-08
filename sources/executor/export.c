@@ -22,7 +22,6 @@ static void	add_or_update_env_var(t_minishell *minishell, const char *new_var)
 
 	env_count = array_len(minishell->env);
 	var_name_len = ft_strchr(new_var, '=') - new_var;
-	// printf("var_name_len: %zu\n", var_name_len); //del
 	i = -1;
 	while (++i < env_count)
 	{
@@ -78,7 +77,6 @@ static int	ft_check_valid_identifier(char *new_var)
 	}
 	while (new_var[i] != '=')
 	{
-		// Проверка на недопустимые символы до знака равно
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
 			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
 			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~')
@@ -96,7 +94,6 @@ static void declare_env_var(t_minishell *minishell, int fd)
 	size_t	i;
 
 	env_count = array_len(minishell->env);
-	// printf("env_count: %zu\n", env_count); //del
 	i = -1;
 	while (++i < env_count)
 	{
@@ -156,40 +153,7 @@ void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 		else if (ft_check_valid_identifier(new_var) != 3)
         	add_or_update_env_var(minishell, new_var);
 		minishell->exit_code = 0;
-		// if (minishell->tmp->is_child != 0)
-		// 	exit(minishell->exit_code);
 	}
 	return ;
 }
 
-// {
-//     size_t  i;
-//     char    *new_var;
-//     size_t  env_count;
-
-//     env_count = array_len(minishell->env);
-//     if (cur->cmd[1] != NULL)
-//     {
-//         new_var = cur->cmd[1];
-//         printf("new_var: %s\n", new_var); //del
-//         if (ft_strchr(new_var, '=') == NULL)
-// 			return;
-// 		if (ft_check_valid_identifier(new_var) == 1)
-//         {
-//             ft_putstr_fd("export: not a valid identifier\n", fd);
-//             return;
-//         }
-//         add_or_update_env_var(minishell, new_var);
-//     }
-//     else
-//     {
-//         i = -1;
-//         while (++i < env_count)
-//         {
-//             ft_putstr_fd("declare -x ", fd);
-//             ft_putstr_fd(minishell->env[i], fd);
-//             ft_putstr_fd("\n", fd);
-//         }
-//     }
-//     minishell->exit_code = 0;
-// }
