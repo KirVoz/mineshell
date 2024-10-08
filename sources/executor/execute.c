@@ -185,6 +185,21 @@ static void	heredoc_fd(t_cmd *cmd)
 	// }
 // }
 
+static void open_file(t_minishell *minishell, const char *filename, int perm_or_no_file)
+{
+	if (access(filename, R_OK) == -1 || access(filename, W_OK) == -1)
+	{
+		if (perm_or_no_file == 1)
+			permission_denied(minishell, (char *)filename, 1);
+		else
+			no_file(minishell, (char *)filename);
+		//permission_denied(minishell, (char *)filename, 1);
+		exit(minishell->exit_code);
+	}
+	else
+		return ;
+}
+
 static void	redirects(t_minishell *minishell, t_cmd *current, int **pipes,
 		int i, int num_cmd)
 {
@@ -208,15 +223,18 @@ static void	redirects(t_minishell *minishell, t_cmd *current, int **pipes,
 		{
 			flags = O_WRONLY | O_CREAT | O_TRUNC;
 			last_output_fd = open(tmp->filename, flags, 0644);
+			open_file(minishell, tmp->filename, 1);
 		}
 		else if (tmp->mode == 'a')
 		{
 			flags = O_WRONLY | O_CREAT | O_APPEND;
 			last_output_fd = open(tmp->filename, flags, 0644);
+			open_file(minishell, tmp->filename, 1);
 		}
 		else if (tmp->mode == 'i')
 		{
 			last_input_fd = open(tmp->filename, O_RDONLY);
+			open_file(minishell, tmp->filename, 0);
 			if (last_input_fd == -1)
 			{
 				no_file(minishell, tmp->filename);
