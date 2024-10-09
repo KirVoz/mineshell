@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+void	handle_incorrect_arguments(t_minishell *minishell, char *av)
+{
+	struct stat	stat_buf;
+
+	stat(av, &stat_buf);
+	if (get_path(minishell, av) && !S_ISDIR(stat_buf.st_mode))
+		exe_binary_error(minishell, get_path(minishell, av));
+	else if (access(av, F_OK) == 0 && S_ISDIR(stat_buf.st_mode))
+		is_a_directory(minishell, av, 'm');
+	else
+		no_path_file(minishell, av);
+}
+
 void	numeric_error(t_minishell *minishell, char *cmd, char *arg)
 {
 	char	*error;

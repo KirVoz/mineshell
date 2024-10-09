@@ -56,8 +56,14 @@ typedef struct s_minishell
 	t_cmd			*cmd;
 	t_mem			*tmp;
 	int				exit_code;
+	int				**pipes;
 }					t_minishell;
 
+typedef struct s_in_out
+{
+	int				in;
+	int				out;
+}					t_in_out;
 // shlvl.c
 char		*increment_shlvl(const char *shlvl);
 // MEMORY MANAGMENT
@@ -91,6 +97,31 @@ void		execute_exit(t_minishell *minishell, int fd, t_cmd *cur);
 void 		execute_command(t_minishell *minishell, int fd, t_cmd *cur);
 //exe
 void		execute(t_minishell *minishell);
+int			solo_builtin(char *cmd);
+int			is_builtin(char *cmd);
+void		free_pipes(int **pipes, int num_cmd);
+void		write_heredoc_to_fd(t_cmd *cmd, int fd);
+void		heredoc_fd(t_cmd *cmd);
+void		open_file(t_minishell *minishell, const char *filename,
+			int perm_or_no_file);
+void		close_pipes(int **pipes, int num_cmd);
+int			path_present(t_minishell *minishell);
+int			file_dir_check(char *cmd);
+void		handle_file_dir(t_minishell *minishell, char **cmd);
+int			count_commands(t_cmd *cmd);
+int			**setup_pipes(int num_cmd);
+void		redirects(t_minishell *minishell, t_cmd *current, int i,
+			int num_cmd);
+void		handle_hd(t_cmd *current, int *last_input_fd);
+void		handle_output_file(t_minishell *minishell, t_list *tmp,
+			int *last_output_fd, int flags);
+void	handle_input_file(t_minishell *minishell, t_list *tmp,
+			int *last_input_fd);
+//export
+void	    declare_env_var(t_minishell *minishell, int fd);
+int			ft_check_valid_simbol(char *new_var);
+int			ft_check_valid_identifier(char *new_var);
+int			validation_check(t_minishell *minishell, t_cmd *cur, int fd, int *i);
 //signals
 void		ft_signals(void);
 //utils.c
@@ -111,6 +142,7 @@ void		permission_denied(t_minishell *minishell,
 				char *path, int redirs_or_file);
 void		numeric_error(t_minishell *minishell, char *cmd, char *arg);
 void		deleted_dir(t_minishell *minishell);
+void		handle_incorrect_arguments(t_minishell *minishell, char *av);
 //path.c
 char		*get_path(t_minishell *minishell, char *cmd);
 

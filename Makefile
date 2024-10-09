@@ -18,12 +18,18 @@ OBJ_DIR = objects
 SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/commands.c \
 		$(EXE_PATH)/execute.c \
+		$(EXE_PATH)/execute2.c \
+		$(EXE_PATH)/execute3.c \
+		$(EXE_PATH)/execute4.c \
+		$(EXE_PATH)/execute5.c \
+		$(EXE_PATH)/execute6.c \
 		$(EXE_PATH)/path.c \
 		$(EXE_PATH)/pwd.c \
 		$(EXE_PATH)/cd.c \
 		$(EXE_PATH)/env.c \
 		$(EXE_PATH)/echo.c \
 		$(EXE_PATH)/export.c \
+		$(EXE_PATH)/export2.c \
 		$(EXE_PATH)/unset.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \

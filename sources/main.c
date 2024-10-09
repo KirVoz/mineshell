@@ -3,28 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 15:22:48 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/10/06 12:46:57 by kvoznese         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:17:46 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "lexer.h"
-
-static void	handle_incorrect_arguments(t_minishell *minishell, char *av)
-{
-	struct stat	stat_buf;
-
-	stat(av, &stat_buf);
-	if (get_path(minishell, av) && !S_ISDIR(stat_buf.st_mode))
-		exe_binary_error(minishell, get_path(minishell, av));
-	else if (access(av, F_OK) == 0 && S_ISDIR(stat_buf.st_mode))
-		is_a_directory(minishell, av, 'm');
-	else
-		no_path_file(minishell, av);
-}
+#include "minishell.h"
 
 static int	check_line(t_minishell minishell)
 {
@@ -36,33 +23,48 @@ static int	check_line(t_minishell minishell)
 	return (0);
 }
 
+static void	process_arguments(int ac, char **av, t_minishell *minishell)
+{
+	if (ac > 1)
+	{
+		handle_incorrect_arguments(minishell, av[1]);
+		exit(1);
+	}
+}
+
+static void	read_and_process_commands(t_minishell *minishell)
+{
+	while (1)
+	{
+		minishell->tmp->line = readline(PROMPT);
+		if (!minishell->tmp->line)
+		{
+			printf("exit\n");
+			exit_free(minishell, 0);
+			break ;
+		}
+		else if (check_line(*minishell))
+			continue ;
+		add_history(minishell->tmp->line);
+		if (!lexer_main(minishell, minishell->tmp->line))
+			continue ;
+		execute(minishell);
+	}
+}
+
+static void	run_minishell(t_minishell *minishell, char **env)
+{
+	ft_signals();
+	init_minishell(minishell, env);
+	read_and_process_commands(minishell);
+	exit_free(minishell, minishell->exit_code);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_minishell	minishell;
 
-	ft_signals();
-	init_minishell(&minishell, env);
-	while (1)
-	{
-		if (ac > 1)
-		{
-			handle_incorrect_arguments(&minishell, av[1]);
-			break ;
-		}
-		minishell.tmp->line = readline(PROMPT);
-		if (!minishell.tmp->line)
-		{
-			printf("exit\n");
-			exit_free(&minishell, 0);
-			break ;
-		}
-		else if (check_line(minishell))
-			continue ;
-		add_history(minishell.tmp->line);
-		if (!lexer_main(&minishell, minishell.tmp->line))
-			continue ;
-		execute(&minishell);
-	}
-	exit_free(&minishell, minishell.exit_code);
+	process_arguments(ac, av, &minishell);
+	run_minishell(&minishell, env);
 	return (0);
 }

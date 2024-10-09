@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/06 21:56:22 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/10/06 21:56:23 by aaleksee         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:17:02 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static char	*join_free(char *res, char *arg)
 	res = ft_strjoin(res, arg);
 	free(res_tmp);
 	return (res);
-
 }
 
 char	*construct_error(char *arg1, char *arg2, char *arg3, char mode)

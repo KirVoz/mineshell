@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/09 17:16:28 by kvoznese          #+#    #+#             */
+/*   Updated: 2024/10/09 17:16:29 by kvoznese         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	update_env_var(t_minishell *minishell, const char *var_name,
@@ -19,7 +31,6 @@ static void	update_pwd_vars(t_minishell *minishell, const char *old_pwd,
 {
 	update_env_var(minishell, "OLDPWD=", old_pwd);
 	update_env_var(minishell, "PWD=", new_path);
-	// printf("%s\n", new_path); //del
 }
 
 static void	change_directory(t_minishell *minishell, const char *new_path)
@@ -28,12 +39,12 @@ static void	change_directory(t_minishell *minishell, const char *new_path)
 	char	*old_pwd;
 
 	old_pwd = ft_strdup(minishell->env[find_string_in_array(minishell->env,
-			"PWD=", 4)] + 4);
+				"PWD=", 4)] + 4);
 	if (chdir(new_path) || getcwd(cwd, sizeof(cwd)) == NULL)
 	{
-  		if (minishell->tmp->is_child != 0)
-   			free(old_pwd);
-  		deleted_dir(minishell);
+		if (minishell->tmp->is_child != 0)
+			free(old_pwd);
+		deleted_dir(minishell);
 	}
 	else
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 05:10:15 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/10/08 04:51:33 by kvoznese         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:16:44 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ void	no_file(t_minishell *minishell, char *filename)
 {
 	char	*error;
 
-	error = construct_error(filename,
-			": No such file or directory\n", NULL, 's');
+	error = construct_error(filename, ": No such file or directory\n", NULL,
+			's');
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 1;

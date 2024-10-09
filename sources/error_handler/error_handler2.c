@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handler2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kvoznese < kvoznese@student.42yerevan.a    +#+  +:+       +#+        */
+/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 05:09:58 by aaleksee          #+#    #+#             */
-/*   Updated: 2024/10/08 05:14:57 by kvoznese         ###   ########.fr       */
+/*   Updated: 2024/10/09 17:19:29 by kvoznese         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	syntax_error(t_minishell *minishell, char *token)
 {
 	char	*error;
 
-	error = construct_error("syntax error near unexpected token `",
-			token, "'\n", 0);
+	error = construct_error("syntax error near unexpected token `", token,
+			"'\n", 0);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 258;
@@ -65,7 +65,8 @@ void	is_a_directory(t_minishell *minishell, char *path, char mode)
 	minishell->exit_code = 126;
 }
 
-void	permission_denied(t_minishell *minishell, char *path, int redirs_or_file)
+void	permission_denied(t_minishell *minishell, char *path,
+		int redirs_or_file)
 {
 	char	*error;
 
