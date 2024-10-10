@@ -13,29 +13,21 @@
 #include "lexer.h"
 #include "minishell.h"
 
-// t_blin	commands[7] = {
-// 	{"echo", execute_echo},
-// 	{"cd", execute_cd},
-// 	{"pwd", execute_pwd},
-// 	{"export", execute_export},
-// 	{"unset", execute_unset},
-// 	{"env", execute_env},
-// 	{"exit", execute_exit},
-// };
-
 t_blin	*get_commands(void)
 {
-	static t_blin	commands[7] = {
-	{"echo", execute_echo},
-	{"cd", execute_cd},
-	{"pwd", execute_pwd},
-	{"export", execute_export},
-	{"unset", execute_unset},
-	{"env", execute_env},
-	{"exit", execute_exit},
-	};
+	t_blin	*builtins;
 
-	return (commands);
+	builtins = malloc(sizeof(t_blin) * 7);
+	if (!builtins)
+		exit_fail("Failed to allocate memory for builtins");
+	builtins[0] = (t_blin){"cd", execute_cd};
+	builtins[1] = (t_blin){"echo", execute_echo};
+	builtins[2] = (t_blin){"pwd", execute_pwd};
+	builtins[3] = (t_blin){"export", execute_export};
+	builtins[4] = (t_blin){"unset", execute_unset};
+	builtins[5] = (t_blin){"env", execute_env};
+	builtins[6] = (t_blin){"exit", execute_exit};
+	return (builtins);
 }
 
 void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)

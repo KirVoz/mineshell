@@ -96,6 +96,7 @@ void		execute_env(t_minishell *minishell, int fd, t_cmd *cur);
 void		execute_exit(t_minishell *minishell, int fd, t_cmd *cur);
 void 		execute_command(t_minishell *minishell, int fd, t_cmd *cur);
 //exe
+t_blin		*get_commands(void);
 void		execute(t_minishell *minishell);
 int			solo_builtin(char *cmd);
 int			is_builtin(char *cmd);

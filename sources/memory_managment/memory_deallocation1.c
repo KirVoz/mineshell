@@ -64,6 +64,11 @@ void	free_minishell(t_minishell *minishell)
 	}
 	if (minishell->tmp)
 		free_tmp(minishell->tmp);
+	if (minishell->buildins)
+	{
+		free(minishell->buildins);
+		minishell->buildins = NULL;
+	}
 	minishell->tmp->current_heredoc = 0;
 	minishell->tmp->is_child = -1;
 }

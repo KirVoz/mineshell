@@ -79,6 +79,7 @@ void	init_minishell(t_minishell *minishell, char **env)
 {
 	minishell->env = NULL;
 	init_envp(minishell, env);
+	minishell->buildins = get_commands();
 	minishell->cmd = NULL;
 	minishell->tmp = (t_mem *)malloc(sizeof(t_mem));
 	if (!minishell->tmp)
