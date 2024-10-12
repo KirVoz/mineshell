@@ -127,7 +127,7 @@ void	execute(t_minishell *minishell)
 	}
 	if (i == 1)
 		update_underscore_variable(minishell);
-	if (i > 1 && !ft_strncmp(minishell->cmd->cmd[0], "env" , 3))
+	if (i > 1 && !ft_strncmp(minishell->cmd->cmd[0], "env", 3))
 		update_underscore_variable(minishell);
 	execute_commands(minishell);
 	free_minishell(minishell);

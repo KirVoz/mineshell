@@ -14,7 +14,7 @@
 
 static int	valid_arg(char *new_var)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
@@ -77,7 +77,7 @@ void	execute_unset(t_minishell *minishell, int fd, t_cmd *cur)
 	{
 		if (valid_arg(cur->cmd[i]))
 		{
-			not_valid(minishell, cur->cmd[i]);
+			not_valid(minishell, cur->cmd[i], 1);
 			return ;
 		}
 		index = find_env_index(minishell->env, cur->cmd[i]);

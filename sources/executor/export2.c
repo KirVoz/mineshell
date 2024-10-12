@@ -13,45 +13,59 @@
 #include "lexer.h"
 #include "minishell.h"
 
+// int	ft_check_valid_simbol(char *new_var)
+// {
+// 	int	i;
+
+// 	i = 0;
+
+// 	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
+// 		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
+// 		|| new_var[i] == '!' || (new_var[i] == '+' && new_var[i + 1]) 
+// 		|| new_var[i] == '~' || new_var[i] == '.' || new_var[i] == '{' 
+// 		|| new_var[i] == '}' || new_var[i] == '\\')
+// 		return (1);
+// 	else
+// 		return (0);
+// }
+
 int	ft_check_valid_simbol(char *new_var)
 {
 	int	i;
 
 	i = 0;
-
-	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
+	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
 		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-		|| new_var[i] == '!' || (new_var[i] == '+' && new_var[i + 1]) 
-		|| new_var[i] == '~' || new_var[i] == '.' || new_var[i] == '{' 
-		|| new_var[i] == '}' || new_var[i] == '\\')
+		|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
+		|| new_var[i] == '{' || new_var[i] == '}')
 		return (1);
 	else
 		return (0);
 }
 
-int	ft_check_valid_identifier(char *new_var)
+int	ft_check_valid_identifier(char *new_v)
 {
 	int	i;
 
 	i = 0;
-	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
+	if (new_v[i] >= '0' && new_v[i] <= '9' && new_v[i] != '=')
 		return (1);
-	if (!ft_strchr(new_var, '='))
+	if (!ft_strchr(new_v, '='))
 		return (3);
-	while (new_var[i] == '=' || new_var[i] == '\0')
+	while (new_v[i] == '=' || new_v[i] == '\0')
 	{
 		i++;
 		return (1);
 	}
-	while (new_var[i] != '=')
+	while (new_v[i] != '=')
 	{
-		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
-			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-			|| new_var[i] == '!' || (new_var[i] == '+' && new_var[i + 1]) 
-			|| new_var[i] == '~' || new_var[i] == '.' || new_var[i] == '{' 
-			|| new_var[i] == '}' || new_var[i] == '\\')
+		if (new_v[i] == '@' || new_v[i] == '*' || new_v[i] == '#'
+			|| new_v[i] == '?' || new_v[i] == '-' || new_v[i] == '$'
+			|| new_v[i] == '!' || new_v[i] == '^' || new_v[i] == '~'
+			|| (new_v[i] == '+' && new_v[i + 1] != '=')
+			|| new_v[i] == '{' || new_v[i] == '}' || new_v[i] == '.')
 			return (1);
-		if (new_var[i] == '\0')
+		if (new_v[i] == '\0')
 			return (0);
 		i++;
 	}
