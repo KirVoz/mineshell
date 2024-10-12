@@ -98,8 +98,12 @@ void	expander_main(t_minishell *minishell, char **tokens)
 	comment_flag = 0;
 	while (tokens[i])
 	{
+		if ((!ft_strncmp(tokens[i], "\"\"", ft_strlen(tokens[i]))
+				|| !ft_strncmp(tokens[i], "\'\'", ft_strlen(tokens[i]))))
+			minishell->tmp->ws_tmp[i] = (minishell->tmp->ws_tmp[i]
+					+ minishell->tmp->ws_tmp[i - 1]) * -1;
 		tokens[i] = expand(minishell, tokens[i], &comment_flag);
 		i++;
 	}
-	minishell->tmp->tokens = del_empty(tokens);
+	minishell->tmp->tokens = del_empty(minishell, tokens);
 }

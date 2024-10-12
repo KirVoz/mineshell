@@ -30,8 +30,7 @@ char	*getting_start(char **line, char *start, int *len);
 void	delim_handler(char **line, int *len, int *in_token, char mode);
 int		count_tokens(char *line);
 int		set_quote(char **line, int *count, int in_token, char mode);
-char	*find_end_quote_len(char *line, int *len);
-int		find_quotation_len(char *line);
+void	increment_len_line(char ***line, int **len);
 int		is_delimiter(char *line);
 void	set_token_flag(char *token, int *flag);
 // PIPE_HEREDOC //del
@@ -40,22 +39,21 @@ void	add_heredocs(t_minishell *minishell,
 char	**handle_heredoc(t_minishell *minishell, char **tokens);
 char	**handle_pipe(t_minishell *minishell, char **tokens);
 char	**pipe_heredoc_main(t_minishell *minishell, char *line);
-// PIPE_HEREDOC_UTILS //del
 char	**get_valid_tokens(void);
 size_t	redirections_count(char **tokens);
 int		incorrect_delimiter(char **delimiter);
-// HEREDOC_UTILS //del
 char	*find_delimiter(char **tokens, size_t *i);
 char	*read_heredoc_lines(char *delimiter);
 char	**procees_heredoc_lines(char *delimiter);
 void	add_line_to_heredoc(char ***heredoc_tokens, size_t *size,
 			size_t *capacity, char *line);
-char	**merge_tokens(char **tokens, char **new_tokens);
 char	*expand_question_mark_hd(t_minishell *minishell, char *token);
 char	*substitute_hd(t_minishell *minishell, char *token, char *exp_token);
 size_t	expanded_line_len_hd(t_minishell *minishell, char *token);
 char	*expand_hd(t_minishell *minishell, char *token);
 void	heredoc_expander(t_minishell *minishell, char **tokens);
+char	**merge_tokens(char **tokens, char **new_tokens);
+int		*merge_ws(int *ws, int *ws_pipe);
 // EXPANDER //del
 char	*expand_question_mark(t_minishell *minishell, char *token,
 			char *current_quote);
@@ -84,6 +82,11 @@ int		validator_main(t_minishell *minishell, char ***tokens);
 void	delimiter_counter(char **token, int *pipes, int *right_redirs,
 			int *left_redirs);
 int		tokens_counter(char **tokens);
+// MERGER //del
+int		should_merge(char **tokens, int i, int *ws_tmp);
+void	merge_token(char **tokens, int *ws_tmp, int i);
+int		handle_merge(char **tokens, int *ws_tmp, int i, int j);
+void	merger_main(t_minishell *minishell, char **tokens);
 // PARSER //del
 void	process_token(t_minishell **minishell, t_cmd *current, char *token,
 			int *i);
@@ -104,6 +107,6 @@ void	print_list_state_v(t_minishell *minishell, char *name);
 void	print_tokens_state_v(t_minishell *minishell, char **tokens,
 			char *name, char mode);
 
-char	**del_empty(char **tokens);
+char	**del_empty(t_minishell *minishell, char **tokens);
 
 #endif

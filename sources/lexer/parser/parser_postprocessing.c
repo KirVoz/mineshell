@@ -48,11 +48,38 @@ void	delete_comment(char *token, char *current_quote, int *comment_flag)
 	}
 }
 
-char	**del_empty(char **tokens)
+char	**rewrite_empty(t_minishell *minishell,
+			char **tokens, char **new_tokens, int *new_ws)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (tokens[i])
+	{
+		if (tokens[i][0] != '\0')
+		{
+			new_ws[j] = minishell->tmp->ws_tmp[i];
+			new_tokens[j] = ft_strdup(tokens[i]);
+			j++;
+		}
+		if (minishell->tmp->ws_tmp[i] < 0)
+			new_ws[j - 1] = minishell->tmp->ws_tmp[i];
+		i++;
+	}
+	free(minishell->tmp->ws_tmp);
+	minishell->tmp->ws_tmp = new_ws;
+	new_tokens[j] = NULL;
+	return (new_tokens);
+}
+
+char	**del_empty(t_minishell *minishell, char **tokens)
 {
 	int		i;
 	int		j;
 	char	**new_tokens;
+	int		*new_ws;
 
 	i = 0;
 	j = 0;
@@ -63,15 +90,8 @@ char	**del_empty(char **tokens)
 		i++;
 	}
 	new_tokens = allocate_array(array_len(tokens) - j, "New_tokens");
-	i = 0;
-	j = 0;
-	while (tokens[i])
-	{
-		if (tokens[i][0] != '\0')
-			new_tokens[j++] = ft_strdup(tokens[i]);
-		i++;
-	}
-	new_tokens[j] = NULL;
+	new_ws = allocate_whitespaces(array_len(tokens) - j, "New_ws");
+	new_tokens = rewrite_empty(minishell, tokens, new_tokens, new_ws);
 	free_array(tokens);
 	return (new_tokens);
 }
@@ -80,12 +100,14 @@ void	delete_last_whitespace(t_cmd *cur)
 {
 	int		flag;
 	int		i;
+	int		j;
 
 	flag = 0;
+	j = -1;
 	while (cur)
 	{
 		i = array_len(cur->cmd) - 1;
-		if (cur->whitespace[i] == 1)
+		if (cur->whitespace[i] > 0)
 			cur->whitespace[i] = 0;
 		while (cur->cmd[i][0] == '\0' && i > 0)
 		{
@@ -94,6 +116,11 @@ void	delete_last_whitespace(t_cmd *cur)
 		}
 		if (flag && cur->whitespace[i] == 1)
 			cur->whitespace[i] = 0;
+		while (++j <= i)
+		{
+			if (cur->whitespace[j] < 0)
+				cur->whitespace[j] *= -1;
+		}
 		cur = cur->next;
 	}
 }

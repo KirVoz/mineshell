@@ -57,3 +57,4 @@ dkms.conf
 minishell
 libraries/readline/history.pc
 minishell_tester/
+minishell_tester2/

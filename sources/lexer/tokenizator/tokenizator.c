@@ -53,9 +53,14 @@ char	*getting_start(char **line, char *start, int *len)
 	in_token = 0;
 	while (**line)
 	{
-		if (ft_strchr(QUOTES, **line))
+		if (ft_strchr(QUOTES, **line) && in_token != 1)
+		{
 			in_token = set_quote(line, len, in_token, 's');
-		else if (is_delimiter(*line) && in_token != 2)
+			if (in_token == 0)
+				return (start);
+		}
+		else if ((is_delimiter(*line)
+				|| ft_strchr(QUOTES, **line)) && in_token != 2)
 		{
 			if (*len == 0)
 				delim_handler(line, len, &in_token, 'g');
@@ -64,10 +69,7 @@ char	*getting_start(char **line, char *start, int *len)
 		else if (!in_token)
 			in_token = 1;
 		else
-		{
-			(*len)++;
-			(*line)++;
-		}
+			increment_len_line(&line, &len);
 	}
 	return (start);
 }

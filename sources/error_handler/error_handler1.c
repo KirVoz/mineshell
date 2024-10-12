@@ -20,6 +20,8 @@ void	not_found(t_minishell *minishell, char *cmd)
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 127;
+	if (!ft_strncmp(cmd, ".", ft_strlen(cmd)))
+		minishell->exit_code = 2;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);
 }
@@ -29,7 +31,7 @@ void	no_file(t_minishell *minishell, char *filename)
 	char	*error;
 
 	error = construct_error(filename, ": No such file or directory\n", NULL,
-			's');
+			0);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 1;

@@ -43,7 +43,7 @@ char	*env_var_copy(char **token)
 	{
 		i++;
 		(*token)++;
-		if (ft_isdigit(*(*token - 1)))
+		if (ft_isdigit(*(*token - 1)) && i == 1)
 			break ;
 	}
 	variable_name = allocate_string(i, "Variable_name in env_var_copy");

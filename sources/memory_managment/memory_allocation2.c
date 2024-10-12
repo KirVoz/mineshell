@@ -45,6 +45,6 @@ int	*allocate_whitespaces(int count, char *error)
 	ws_array = (int *)ft_calloc(count + 1, sizeof(int));
 	if (!ws_array)
 		exit_fail(error);
-	ws_array[count] = -1;
+	ws_array[count] = -9999;
 	return (ws_array);
 }

@@ -17,6 +17,7 @@ void	arg_count_error(t_minishell *minishell, char *command)
 	char	*error;
 
 	error = construct_error(command, ": too many arguments\n", NULL, 0);
+	ft_putstr_fd("exit\n", 2);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 1;

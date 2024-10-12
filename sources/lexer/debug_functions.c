@@ -84,6 +84,7 @@ void	print_tokens_state_v(t_minishell *minishell, char **tokens, char *name, cha
 	{
 		printf(" Token %d: ", i);
 		print_visible(*(tokens++));
+		printf(" ws: %d", minishell->tmp->ws_tmp[i]);
 		printf("\n");
 		if (mode == 'w')
 			printf(" W-space: %d\n", minishell->tmp->ws_tmp[i]);

@@ -39,6 +39,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(ERR_PATH)/error_handler_utils.c \
 		$(LXR_PATH)/lexer.c \
 		$(LXR_PATH)/lexer_utils.c \
+		$(LXR_PATH)/merger.c \
 		$(TKN_PATH)/tokenizator.c \
 		$(TKN_PATH)/tokenizator_utils.c \
 		$(PHD_PATH)/pipe_heredoc.c \

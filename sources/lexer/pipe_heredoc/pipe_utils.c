@@ -41,3 +41,31 @@ char	**merge_tokens(char **tokens, char **new_tokens)
 	result[i] = NULL;
 	return (result);
 }
+
+int	*merge_ws(int *ws, int *ws_pipe)
+{
+	int		*result;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	result = allocate_whitespaces(int_array_len(ws) + int_array_len(ws_pipe),
+			"Result in merge_ws");
+	while (ws[i])
+	{
+		result[j] = ws[i];
+		i++;
+		j++;
+	}
+	i = 0;
+	while (ws_pipe[i])
+	{
+		result[j] = ws_pipe[i];
+		i++;
+		j++;
+	}
+	result[j] = 0;
+	free(ws);
+	return (result);
+}

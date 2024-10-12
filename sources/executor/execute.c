@@ -29,7 +29,9 @@ static void	execute_child(t_minishell *minishell, t_cmd *current,
 			return (no_path_file(minishell, current->cmd[0]));
 		if (file_dir_check(current->cmd[0]))
 			return (handle_file_dir(minishell, current->cmd));
-		if (!get_path(minishell, current->cmd[0]))
+		if (!get_path(minishell, current->cmd[0])
+			|| !ft_strncmp(current->cmd[0], ".", ft_strlen(current->cmd[0]))
+			|| !ft_strncmp(current->cmd[0], "..", ft_strlen(current->cmd[0])))
 		{
 			not_found(minishell, current->cmd[0]);
 			exit(minishell->exit_code);

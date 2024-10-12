@@ -84,8 +84,13 @@ void	execute_echo(t_minishell *minishell, int fd, t_cmd *cur)
 	while (cur->cmd[i] != NULL)
 	{
 		ft_putstr_fd(cur->cmd[i], fd);
-		if (cur->whitespace[i])
+		// if (cur->whitespace[i])
+		// 	ft_putstr_fd(" ", fd);
+		while (cur->whitespace[i] > 0)
+		{
 			ft_putstr_fd(" ", fd);
+			cur->whitespace[i]--;
+		}
 		i++;
 	}
 	if (newline)

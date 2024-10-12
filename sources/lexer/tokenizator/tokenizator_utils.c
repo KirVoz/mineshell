@@ -26,7 +26,7 @@ int	set_quote(char **line, int *count, int in_token, char mode)
 	}
 	else if (in_token == 2 && **line == quote)
 	{
-		in_token = 1;
+		in_token = 0;
 		quote = 0;
 		if (mode == 's')
 			(*count)++;
@@ -37,32 +37,10 @@ int	set_quote(char **line, int *count, int in_token, char mode)
 	return (in_token);
 }
 
-char	*find_end_quote_len(char *line, int *len)
+void	increment_len_line(char ***line, int **len)
 {
-	int		i;
-	char	quote;
-
-	i = 1;
-	quote = *line;
-	while (line[i] && line[i] != quote)
-	{
-		i++;
-		(*len)++;
-	}
-	*len += 2;
-	return (&(line[i + 1]));
-}
-
-int	find_quotation_len(char *line)
-{
-	char	quote;
-	int		i;
-
-	quote = *line;
-	i = 1;
-	while (line[i] && line[i] != quote)
-		i++;
-	return (i + 1);
+	(**len)++;
+	(**line)++;
 }
 
 int	is_delimiter(char *line)
@@ -73,16 +51,9 @@ int	is_delimiter(char *line)
 	return (0);
 }
 
-// int	is_delimiter(char *line)
-// {
-// 	if (*line == ' ' || ft_strchr(DELIMS, *line))
-// 		return (1);
-// 	return (0);
-// }
-
 void	set_token_flag(char *token, int *flag)
 {
-	if (ft_strchr(DELIMS, *token))
+	if (ft_strchr("|", *token))
 		*flag = 1;
 	else
 		*flag = 0;

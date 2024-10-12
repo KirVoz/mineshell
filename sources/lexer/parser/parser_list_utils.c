@@ -55,8 +55,8 @@ void	add_command(t_minishell **minishell, t_cmd *current,
 		exit_fail("Failed to allocate memory for command");
 	current->cmd = command;
 	current->cmd[command_len] = ft_strdup(token);
-	if ((*minishell)->tmp->ws_tmp[*i] == 1)
-		current->whitespace[command_len] = 1;
+	if ((*minishell)->tmp->ws_tmp[*i] != 0)
+		current->whitespace[command_len] = (*minishell)->tmp->ws_tmp[*i];
 	if (!current->cmd[command_len])
 		exit_fail("Failed to duplicate token in add_command");
 	current->cmd[command_len + 1] = NULL;
