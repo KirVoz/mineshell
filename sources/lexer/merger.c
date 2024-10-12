@@ -33,6 +33,7 @@ void	merge_token(char **tokens, int *ws_tmp, int i)
 	tmp = tokens[i];
 	tokens[i] = ft_strjoin(tokens[i], tokens[i + 1]);
 	free(tmp);
+	free(tokens[i + 1]);
 	ws_tmp[i] = ws_tmp[i + 1];
 	j = i + 1;
 	while (tokens[j + 1])
@@ -67,9 +68,7 @@ void	merger_main(t_minishell *minishell, char **tokens)
 	while (tokens[i])
 	{
 		if (should_merge(tokens, i, minishell->tmp->ws_tmp))
-		{
 			j = handle_merge(tokens, minishell->tmp->ws_tmp, i, j);
-		}
 		else
 		{
 			if (i != j)

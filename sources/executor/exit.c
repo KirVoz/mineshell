@@ -80,17 +80,17 @@ void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 	char	*command;
 
 	(void)fd;
-	if (cur->cmd[1] && cur->cmd[2])
+	if (cur->cmd[1] && cur->cmd[2] && !ft_isalpha(cur->cmd[1][0]))
 	{
 		arg_count_error(minishell, "exit");
-		return;
+		return ;
 	}
 	if (minishell->tmp->is_child == 0)
-		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("exit\n", 2);
 	command = validate_exit_arg(cur->cmd[1]);
 	if (!command)
 	{
-		numeric_error(minishell, "exit", command);
+		numeric_error(minishell, "exit", cur->cmd[1]);
 		exit_code = 255;
 	}
 	else

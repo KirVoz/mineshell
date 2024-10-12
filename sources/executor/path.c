@@ -71,7 +71,6 @@ static bool	is_explicit_path(const char *cmd)
 char	*get_path(t_minishell *minishell, char *cmd)
 {
 	char	**paths;
-	char	*path;
 
 	if (*cmd == '\0')
 		return (NULL);
@@ -85,7 +84,7 @@ char	*get_path(t_minishell *minishell, char *cmd)
 	paths = get_paths(minishell);
 	if (paths == NULL)
 		return (NULL);
-	path = find_executable(paths, cmd);
+	minishell->path = find_executable(paths, cmd);
 	ft_free_split(paths);
-	return (path);
+	return (minishell->path);
 }

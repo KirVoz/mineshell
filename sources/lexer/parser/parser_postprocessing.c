@@ -61,7 +61,7 @@ char	**rewrite_empty(t_minishell *minishell,
 		if (tokens[i][0] != '\0')
 		{
 			new_ws[j] = minishell->tmp->ws_tmp[i];
-			new_tokens[j] = ft_strdup(tokens[i]);
+			new_tokens[j] = allocate_dup(tokens[i], "New_tokens[j]");
 			j++;
 		}
 		if (minishell->tmp->ws_tmp[i] < 0)
@@ -83,6 +83,8 @@ char	**del_empty(t_minishell *minishell, char **tokens)
 
 	i = 0;
 	j = 0;
+	if (tokens[i][0] == '\0' && !tokens[i + 1])
+		return (tokens);
 	while (tokens[i])
 	{
 		if (tokens[i][0] == '\0')
@@ -92,7 +94,7 @@ char	**del_empty(t_minishell *minishell, char **tokens)
 	new_tokens = allocate_array(array_len(tokens) - j, "New_tokens");
 	new_ws = allocate_whitespaces(array_len(tokens) - j, "New_ws");
 	new_tokens = rewrite_empty(minishell, tokens, new_tokens, new_ws);
-	free_array(tokens);
+	free_array(minishell->tmp->tokens);
 	return (new_tokens);
 }
 

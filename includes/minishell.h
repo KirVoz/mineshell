@@ -56,6 +56,7 @@ typedef struct s_minishell
 	t_cmd			*cmd;
 	t_mem			*tmp;
 	int				exit_code;
+	char			*path;
 	int				**pipes;
 }					t_minishell;
 

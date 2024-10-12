@@ -52,8 +52,8 @@ char	*substitute(t_minishell *minishell, char *token,
 	while (*token)
 	{
 		set_current_quote(current_quote, *token, &token);
-		if (*token == '$' && *(token + 1) && ft_isalnum(*(token + 1))
-			&& *current_quote != '\'')
+		if (*token == '$' && *(token + 1) && (ft_isalnum(*(token + 1))
+			|| *(token + 1) == '_') && *current_quote != '\'')
 		{
 			env_value = get_env_value(minishell, &token);
 			while (env_value[n])
@@ -91,8 +91,8 @@ char	*expand(t_minishell *minishell, char *token, int *comment_flag)
 
 void	expander_main(t_minishell *minishell, char **tokens)
 {
-	int		i;
 	int		comment_flag;
+	int		i;
 
 	i = 0;
 	comment_flag = 0;

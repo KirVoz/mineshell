@@ -86,5 +86,6 @@ void	init_minishell(t_minishell *minishell, char **env)
 		exit_fail("Minishell->tmp in init_minishell");
 	init_tmp(minishell->tmp);
 	minishell->exit_code = 0;
+	minishell->path = NULL;
 	minishell->pipes = NULL;
 }
