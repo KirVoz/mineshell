@@ -24,7 +24,7 @@ size_t	expanded_line_len(t_minishell *minishell,
 	{
 		set_current_quote(current_quote, *token, &token);
 		if (*token == '$' && *(token + 1) && (ft_isalnum(*(token + 1))
-			|| *(token + 1) == '_') && *current_quote != '\'')
+				|| *(token + 1) == '_') && *current_quote != '\'')
 		{
 			env_value = get_env_value(minishell, &token);
 			len += ft_strlen(env_value);

@@ -125,6 +125,7 @@ void	    declare_env_var(t_minishell *minishell, int fd);
 int			ft_check_valid_simbol(char *new_var);
 int			ft_check_valid_identifier(char *new_var);
 int			validation_check(t_minishell *minishell, t_cmd *cur, int fd, int *i);
+char		*construct_declare(char *env_var);
 //signals
 void		ft_signals(void);
 //utils.c

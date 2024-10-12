@@ -53,7 +53,7 @@ char	*substitute(t_minishell *minishell, char *token,
 	{
 		set_current_quote(current_quote, *token, &token);
 		if (*token == '$' && *(token + 1) && (ft_isalnum(*(token + 1))
-			|| *(token + 1) == '_') && *current_quote != '\'')
+				|| *(token + 1) == '_') && *current_quote != '\'')
 		{
 			env_value = get_env_value(minishell, &token);
 			while (env_value[n])

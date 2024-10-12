@@ -36,7 +36,7 @@ static char	*clean_argument(char *arg)
 	int		i;
 	int		j;
 	char	*cleaned_arg;
-	
+
 	cleaned_arg = allocate_cleaned_arg(arg, &i, &j);
 	if (!cleaned_arg)
 		return (NULL);

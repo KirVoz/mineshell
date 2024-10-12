@@ -81,3 +81,23 @@ int	validation_check(t_minishell *minishell, t_cmd *cur, int fd, int *i)
 		return (1);
 	}
 }
+
+char	*construct_declare(char *env_var)
+{
+	char	*new_var;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	new_var = allocate_string(ft_strlen(env_var) + 2, "New_var");
+	while (env_var[i] != '=')
+		new_var[j++] = env_var[i++];
+	new_var[j++] = env_var[i++];
+	new_var[j++] = '"';
+	while (env_var[i])
+		new_var[j++] = env_var[i++];
+	new_var[j++] = '"';
+	new_var[j] = '\0';
+	return (new_var);
+}
