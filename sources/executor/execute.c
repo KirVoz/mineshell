@@ -109,6 +109,7 @@ static void	execute_commands(t_minishell *minishell)
 		wait_for_processes(pids, num_cmd, minishell);
 		free(pids);
 	}
+	update_underscore_variable(minishell);
 }
 
 void	execute(t_minishell *minishell)
