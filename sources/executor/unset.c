@@ -12,6 +12,28 @@
 
 #include "minishell.h"
 
+static int	valid_arg(char *new_var)
+{
+	int i;
+
+	i = 0;
+	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
+		return (1);
+	while (new_var[i])
+	{
+		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
+			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
+			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~'
+			|| new_var[i] == '.' || new_var[i] == '/' || new_var[i] == '\\'
+			|| new_var[i] == '=' || new_var[i] == '^' || new_var[i] == '%')
+			return (1);
+		if (new_var[i] == '\0')
+			return (0);
+		i++;
+	}
+	return (0);
+}
+
 static int	find_env_index(char **env_array, const char *var_name)
 {
 	size_t	var_name_len;
@@ -53,6 +75,11 @@ void	execute_unset(t_minishell *minishell, int fd, t_cmd *cur)
 	i = 1;
 	while (cur->cmd[i] != NULL)
 	{
+		if (valid_arg(cur->cmd[i]))
+		{
+			not_valid(minishell, cur->cmd[i]);
+			return ;
+		}
 		index = find_env_index(minishell->env, cur->cmd[i]);
 		if (index != -1)
 			remove_env_var(minishell->env, index);

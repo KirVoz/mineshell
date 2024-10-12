@@ -51,7 +51,8 @@ int	ft_check_valid_identifier(char *new_var)
 	{
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
 			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~')
+			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~'
+			|| new_var[i] == '.' || new_var[i] == '/' || new_var[i] == '\\')
 			return (1);
 		if (new_var[i] == '\0')
 			return (0);

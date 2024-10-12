@@ -86,11 +86,9 @@ void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 	i = 1;
 	if (validation_check(minishell, cur, fd, &i) == 1)
 	{
+		printf("test\n");
 		new_var = cur->cmd[i];
-		if (ft_strchr(new_var, '=') == NULL
-			&& ft_check_valid_simbol(new_var) == 0)
-			return ;
-		else if (ft_check_valid_identifier(new_var) == 1
+		if (ft_check_valid_identifier(new_var) == 1
 			|| ft_check_valid_identifier(new_var) == 3)
 		{
 			handle_invalid_identifier(minishell, new_var);
@@ -98,7 +96,8 @@ void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 		}
 		else if (ft_check_valid_identifier(new_var) != 3)
 			add_or_update_env_var(minishell, new_var);
-		minishell->exit_code = 0;
+		else
+			minishell->exit_code = 111;
 	}
 	return ;
 }
