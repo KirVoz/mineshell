@@ -15,8 +15,8 @@
 
 static void	update(t_minishell *minishell, const char *new_var, int env_count)
 {
-	minishell->env = ft_realloc_exe(minishell->env, sizeof(char *) * (env_count
-				+ 2));
+	minishell->env = ft_realloc(minishell->env, sizeof(char *) * (env_count),
+		sizeof(char *) * (env_count + 2));
 	if (minishell->env == NULL)
 		exit_fail("Failed to allocate memory for envp_var");
 	minishell->env[env_count] = ft_strdup(new_var);

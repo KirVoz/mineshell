@@ -1,4 +1,4 @@
-prefix=/home/ykiso/minishell/minishell_tester/libraries/readline_lib
+prefix=/home/ykiso/minishell/libraries/readline_lib
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
