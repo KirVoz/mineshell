@@ -77,7 +77,7 @@ char	*expand(t_minishell *minishell, char *token, int *comment_flag)
 	size_t	len;
 
 	current_quote = 0;
-	if (ft_strnstr(token, "#", ft_strlen(token)) || *comment_flag == 1)
+	if ((ft_strnstr(token, "#", ft_strlen(token)) || *comment_flag == 1))
 		delete_comment(token, &current_quote, comment_flag);
 	if (ft_strnstr(token, "$?", ft_strlen(token)))
 		token = expand_question_mark(minishell, token, &current_quote);
