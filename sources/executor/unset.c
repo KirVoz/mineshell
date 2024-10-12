@@ -27,9 +27,9 @@ static int	valid_arg(char *new_var)
 	while (new_var[i])
 	{
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
-		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-		|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
-		|| new_var[i] == '{' || new_var[i] == '}')
+			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
+			|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
+			|| new_var[i] == '{' || new_var[i] == '}')
 			return (1);
 		if (new_var[i] == '\0')
 			return (0);
