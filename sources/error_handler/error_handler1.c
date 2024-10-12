@@ -55,7 +55,7 @@ void	not_valid(t_minishell *minishell, char *cmd)
 {
 	char	*error;
 
-	error = construct_error("export: ", cmd, ": not a valid identifier\n", 0);
+	error = construct_error("export: `", cmd, "': not a valid identifier\n", 0);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 1;

@@ -64,25 +64,7 @@ int	main(int ac, char **av, char **env)
 {
 	t_minishell	minishell;
 
-	if (ac >= 3 && !ft_strncmp(av[1], "-c", 3))
-	{
-		ft_signals();
-		init_minishell(&minishell, env);
-		minishell.tmp->line = ft_strdup(av[2]);
-		while (1)
-		{
-			if (check_line(minishell))
-				continue ;
-			else if (!lexer_main(&minishell, minishell.tmp->line))
-				exit(minishell.exit_code);
-			execute(&minishell);
-			exit_free(&minishell, minishell.exit_code);
-		}
-	}
-	else
-	{
-		process_arguments(ac, av, &minishell);
-		run_minishell(&minishell, env);
-	}
+	process_arguments(ac, av, &minishell);
+	run_minishell(&minishell, env);
 	return (0);
 }

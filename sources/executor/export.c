@@ -86,7 +86,7 @@ void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 	i = 1;
 	if (validation_check(minishell, cur, fd, &i) == 1)
 	{
-		printf("test\n");
+		// printf("test\n");
 		new_var = cur->cmd[i];
 		if (ft_check_valid_identifier(new_var) == 1
 			|| ft_check_valid_identifier(new_var) == 3)
