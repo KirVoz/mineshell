@@ -71,11 +71,20 @@ void	declare_env_var(t_minishell *minishell, int fd)
 	}
 }
 
-static void	handle_invalid_identifier(t_minishell *minishell, char *new_var)
+static void	handle_invalid_identifier(t_minishell *minishell, char *new_var,
+	int bash_err)
 {
-	not_valid(minishell, new_var);
-	if (minishell->tmp->is_child != 0)
-		exit(minishell->exit_code);
+	if (bash_err)
+	{
+		minishell->exit_code = 2;
+		ft_putstr_fd("bash: export: `=': not a valid identifier\n", 2);
+	}
+	else
+	{
+		not_valid(minishell, new_var);
+		if (minishell->tmp->is_child != 0)
+			exit(minishell->exit_code);
+	}
 }
 
 void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
@@ -84,20 +93,22 @@ void	execute_export(t_minishell *minishell, int fd, t_cmd *cur)
 	int		i;
 
 	i = 1;
+	if (ft_check_valid_simbol(cur->cmd[i]) == 1)
+	{
+		handle_invalid_identifier(minishell, cur->cmd[i], 1);
+		return ;
+	}
 	if (validation_check(minishell, cur, fd, &i) == 1)
 	{
-		printf("test\n");
 		new_var = cur->cmd[i];
 		if (ft_check_valid_identifier(new_var) == 1
 			|| ft_check_valid_identifier(new_var) == 3)
 		{
-			handle_invalid_identifier(minishell, new_var);
+			handle_invalid_identifier(minishell, new_var, 0);
 			return ;
 		}
 		else if (ft_check_valid_identifier(new_var) != 3)
 			add_or_update_env_var(minishell, new_var);
-		else
-			minishell->exit_code = 111;
 	}
 	return ;
 }
