@@ -115,7 +115,20 @@ static void	execute_commands(t_minishell *minishell)
 
 void	execute(t_minishell *minishell)
 {
-	update_underscore_variable(minishell);
+	int		i;
+	t_cmd	*tmp;
+
+	tmp = minishell->cmd;
+	i = 0;
+	while (tmp)
+	{
+		i++;
+		tmp = tmp->next;
+	}
+	if (i == 1)
+		update_underscore_variable(minishell);
+	if (i > 1 && !ft_strncmp(minishell->cmd->cmd[0], "env" , 3))
+		update_underscore_variable(minishell);
 	execute_commands(minishell);
 	free_minishell(minishell);
 }

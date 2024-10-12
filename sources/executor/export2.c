@@ -18,19 +18,15 @@ int	ft_check_valid_simbol(char *new_var)
 	int	i;
 
 	i = 0;
-	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
+
+	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
+		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
+		|| new_var[i] == '!' || (new_var[i] == '+' && new_var[i + 1]) 
+		|| new_var[i] == '~' || new_var[i] == '.' || new_var[i] == '{' 
+		|| new_var[i] == '}' || new_var[i] == '\\')
 		return (1);
-	while (new_var[i] != '=')
-	{
-		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
-			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~')
-			return (1);
-		if (new_var[i] == '\0')
-			return (0);
-		i++;
-	}
-	return (0);
+	else
+		return (0);
 }
 
 int	ft_check_valid_identifier(char *new_var)
@@ -51,8 +47,9 @@ int	ft_check_valid_identifier(char *new_var)
 	{
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
 			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-			|| new_var[i] == '!' || new_var[i] == '+' || new_var[i] == '~'
-			|| new_var[i] == '.' || new_var[i] == '/' || new_var[i] == '\\')
+			|| new_var[i] == '!' || (new_var[i] == '+' && new_var[i + 1]) 
+			|| new_var[i] == '~' || new_var[i] == '.' || new_var[i] == '{' 
+			|| new_var[i] == '}' || new_var[i] == '\\')
 			return (1);
 		if (new_var[i] == '\0')
 			return (0);
