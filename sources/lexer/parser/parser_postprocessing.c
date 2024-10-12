@@ -58,7 +58,7 @@ char	**rewrite_empty(t_minishell *minishell,
 	j = 0;
 	while (tokens[i])
 	{
-		if (tokens[i][0] != '\0')
+		if (tokens[i][0] != '\0' || i == 0)
 		{
 			new_ws[j] = minishell->tmp->ws_tmp[i];
 			new_tokens[j] = allocate_dup(tokens[i], "New_tokens[j]");
@@ -87,7 +87,7 @@ char	**del_empty(t_minishell *minishell, char **tokens)
 		return (tokens);
 	while (tokens[i])
 	{
-		if (tokens[i][0] == '\0')
+		if (tokens[i][0] == '\0' && i != 0)
 			j++;
 		i++;
 	}
