@@ -52,9 +52,29 @@ static void	add_or_update_env_var(t_minishell *minishell, const char *new_var)
 	update(minishell, new_var, env_count);
 	minishell->exit_code = 0;
 }
+char	*construct_declare(char *env_var)
+{
+	char	*new_var;
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = 0;
+	new_var = allocate_string(ft_strlen(env_var) + 2, "New_var");
+	while (env_var[i] != '=')
+		new_var[j++] = env_var[i++];
+	new_var[j++] = env_var[i++];
+	new_var[j++] = '"';
+	while(env_var[i])
+		new_var[j++] = env_var[i++];
+	new_var[j++] = '"';
+	new_var[j] = '\0';
+	return (new_var);
+}
 
 void	declare_env_var(t_minishell *minishell, int fd)
 {
+	char	*declare;
 	size_t	env_count;
 	size_t	i;
 
@@ -62,9 +82,11 @@ void	declare_env_var(t_minishell *minishell, int fd)
 	i = -1;
 	while (++i < env_count)
 	{
+		declare = construct_declare(minishell->env[i]);
 		ft_putstr_fd("declare -x ", fd);
-		ft_putstr_fd(minishell->env[i], fd);
+		ft_putstr_fd(declare, fd);
 		ft_putstr_fd("\n", 1);
+		free(declare);
 	}
 }
 
