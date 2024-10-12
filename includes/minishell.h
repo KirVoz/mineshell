@@ -120,6 +120,8 @@ void		handle_output_file(t_minishell *minishell, t_list *tmp,
 void	handle_input_file(t_minishell *minishell, t_list *tmp,
 			int *last_input_fd);
 void		update_underscore_variable(t_minishell *minishell);
+void		ft_free_exe_free(t_minishell *minishell, t_cmd *current);
+
 //export
 void	    declare_env_var(t_minishell *minishell, int fd);
 int			ft_check_valid_simbol(char *new_var);

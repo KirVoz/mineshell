@@ -36,8 +36,7 @@ static void	execute_child(t_minishell *minishell, t_cmd *current,
 			not_found(minishell, current->cmd[0]);
 			exit(minishell->exit_code);
 		}
-		execve(get_path(minishell, current->cmd[0]),
-			current->cmd, minishell->env);
+		ft_free_exe_free(minishell, current);
 		exit(minishell->exit_code);
 	}
 }

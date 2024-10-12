@@ -24,6 +24,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/execute5.c \
 		$(EXE_PATH)/execute6.c \
 		$(EXE_PATH)/execute7.c \
+		$(EXE_PATH)/execute8.c \
 		$(EXE_PATH)/exit.c \
 		$(EXE_PATH)/path.c \
 		$(EXE_PATH)/pwd.c \
