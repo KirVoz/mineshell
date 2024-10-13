@@ -65,10 +65,8 @@ static char	*get_last_command(t_minishell *minishell)
 {
 	t_cmd	*tmp;
 	int		i;
-	char	*full_path;
 
 	tmp = minishell->cmd;
-	full_path = NULL;
 	i = -1;
 	while (tmp->cmd[++i])
 	{
@@ -76,9 +74,9 @@ static char	*get_last_command(t_minishell *minishell)
 		{
 			if (i == 0)
 			{
-				full_path = get_path(minishell, tmp->cmd[i]);
-				if (full_path)
-					return (full_path);
+				get_path(minishell, tmp->cmd[i]);
+				if (minishell->path)
+					return (minishell->path);
 				else
 					return (tmp->cmd[i]);
 			}
@@ -98,6 +96,11 @@ void	update_underscore_variable(t_minishell *minishell)
 	if (last_cmd)
 	{
 		new_value = ft_strjoin("_=", last_cmd);
+		if (minishell->path)
+		{
+			free(minishell->path);
+			minishell->path = NULL;
+		}
 		if (!new_value)
 			exit_fail("Failed to allocate memory for _= variable");
 		update_environment(minishell, new_value);
