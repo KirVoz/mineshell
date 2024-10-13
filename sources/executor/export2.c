@@ -13,22 +13,6 @@
 #include "lexer.h"
 #include "minishell.h"
 
-// int	ft_check_valid_simbol(char *new_var)
-// {
-// 	int	i;
-
-// 	i = 0;
-
-// 	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '#'
-// 		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-// 		|| new_var[i] == '!' || (new_var[i] == '+' && new_var[i + 1]) 
-// 		|| new_var[i] == '~' || new_var[i] == '.' || new_var[i] == '{' 
-// 		|| new_var[i] == '}' || new_var[i] == '\\')
-// 		return (1);
-// 	else
-// 		return (0);
-// }
-
 int	ft_check_valid_simbol(char *new_var)
 {
 	int	i;
@@ -50,8 +34,6 @@ int	ft_check_valid_identifier(char *new_v)
 	i = 0;
 	if (new_v[i] >= '0' && new_v[i] <= '9' && new_v[i] != '=')
 		return (1);
-	if (!ft_strchr(new_v, '='))
-		return (3);
 	while (new_v[i] == '=' || new_v[i] == '\0')
 	{
 		i++;
@@ -69,6 +51,8 @@ int	ft_check_valid_identifier(char *new_v)
 			return (0);
 		i++;
 	}
+	if (!ft_strchr(new_v, '='))
+		return (3);
 	return (0);
 }
 
