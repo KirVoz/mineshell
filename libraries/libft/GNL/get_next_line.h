@@ -27,6 +27,6 @@ char	*truncate_buffer(char *buffer, size_t i);
 char	*ft_strjoin_gnl(char const *s1, char const *s2, ssize_t bytes_read);
 void	*ft_memcpy_gnl(void *dst, const void *src, size_t n);
 char	*ft_strchr_gnl(const char *s, int c);
-size_t  ft_strlen_gnl(const char *s);
+size_t	ft_strlen_gnl(const char *s);
 
 #endif

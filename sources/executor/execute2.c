@@ -19,6 +19,8 @@ int	solo_builtin(char *cmd)
 	char	*cmd_lower;
 
 	len = ft_strlen(cmd);
+	if (len == 0)
+		return (0);
 	cmd_lower = str_to_lower(cmd);
 	if (ft_strncmp(cmd_lower, "cd", len) == 0 || ft_strncmp(cmd_lower, "export",
 			len) == 0 || ft_strncmp(cmd_lower, "unset", len) == 0

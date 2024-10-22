@@ -53,6 +53,7 @@ static pid_t	*fork_processes(t_minishell *minishell, int num_cmd)
 	while (++i < num_cmd)
 	{
 		pids[i] = fork();
+		g_child = 1;
 		if (pids[i] == -1)
 		{
 			perror("fork");
@@ -60,6 +61,7 @@ static pid_t	*fork_processes(t_minishell *minishell, int num_cmd)
 		}
 		if (pids[i] == 0)
 		{
+			// ft_default_signals();
 			execute_child(minishell, cur, i, num_cmd);
 		}
 		cur = cur->next;
@@ -108,6 +110,8 @@ static void	execute_commands(t_minishell *minishell)
 			free_pipes(minishell->pipes, num_cmd);
 		}
 		wait_for_processes(pids, num_cmd, minishell);
+		// ft_signals();
+		g_child = 0;
 		free(pids);
 	}
 }

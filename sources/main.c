@@ -23,15 +23,6 @@ static int	check_line(t_minishell minishell)
 	return (0);
 }
 
-static void	process_arguments(int ac, char **av, t_minishell *minishell)
-{
-	if (ac > 1)
-	{
-		handle_incorrect_arguments(minishell, av[1]);
-		exit(1);
-	}
-}
-
 static void	read_and_process_commands(t_minishell *minishell)
 {
 	while (1)
@@ -39,7 +30,7 @@ static void	read_and_process_commands(t_minishell *minishell)
 		minishell->tmp->line = readline(PROMPT);
 		if (!minishell->tmp->line)
 		{
-			printf("exit\n");
+			printf("\e[A\e[11Cexit\n");
 			exit_free(minishell, 0);
 			break ;
 		}
@@ -52,19 +43,18 @@ static void	read_and_process_commands(t_minishell *minishell)
 	}
 }
 
-static void	run_minishell(t_minishell *minishell, char **env)
-{
-	ft_signals();
-	init_minishell(minishell, env);
-	read_and_process_commands(minishell);
-	exit_free(minishell, minishell->exit_code);
-}
-
 int	main(int ac, char **av, char **env)
 {
 	t_minishell	minishell;
 
-	process_arguments(ac, av, &minishell);
-	run_minishell(&minishell, env);
+	ft_signals();
+	init_minishell(&minishell, env);
+	if (ac > 1)
+	{
+		handle_incorrect_arguments(&minishell, av[1]);
+		exit_free(&minishell, (&minishell)->exit_code);
+	}
+	read_and_process_commands(&minishell);
+	exit_free(&minishell, (&minishell)->exit_code);
 	return (0);
 }
