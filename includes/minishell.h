@@ -31,9 +31,9 @@
 # define PROMPT "minishell$ "
 # define PROMPT_HEREDOC "> "
 
-volatile sig_atomic_t		g_child;
+extern volatile sig_atomic_t	g_child;
 
-typedef struct s_minishell	t_minishell;
+typedef struct s_minishell		t_minishell;
 
 typedef struct s_cmd
 {

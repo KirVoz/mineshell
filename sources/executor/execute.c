@@ -13,6 +13,8 @@
 #include "lexer.h"
 #include "minishell.h"
 
+volatile sig_atomic_t	g_child = 0;
+
 static void	execute_child(t_minishell *minishell, t_cmd *current,
 		int i, int num_cmd)
 {
@@ -60,10 +62,7 @@ static pid_t	*fork_processes(t_minishell *minishell, int num_cmd)
 			exit(EXIT_FAILURE);
 		}
 		if (pids[i] == 0)
-		{
-			// ft_default_signals();
 			execute_child(minishell, cur, i, num_cmd);
-		}
 		cur = cur->next;
 	}
 	return (pids);
@@ -110,7 +109,6 @@ static void	execute_commands(t_minishell *minishell)
 			free_pipes(minishell->pipes, num_cmd);
 		}
 		wait_for_processes(pids, num_cmd, minishell);
-		// ft_signals();
 		g_child = 0;
 		free(pids);
 	}

@@ -16,7 +16,6 @@ static void	ctrl_c(int signal)
 {
 	if (signal == SIGINT)
 	{
-		// printf("g_child: %d\n", g_child);
 		printf("\n");
 		if (!g_child)
 		{
@@ -35,20 +34,6 @@ static void	ctrl_backslash(int signal)
 			printf("Quit: 3\n");
 	}
 }
-
-// void	ft_default_signals(void)
-// {
-// 	struct sigaction	sa;
-
-//     printf("Restoring default signal handling in child process\n");
-// 	rl_catch_signals = 0;
-// 	sa.sa_handler = SIG_DFL;
-// 	sa.sa_flags = 0;
-// 	sigemptyset(&sa.sa_mask);
-// 	sigaction(SIGINT, &sa, NULL);
-// 	sa.sa_handler = ctrl_backslash;
-// 	sigaction(SIGQUIT, &sa, NULL);
-// }
 
 void	ft_signals(void)
 {
