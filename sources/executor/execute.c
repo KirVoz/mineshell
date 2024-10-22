@@ -108,7 +108,8 @@ static void	execute_commands(t_minishell *minishell)
 			close_pipes(minishell->pipes, num_cmd);
 			free_pipes(minishell->pipes, num_cmd);
 		}
-		wait_for_processes(pids, num_cmd, minishell);
+		if (!g_child)
+			wait_for_processes(pids, num_cmd, minishell);
 		g_child = 0;
 		free(pids);
 	}
