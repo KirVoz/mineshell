@@ -64,7 +64,11 @@ static char	*allocate_and_construct_shlvl(int level)
 	new_shlvl = malloc(sizeof(char) * (length + 1));
 	if (!new_shlvl)
 		exit_fail("Failed to allocate memory for new SHLVL");
-	ft_memcpy(new_shlvl, "SHLVL=", 6);
+	if (ft_memcpy(new_shlvl, "SHLVL=", 6) == NULL)
+	{
+		free(new_shlvl);
+		exit_fail("Failed to copy SHLVL to new_shlvl");
+	}
 	convert_level_to_string(new_shlvl + 6, level, length - 6);
 	return (new_shlvl);
 }

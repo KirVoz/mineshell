@@ -49,7 +49,7 @@ void	parser_main(t_minishell **minishell, char ***tokens)
 			continue ;
 		}
 		process_token(minishell, current, (*tokens)[i], &i);
-		if (!current->cmd)
+		if (!current->cmd && !(*tokens)[i])
 			current->cmd = array_init();
 	}
 	(*minishell)->cmd = cmd_list;

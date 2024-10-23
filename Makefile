@@ -26,6 +26,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/execute7.c \
 		$(EXE_PATH)/execute8.c \
 		$(EXE_PATH)/exit.c \
+		$(EXE_PATH)/exit2.c \
 		$(EXE_PATH)/path.c \
 		$(EXE_PATH)/pwd.c \
 		$(EXE_PATH)/cd.c \
@@ -73,7 +74,7 @@ OSRC = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 CC = cc
 
-INCFLAGS = -I./includes -I$(READLINE_LIB_PATH)/readline/include -DREADLINE_LIBRARY
+INCFLAGS = -I./includes -I$(READLINE_LIB_PATH)/include/readline/ -DREADLINE_LIBRARY
 LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline -lncurses
 
 CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
@@ -91,7 +92,7 @@ $(NAME): $(READLINE_LIB_PATH) $(OSRC) $(LIBFT)
 $(READLINE_LIB_PATH):
 	@echo "Configuring readline ..."
 	@mkdir -p $(READLINE_LIB_PATH)
-	@cd $(READLINE_PATH) && ./configure --prefix=$(READLINE_LIB_PATH) --with-curses &> /dev/null
+	@cd $(READLINE_PATH) && ./configure --prefix=$(READLINE_LIB_PATH) &> /dev/null
 	@echo "Installing readline ..."
 	@make -C $(READLINE_PATH) install &> /dev/null
 	@echo "Readline installed"

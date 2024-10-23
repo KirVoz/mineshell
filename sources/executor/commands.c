@@ -18,15 +18,18 @@ t_blin	*get_commands(void)
 	t_blin	*builtins;
 
 	builtins = malloc(sizeof(t_blin) * 7);
-	if (!builtins)
+	if (builtins == NULL)
 		exit_fail("Failed to allocate memory for builtins");
-	builtins[0] = (t_blin){"cd", execute_cd};
-	builtins[1] = (t_blin){"echo", execute_echo};
-	builtins[2] = (t_blin){"pwd", execute_pwd};
-	builtins[3] = (t_blin){"export", execute_export};
-	builtins[4] = (t_blin){"unset", execute_unset};
-	builtins[5] = (t_blin){"env", execute_env};
-	builtins[6] = (t_blin){"exit", execute_exit};
+	else
+	{
+		builtins[0] = (t_blin){"cd", execute_cd};
+		builtins[1] = (t_blin){"echo", execute_echo};
+		builtins[2] = (t_blin){"pwd", execute_pwd};
+		builtins[3] = (t_blin){"export", execute_export};
+		builtins[4] = (t_blin){"unset", execute_unset};
+		builtins[5] = (t_blin){"env", execute_env};
+		builtins[6] = (t_blin){"exit", execute_exit};
+	}
 	return (builtins);
 }
 

@@ -59,3 +59,7 @@ libraries/readline/history.pc
 minishell_tester/
 minishell_tester2/
 sources/lexer/debug_functions.c
+
+# STATICANALIZER
+
+vgcore

@@ -32,6 +32,8 @@ static void	append_to_environment(t_minishell *minishell, char *new_value)
 		j++;
 	}
 	new_env[env_len] = ft_strdup(new_value);
+	if (!new_env[env_len])
+		exit_fail("Failed to allocate memory for new environment variable");
 	new_env[env_len + 1] = NULL;
 	free(minishell->env);
 	minishell->env = NULL;

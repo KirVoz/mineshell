@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute7.c                                         :+:      :+:    :+:   */
+/*   exit.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -68,7 +68,9 @@ static int	get_exit_code(char *command)
 {
 	long long	exit_value;
 
-	exit_value = atoll(command);
+	exit_value = ft_atoll(command);
+	if (errno == ERANGE)
+		return (-1);
 	if (exit_value > 255 || exit_value < 0)
 		return ((int)(exit_value % 256));
 	return ((int)exit_value);
@@ -76,27 +78,26 @@ static int	get_exit_code(char *command)
 
 void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 {
-	int		exit_code;
 	char	*command;
 
 	(void)fd;
-	if (cur->cmd[1] && cur->cmd[2] && !ft_isalpha(cur->cmd[1][0]))
+	if (cur->cmd[1] && cur->cmd[2] && !is_valid_number(cur->cmd[1]))
 	{
 		arg_count_error(minishell, "exit");
 		return ;
 	}
 	if (minishell->tmp->is_child == 0)
 		ft_putstr_fd("exit\n", 2);
-	command = validate_exit_arg(cur->cmd[1]);
-	if (!command)
+	if (cur->cmd[1] != NULL)
 	{
-		numeric_error(minishell, "exit", cur->cmd[1]);
-		exit_code = 255;
-	}
-	else
-	{
-		exit_code = get_exit_code(command);
+		command = validate_exit_arg(cur->cmd[1]);
+		if (command == NULL || get_exit_code(command) == -1)
+			numeric_error(minishell, "exit", cur->cmd[1]);
+		else
+			minishell->exit_code = get_exit_code(command);
 		free(command);
 	}
-	exit_free(minishell, exit_code);
+	else
+		minishell->exit_code = 0;
+	exit_free(minishell, minishell->exit_code);
 }

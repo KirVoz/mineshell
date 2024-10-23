@@ -43,7 +43,10 @@ static void	change_directory(t_minishell *minishell, const char *new_path)
 	if (chdir(new_path) || getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		if (minishell->tmp->is_child != 0)
+		{	
 			free(old_pwd);
+			old_pwd = NULL;
+		}
 		deleted_dir(minishell);
 	}
 	else
@@ -51,7 +54,8 @@ static void	change_directory(t_minishell *minishell, const char *new_path)
 		update_pwd_vars(minishell, old_pwd, cwd);
 		minishell->exit_code = 0;
 	}
-	free(old_pwd);
+	if (old_pwd != NULL)
+		free(old_pwd);
 }
 
 static void	change_to_home_directory(t_minishell *minishell)

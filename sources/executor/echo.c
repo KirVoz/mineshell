@@ -12,61 +12,50 @@
 
 #include "minishell.h"
 
-int	is_valid_n(char *str, int ws, int cur_i)
+static int	is_n_str(char *str)
 {
-	int	i;
-
-	if (str[0] != '-' && cur_i == 1)
-		return (3);
-	if (ws == 1)
-	{
-		i = 1;
-		if (str[0] == '-' || str[1] == 'n')
-		{
-			while (str[i++] == 'n')
-				if (str[i] == '\0')
-					return (1);
-			return (0);
-		}
-	}
-	else if (ws == 0)
-	{
-		i = 0;
-		while (str[i++] == 'n')
-			if (str[i] == '\0')
-				return (1);
+	if (str[0] != '-' || str[1] != 'n')
 		return (0);
+	str += 2;
+	while (*str)
+	{
+		if (*str != 'n')
+			return (0);
+		str++;
 	}
-	return (2);
+	return (1);
 }
 
-int	check_n(t_minishell *minishell, char **cmd, int *i)
+static int	is_n_sequence(char *str)
 {
-	int	is_valid;
-	int	previous_is_valid;
-	int	ws;
-	int	j;
-
-	is_valid = -1;
-	ws = 1;
-	j = *i;
-	while (cmd[j])
+	while (*str)
 	{
-		previous_is_valid = is_valid;
-		is_valid = is_valid_n(cmd[j], ws, j);
-		if (is_valid == 1)
-		{
-			ws = minishell->cmd->whitespace[j];
-			j++;
-			continue ;
-		}
-		else if (((is_valid == 2 && is_valid != 3) || (is_valid == 0
-					&& previous_is_valid == 1 && ws != 0)))
-			break ;
-		return (1);
+		if (*str != 'n')
+			return (0);
+		str++;
 	}
-	*i = j;
-	return (0);
+	return (1);
+}
+
+static int	check_newline(char **cmd, int *whitespace, int *i)
+{
+	int	current;
+	int	newline;
+
+	current = *i;
+	newline = 1;
+	if (!cmd[current] || !is_n_str(cmd[current]))
+		return (1);
+	current++;
+	while (cmd[current] && (is_n_str(cmd[current]) || (!whitespace[current - 1]
+				&& is_n_sequence(cmd[current]))))
+		current++;
+	if (current > *i)
+	{
+		*i = current;
+		newline = 0;
+	}
+	return (newline);
 }
 
 void	execute_echo(t_minishell *minishell, int fd, t_cmd *cur)
@@ -78,7 +67,7 @@ void	execute_echo(t_minishell *minishell, int fd, t_cmd *cur)
 	i = 1;
 	(void)file_fd;
 	if (cur->cmd[1])
-		newline = check_n(minishell, cur->cmd, &i);
+		newline = check_newline(cur->cmd, cur->whitespace, &i);
 	else
 		newline = 1;
 	while (cur->cmd[i] != NULL)

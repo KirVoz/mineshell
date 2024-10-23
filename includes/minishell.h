@@ -98,6 +98,8 @@ t_cmd		*init_cmd_node(size_t ws_count);
 void		init_minishell(t_minishell *minishell, char **env);
 /*utils.c*/
 void		*ft_realloc_exe(void *ptr, size_t size);
+long long	ft_atoll(const char *str);
+int			is_valid_number(const char *str);
 /*emulated comms*/
 int			find_string_in_array(char **array, const char *str, size_t n);
 void		execute_cd(t_minishell *minishell, int fd, t_cmd *cur);
@@ -139,9 +141,7 @@ int			ft_check_valid_identifier(char *new_var);
 int			validation_check(t_minishell *minishell, t_cmd *cur,
 				int fd, int *i);
 char		*construct_declare(char *env_var);
-//signals
 void		ft_signals(void);
-void		ft_default_signals(void);
 //utils.c
 char		*str_to_lower(char *str);
 int			ft_isspace(char c);

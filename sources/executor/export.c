@@ -15,14 +15,25 @@
 
 static void	update(t_minishell *minishell, const char *new_var, int env_count)
 {
+	int i;
+	
 	minishell->env = ft_realloc(minishell->env, sizeof(char *) * (env_count),
 			sizeof(char *) * (env_count + 2));
 	if (minishell->env == NULL)
+	
 		exit_fail("Failed to allocate memory for envp_var");
-	minishell->env[env_count] = ft_strdup(new_var);
+	else
+		minishell->env[env_count] = ft_strdup(new_var);
 	if (minishell->env[env_count] == NULL)
+	{
+		i = -1;
+		while (++i < env_count)
+			free(minishell->env[i]);
+		free(minishell->env);
 		exit_fail("Failed to allocate memory for new_var");
-	minishell->env[env_count + 1] = NULL;
+	}
+	else
+		minishell->env[env_count + 1] = NULL;
 }
 
 static void	add_or_update_env_var(t_minishell *minishell, const char *new_var)

@@ -74,8 +74,11 @@ void	free_minishell(t_minishell *minishell)
 		free(minishell->path);
 		minishell->path = NULL;
 	}
-	minishell->tmp->current_heredoc = 0;
-	minishell->tmp->is_child = -1;
+	if (minishell->tmp)
+	{
+		minishell->tmp->current_heredoc = 0;
+		minishell->tmp->is_child = -1;
+	}
 }
 
 void	exit_free(t_minishell *minishell, int exit_code)

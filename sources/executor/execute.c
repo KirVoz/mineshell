@@ -41,6 +41,7 @@ static void	execute_child(t_minishell *minishell, t_cmd *current,
 		ft_free_exe_free(minishell, current);
 		exit(minishell->exit_code);
 	}
+	exit(minishell->exit_code);
 }
 
 static pid_t	*fork_processes(t_minishell *minishell, int num_cmd)
@@ -79,7 +80,7 @@ static void	wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
 	while (i < num_cmd)
 	{
 		waitpid(pids[i], &status, 0);
-		if (WIFEXITED(status))
+		if (!g_child && WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 		i++;
 	}
@@ -108,8 +109,7 @@ static void	execute_commands(t_minishell *minishell)
 			close_pipes(minishell->pipes, num_cmd);
 			free_pipes(minishell->pipes, num_cmd);
 		}
-		if (!g_child)
-			wait_for_processes(pids, num_cmd, minishell);
+		wait_for_processes(pids, num_cmd, minishell);
 		g_child = 0;
 		free(pids);
 	}
@@ -122,6 +122,8 @@ void	execute(t_minishell *minishell)
 
 	tmp = minishell->cmd;
 	i = 0;
+	if (!tmp)
+		return ;
 	while (tmp)
 	{
 		i++;
