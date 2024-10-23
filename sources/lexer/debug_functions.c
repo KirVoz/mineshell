@@ -61,7 +61,7 @@ void	print_list_state_v(t_minishell *minishell, char *name)
 			j++;
 			files = files->next;
 		}
-		
+		printf("\n");
 		for (int i = 0; current->heredoc && current->heredoc[i]; i++)
 		{
 			printf("   heredoc: ");

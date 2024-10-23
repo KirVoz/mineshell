@@ -28,7 +28,7 @@ size_t	int_array_len(int *array)
 	size_t	i;
 
 	i = 0;
-	while (array[i] != -1)
+	while (array[i] != -9999)
 		i++;
 	return (i);
 }

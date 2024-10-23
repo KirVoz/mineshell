@@ -79,7 +79,7 @@ static void	wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
 	while (i < num_cmd)
 	{
 		waitpid(pids[i], &status, 0);
-		if (WIFEXITED(status))
+		if (!g_child && WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 		i++;
 	}
@@ -108,8 +108,7 @@ static void	execute_commands(t_minishell *minishell)
 			close_pipes(minishell->pipes, num_cmd);
 			free_pipes(minishell->pipes, num_cmd);
 		}
-		if (!g_child)
-			wait_for_processes(pids, num_cmd, minishell);
+		wait_for_processes(pids, num_cmd, minishell);
 		g_child = 0;
 		free(pids);
 	}

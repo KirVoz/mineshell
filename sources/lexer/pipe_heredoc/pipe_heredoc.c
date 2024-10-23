@@ -77,11 +77,18 @@ char	**handle_pipe(t_minishell *minishell, char **tokens)
 char	**pipe_heredoc_main(t_minishell *minishell, char *line)
 {
 	char	**tokens;
+	char	mode;
 
 	tokens = tokenizator(&(minishell->tmp->ws_tmp), line);
-	if (hanging_pipe_heredoc(line) == 'h')
+	mode = hanging_pipe_heredoc(line);
+	if (mode == 'h')
 		tokens = handle_heredoc(minishell, tokens);
-	else if (hanging_pipe_heredoc(line) == 'p')
+	else if (mode == 'p')
 		tokens = handle_pipe(minishell, tokens);
+	else if (mode == 'b')
+	{
+		tokens = handle_heredoc(minishell, tokens);
+		tokens = handle_pipe(minishell, tokens);
+	}
 	return (tokens);
 }
