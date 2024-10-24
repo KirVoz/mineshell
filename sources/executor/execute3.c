@@ -86,4 +86,6 @@ void	handle_file_dir(t_minishell *minishell, char **cmd)
 		permission_denied(minishell, *cmd, 0);
 		exit(minishell->exit_code);
 	}
+	else
+		ft_free_exe_free(minishell, cmd);
 }

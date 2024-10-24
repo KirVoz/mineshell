@@ -13,12 +13,12 @@
 #include "lexer.h"
 #include "minishell.h"
 
-void	ft_free_exe_free(t_minishell *minishell, t_cmd *current)
+void	ft_free_exe_free(t_minishell *minishell, char **cmd)
 {
 	free(minishell->path);
 	minishell->path = NULL;
-	execve(get_path(minishell, current->cmd[0]),
-		current->cmd, minishell->env);
+	execve(get_path(minishell, cmd[0]),
+		cmd, minishell->env);
 	free(minishell->path);
 	minishell->path = NULL;
 }

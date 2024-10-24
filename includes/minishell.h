@@ -163,6 +163,6 @@ void		deleted_dir(t_minishell *minishell);
 void		handle_incorrect_arguments(t_minishell *minishell, char *av);
 //path.c
 char		*get_path(t_minishell *minishell, char *cmd);
-void		ft_free_exe_free(t_minishell *minishell, t_cmd *current);
+void		ft_free_exe_free(t_minishell *minishell, char **cmd);
 
 #endif
