@@ -12,25 +12,6 @@
 
 #include "minishell.h"
 
-void	*ft_realloc_exe(void *ptr, size_t size)
-{
-	void	*new_ptr;
-
-	if (ptr == NULL)
-		return (malloc(size));
-	if (size == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new_ptr = malloc(size);
-	if (new_ptr == NULL)
-		return (NULL);
-	ft_memcpy(new_ptr, ptr, size);
-	free(ptr);
-	return (new_ptr);
-}
-
 char	*str_to_lower(char *str)
 {
 	char	*lower_str;
@@ -52,4 +33,27 @@ int	ft_isspace(char c)
 		|| c == ' ')
 		return (1);
 	return (0);
+}
+
+int	ft_array_len(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+		i++;
+	return (i);
+}
+
+void	print_exit_util(t_minishell *minishell)
+{
+	printf("PWD environment variable not found\n");
+	minishell->exit_code = 1;
+}
+
+void	error_free_exit(t_minishell *minishell, char *new_entry)
+{
+	printf("Memory allocation error\n");
+	free(new_entry);
+	minishell->exit_code = 1;
 }

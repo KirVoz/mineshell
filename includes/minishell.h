@@ -97,12 +97,15 @@ void		init_tmp(t_mem *tmp);
 t_cmd		*init_cmd_node(size_t ws_count);
 void		init_minishell(t_minishell *minishell, char **env);
 /*utils.c*/
-void		*ft_realloc_exe(void *ptr, size_t size);
 long long	ft_atoll(const char *str);
 int			is_valid_number(const char *str);
+void		error_free_exit(t_minishell *minishell, char *new_entry);
+void		print_exit_util(t_minishell *minishell);
 /*emulated comms*/
 int			find_string_in_array(char **array, const char *str, size_t n);
 void		execute_cd(t_minishell *minishell, int fd, t_cmd *cur);
+void		update_env_var(t_minishell *minishell, const char *var_name,
+			const char *new_value, int len);
 void		execute_echo(t_minishell *minishell, int fd, t_cmd *cur);
 void		execute_pwd(t_minishell *minishell, int fd, t_cmd *cur);
 void		execute_export(t_minishell *minishell, int fd, t_cmd *cur);
@@ -145,6 +148,7 @@ void		ft_signals(void);
 //utils.c
 char		*str_to_lower(char *str);
 int			ft_isspace(char c);
+int			ft_array_len(char **array);
 //error
 void		exit_fail(const char *exit_message);
 char		*construct_error(char *arg1, char *arg2, char *arg3, char mode);
