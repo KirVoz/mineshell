@@ -31,6 +31,8 @@ static int	calculate_shlvl_length(int level)
 
 	temp = level;
 	length = 6;
+	if (temp == 0)
+		return (7);
 	while (temp > 0)
 	{
 		length++;
@@ -79,6 +81,8 @@ char	*increment_shlvl(const char *shlvl)
 	int	new_level;
 
 	current_level = ft_atoi(shlvl + 6);
+	if (current_level < 0)
+		return (allocate_and_construct_shlvl(0));
 	new_level = get_new_shlvl(current_level);
 	return (allocate_and_construct_shlvl(new_level));
 }

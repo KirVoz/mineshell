@@ -22,9 +22,7 @@ static void	copy_env_var(t_minishell *minishell, char **env, int *i, int *j)
 			exit_fail("Failed to allocate memory for incremented SHLVL");
 	}
 	else
-	{
 		minishell->env[*j] = allocate_dup(env[*i], "Env[j] in init_envp");
-	}
 	(*j)++;
 	(*i)++;
 }
@@ -42,9 +40,7 @@ void	init_envp(t_minishell *minishell, char **env)
 	i = 0;
 	j = 0;
 	while (env[i] != NULL)
-	{
 		copy_env_var(minishell, env, &i, &j);
-	}
 	minishell->env[j] = NULL;
 }
 
