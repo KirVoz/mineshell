@@ -59,6 +59,8 @@ int	file_dir_check(char *cmd)
 {
 	while (ft_isspace(*cmd))
 		cmd++;
+	if (*cmd == '.' && *(cmd + 1) == '/' && *(cmd + 2) == '\0')
+		return (1);
 	if ((*cmd == '/' || (*cmd == '.' && *(cmd + 1) == '/')
 			|| (*cmd == '.' && *(cmd + 1) == '.' && *(cmd + 2) == '/'))
 		&& ft_strncmp(cmd, "./minishell", ft_strlen(cmd)) != 0)
