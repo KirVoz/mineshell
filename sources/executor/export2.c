@@ -39,7 +39,7 @@ int	ft_check_valid_identifier(char *new_v)
 		i++;
 		return (1);
 	}
-	while (new_v[i] != '=')
+	while (ft_strchr(new_v, '=') && new_v[i] != '=')
 	{
 		if (new_v[i] == '@' || new_v[i] == '*' || new_v[i] == '#'
 			|| new_v[i] == '?' || new_v[i] == '-' || new_v[i] == '$'

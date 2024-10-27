@@ -31,9 +31,9 @@ static void	execute_child(t_minishell *minishell, t_cmd *current,
 			return (no_path_file(minishell, current->cmd[0]));
 		if (file_dir_check(current->cmd[0]))
 			return (handle_file_dir(minishell, current->cmd));
-		if (!get_path(minishell, current->cmd[0])
+		if (current->cmd[0][0] != '\0' && (!get_path(minishell, current->cmd[0])
 			|| !ft_strncmp(current->cmd[0], ".", ft_strlen(current->cmd[0]))
-			|| !ft_strncmp(current->cmd[0], "..", ft_strlen(current->cmd[0])))
+			|| !ft_strncmp(current->cmd[0], "..", ft_strlen(current->cmd[0]))))
 		{
 			not_found(minishell, current->cmd[0]);
 			exit(minishell->exit_code);
@@ -80,7 +80,7 @@ static void	wait_for_processes(pid_t *pids, int num_cmd, t_minishell *minishell)
 	while (i < num_cmd)
 	{
 		waitpid(pids[i], &status, 0);
-		if (!g_child && WIFEXITED(status))
+		if (WIFEXITED(status))
 			exit_code = WEXITSTATUS(status);
 		i++;
 	}

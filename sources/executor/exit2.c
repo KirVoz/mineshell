@@ -17,7 +17,7 @@ static long long	check_overflow(long long res, int sign, char next_digit)
 {
 	if (sign == 1 && (res > (LLONG_MAX - (next_digit - '0')) / 10))
 		errno = ERANGE;
-	if (sign == -1 && (res > (-(LLONG_MIN + (next_digit - '0')) / 10)))
+	if (sign == -1 && (-res < (LLONG_MIN + (next_digit - '0')) / 10))
 		errno = ERANGE;
 	return (res);
 }

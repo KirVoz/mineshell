@@ -71,8 +71,10 @@ static int	get_exit_code(char *command)
 	exit_value = ft_atoll(command);
 	if (errno == ERANGE)
 		return (-1);
-	if (exit_value > 255 || exit_value < 0)
+	if (exit_value > 255)
 		return ((int)(exit_value % 256));
+	else if (exit_value < 0)
+		return ((int)(exit_value % 256) + 256);
 	return ((int)exit_value);
 }
 
@@ -81,13 +83,13 @@ void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 	char	*command;
 
 	(void)fd;
-	if (cur->cmd[1] && cur->cmd[2] && !is_valid_number(cur->cmd[1]))
+	if (cur->cmd[1] && cur->cmd[2])
 	{
 		arg_count_error(minishell, "exit");
 		return ;
 	}
 	if (minishell->tmp->is_child == 0)
-		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit\n", 1);
 	if (cur->cmd[1] != NULL)
 	{
 		command = validate_exit_arg(cur->cmd[1]);

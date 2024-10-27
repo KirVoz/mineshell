@@ -20,7 +20,8 @@ int	should_merge(char **tokens, int i, int *ws_tmp)
 		&& (i == 0
 			|| ft_strncmp(tokens[i - 1], "|", ft_strlen(tokens[i - 1])) != 0)
 		&& ft_strncmp(tokens[i + 1], "|", ft_strlen(tokens[i + 1])) != 0
-		&& ws_tmp[i] == 0 && *(tokens[i]) != '-')
+		// && ws_tmp[i] == 0 && *(tokens[i]) != '-')
+		&& ws_tmp[i] == 0)
 		return (1);
 	return (0);
 }
