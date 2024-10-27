@@ -22,10 +22,10 @@ int	solo_builtin(char *cmd)
 	if (len == 0)
 		return (0);
 	cmd_lower = str_to_lower(cmd);
-	if (ft_strncmp(cmd_lower, "cd", len) == 0 || ft_strncmp(cmd_lower, "export",
-			len) == 0 || ft_strncmp(cmd_lower, "unset", len) == 0
-		|| ft_strncmp(cmd_lower, "env", len) == 0 || ft_strncmp(cmd_lower,
-			"exit", len) == 0)
+	if (ft_strncmp(cmd_lower, "cd", 2) == 0 || ft_strncmp(cmd_lower, "export",
+			6) == 0 || ft_strncmp(cmd_lower, "unset", 5) == 0
+		|| ft_strncmp(cmd_lower, "env", 3) == 0 || ft_strncmp(cmd_lower,
+			"exit", 4) == 0)
 	{
 		free(cmd_lower);
 		return (1);
@@ -36,16 +36,14 @@ int	solo_builtin(char *cmd)
 
 int	is_builtin(char *cmd)
 {
-	int		len;
 	char	*cmd_lower;
 
-	len = ft_strlen(cmd);
 	cmd_lower = str_to_lower(cmd);
-	if (ft_strncmp(cmd_lower, "echo", len) == 0 || ft_strncmp(cmd_lower, "cd",
-			len) == 0 || ft_strncmp(cmd_lower, "pwd", len) == 0
-		|| ft_strncmp(cmd_lower, "export", len) == 0 || ft_strncmp(cmd_lower,
-			"unset", len) == 0 || ft_strncmp(cmd_lower, "env", len) == 0
-		|| ft_strncmp(cmd_lower, "exit", len) == 0)
+	if (ft_strncmp(cmd_lower, "echo", 4) == 0 || ft_strncmp(cmd_lower, "cd",
+			2) == 0 || ft_strncmp(cmd_lower, "pwd", 3) == 0
+		|| ft_strncmp(cmd_lower, "export", 6) == 0 || ft_strncmp(cmd_lower,
+			"unset", 5) == 0 || ft_strncmp(cmd_lower, "env", 3) == 0
+		|| ft_strncmp(cmd_lower, "exit", 4) == 0)
 	{
 		free(cmd_lower);
 		return (1);
