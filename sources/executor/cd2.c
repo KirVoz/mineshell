@@ -1,45 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   cd2.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aaleksee <aaleksee@student.42yerevan.am>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/09 17:16:28 by kvoznese          #+#    #+#             */
-/*   Updated: 2024/10/09 17:16:29 by kvoznese         ###   ########.fr       */
+/*   Created: 2024/10/30 00:57:22 by aaleksee          #+#    #+#             */
+/*   Updated: 2024/10/30 00:57:24 by aaleksee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	update_env_var(t_minishell *minishell, const char *var_name,
-		const char *new_value, int len)
-{
-	int		var_index;
-	char	*new_entry;
-	char	**new_env;
-
-	var_index = find_string_in_array(minishell->env, var_name,
-			ft_strlen(var_name));
-	new_entry = ft_strjoin(var_name, new_value);
-	if (!new_entry)
-		return (error_free_exit(minishell, new_entry));
-	if (var_index != -1)
-	{
-		free(minishell->env[var_index]);
-		minishell->env[var_index] = new_entry;
-	}
-	else
-	{
-		new_env = ft_realloc(minishell->env, sizeof(char *) * (len),
-				sizeof(char *) * (len + 2));
-		if (!new_env)
-			return (error_free_exit(minishell, new_entry));
-		new_env[len] = new_entry;
-		new_env[len + 1] = NULL;
-		minishell->env = new_env;
-	}
-}
 
 static void	update_pwd_vars(t_minishell *minishell, const char *old_pwd,
 		const char *new_path)
@@ -51,10 +22,9 @@ static void	update_pwd_vars(t_minishell *minishell, const char *old_pwd,
 	update_env_var(minishell, "PWD=", new_path, len);
 }
 
-static void	change_directory(t_minishell *minishell, const char *new_path)
+static void	setup_old_pwd(t_minishell *minishell, char **old_pwd)
 {
 	char	cwd[1024];
-	char	*old_pwd;
 	int		i;
 
 	i = find_string_in_array(minishell->env, "PWD=", 4);
@@ -62,19 +32,32 @@ static void	change_directory(t_minishell *minishell, const char *new_path)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
-			perror("getcwd");
-			minishell->exit_code = 1;
-			return;
+			printf("!getcwd\n");
+			no_file(minishell, "PWD");
+			*old_pwd = NULL;
+			return ;
 		}
-		old_pwd = ft_strdup(cwd);
+		*old_pwd = ft_strdup(cwd);
 		update_env_var(minishell, "PWD=", cwd, ft_array_len(minishell->env));
 	}
 	else
-		old_pwd = ft_strdup(minishell->env[i] + 4);
-	if (chdir(new_path) || getcwd(cwd, sizeof(cwd)) == NULL)
+		*old_pwd = ft_strdup(minishell->env[i] + 4);
+}
+
+static void	change_directory(t_minishell *minishell, char *new_path)
+{
+	char	cwd[1024];
+	char	*old_pwd;
+
+	setup_old_pwd(minishell, &old_pwd);
+	if (old_pwd == NULL)
+		return ;
+	if (chdir(new_path) != 0)
+		no_file(minishell, new_path);
+	else if (getcwd(cwd, sizeof(cwd)) == NULL)
 	{
 		if (minishell->tmp->is_child != 0)
-		{	
+		{
 			free(old_pwd);
 			old_pwd = NULL;
 		}
@@ -117,8 +100,8 @@ void	execute_cd(t_minishell *minishell, int fd, t_cmd *cur)
 			return ;
 		}
 		else
-			change_directory(minishell, minishell->env[find_string_in_array(
-				minishell->env, "OLDPWD=", 7)] + 7);
+			change_directory(minishell, minishell->env
+			[find_string_in_array(minishell->env, "OLDPWD=", 7)] + 7);
 	}
 	else
 		change_directory(minishell, cur->cmd[1]);

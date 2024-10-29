@@ -40,7 +40,7 @@ void	execute_pwd(t_minishell *minishell, int fd, t_cmd *cur)
 		{
 			perror("getcwd");
 			minishell->exit_code = 1;
-			return;
+			return ;
 		}
 		update_env_var(minishell, "PWD=", cwd, ft_array_len(minishell->env));
 	}
