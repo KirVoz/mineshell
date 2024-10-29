@@ -123,7 +123,7 @@ void	execute(t_minishell *minishell)
 	tmp = minishell->cmd;
 	i = 0;
 	if (!tmp)
-		return ;
+		free_minishell(minishell);
 	while (tmp)
 	{
 		i++;

@@ -49,6 +49,8 @@ int	lexer_main(t_minishell *minishell, char *line)
 	else
 		minishell->tmp->tokens = tokenizator(&(minishell->tmp->ws_tmp), line);
 	// print_tokens_state_v(minishell, minishell->tmp->tokens, "after tokenizator, before validator", 'n'); 
+	if (minishell->tmp->tokens[0] == NULL)
+		return (1);
 	if (!validator_main(minishell, &minishell->tmp->tokens))
 	{
 		free_minishell(minishell);
