@@ -29,7 +29,8 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/exit2.c \
 		$(EXE_PATH)/path.c \
 		$(EXE_PATH)/pwd.c \
-		$(EXE_PATH)/cd.c \
+		$(EXE_PATH)/cd1.c \
+		$(EXE_PATH)/cd2.c \
 		$(EXE_PATH)/env.c \
 		$(EXE_PATH)/echo.c \
 		$(EXE_PATH)/export.c \
@@ -78,8 +79,8 @@ CC = cc
 INCFLAGS = -I./includes -I$(READLINE_LIB_PATH)/include/readline/ -DREADLINE_LIBRARY
 LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline -lncurses
 
-# CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
+CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
+# CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
 # CFLAGS += -isysroot $(shell xcrun --sdk macosx --show-sdk-path)
 
 LIBFT = $(LIBFT_PATH)/libft.a
