@@ -34,6 +34,7 @@ SRC =	$(SRC_PATH)/main.c \
 		$(EXE_PATH)/echo.c \
 		$(EXE_PATH)/export.c \
 		$(EXE_PATH)/export2.c \
+		$(EXE_PATH)/export3.c \
 		$(EXE_PATH)/unset.c \
 		$(SRC_PATH)/signals.c \
 		$(SRC_PATH)/utils.c \
