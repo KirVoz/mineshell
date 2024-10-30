@@ -94,6 +94,7 @@ void	handle_redirections(t_cmd *current, char *delimiter, char *file);
 size_t	array_len(char **array);
 size_t	int_array_len(int *array);
 char	**del_empty(t_minishell *minishell, char **tokens);
+// debug
 void	print_visible(char *str);
 void	print_list_state_v(t_minishell *minishell, char *name);
 void	print_tokens_state_v(t_minishell *minishell, char **tokens,

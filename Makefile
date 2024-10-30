@@ -80,7 +80,6 @@ LDFLAGS = -L$(READLINE_LIB_PATH)/lib -lreadline -lncurses
 
 CFLAGS = -Wall -Wextra -Werror -g $(INCFLAGS)
 # CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address $(INCFLAGS)
-# CFLAGS += -isysroot $(shell xcrun --sdk macosx --show-sdk-path)
 
 LIBFT = $(LIBFT_PATH)/libft.a
 
@@ -101,9 +100,6 @@ $(READLINE_LIB_PATH):
 $(LIBFT):
 	@make -C $(LIBFT_PATH)
 	@echo "Libft created"
-
-ex: re
-	@./minishell
 
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(@D)

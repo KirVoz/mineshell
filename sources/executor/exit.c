@@ -85,7 +85,7 @@ void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 	(void)fd;
 	if (cur->cmd[1] && cur->cmd[2])
 	{
-		arg_count_error(minishell, "exit");
+		arg_count_error(minishell, "exit", 'e');
 		return ;
 	}
 	if (minishell->tmp->is_child == 0)

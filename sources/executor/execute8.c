@@ -17,6 +17,7 @@ void	ft_free_exe_free(t_minishell *minishell, char **cmd)
 {
 	free(minishell->path);
 	minishell->path = NULL;
+	minishell->exit_code = 0;
 	execve(get_path(minishell, cmd[0]),
 		cmd, minishell->env);
 	free(minishell->path);

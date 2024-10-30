@@ -12,12 +12,13 @@
 
 #include "minishell.h"
 
-void	arg_count_error(t_minishell *minishell, char *command)
+void	arg_count_error(t_minishell *minishell, char *command, char mode)
 {
 	char	*error;
 
 	error = construct_error(command, ": too many arguments\n", NULL, 0);
-	ft_putstr_fd("exit\n", 1);
+	if (mode == 'e')
+		ft_putstr_fd("exit\n", 1);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 1;

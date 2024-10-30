@@ -32,7 +32,7 @@ void	numeric_error(t_minishell *minishell, char *cmd, char *arg)
 	error = construct_error(cmd, arg, ": numeric argument required\n", 's');
 	ft_putstr_fd(error, 2);
 	free(error);
-	minishell->exit_code = 255; // in linux here must be 2))))
+	minishell->exit_code = 255;
 	if (minishell->tmp->is_child != 0)
 		exit(minishell->exit_code);
 }

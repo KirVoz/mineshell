@@ -105,7 +105,7 @@ void		print_exit_util(t_minishell *minishell);
 int			find_string_in_array(char **array, const char *str, size_t n);
 void		execute_cd(t_minishell *minishell, int fd, t_cmd *cur);
 void		update_env_var(t_minishell *minishell, const char *var_name,
-			const char *new_value, int len);
+				const char *new_value, int len);
 void		execute_echo(t_minishell *minishell, int fd, t_cmd *cur);
 void		execute_pwd(t_minishell *minishell, int fd, t_cmd *cur);
 void		execute_export(t_minishell *minishell, int fd, t_cmd *cur);
@@ -156,7 +156,7 @@ void		not_found(t_minishell *minishell, char *cmd);
 void		no_file(t_minishell *minishell, char *filename);
 void		no_path_file(t_minishell *minishell, char *filename);
 int			syntax_error(t_minishell *minishell, char *token);
-void		arg_count_error(t_minishell *minishell, char *command);
+void		arg_count_error(t_minishell *minishell, char *command, char mode);
 void		exe_binary_error(t_minishell *minishell, char *path);
 void		is_a_directory(t_minishell *minishell, char *path, char mode);
 void		not_valid(t_minishell *minishell, char *cmd, int exit_code);
