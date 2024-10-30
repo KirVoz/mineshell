@@ -138,15 +138,14 @@ void		handle_input_file(t_minishell *minishell, t_list *tmp,
 				int *last_input_fd);
 void		update_underscore_variable(t_minishell *minishell);
 //export
-void		declare_env_var(t_minishell *minishell, int fd);
+void		add_or_update_env_var(t_minishell *minishell, const char *new_var);
+void		concatinate_env_var(t_minishell *minishell, char *cmd);
 int			ft_check_valid_symbol(char *new_var, int i, int mode);
-int			ft_check_valid_identifier(char *new_var);
-int			validation_check(t_minishell *minishell, t_cmd *cur,
-				int fd, int *i);
+void		declare_env_var(t_minishell *minishell, int fd);
 char		*construct_declare(char *env_var);
 void		ft_signals(void);
-char		*ft_strndup(char *str, size_t n);
 char		*find_var_name(char *cmd);
+char		*ft_strndup(char *str, size_t n);
 void		*ft_strcat(char *dst, const char *src);
 //utils.c
 char		*str_to_lower(char *str);

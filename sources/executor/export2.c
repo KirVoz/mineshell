@@ -13,25 +13,25 @@
 #include "lexer.h"
 #include "minishell.h"
 
-int ft_check_valid_symbol(char *new_var, int i, int mode)
+int	ft_check_valid_symbol(char *new_var, int i, int mode)
 {
-	if (mode) // режим проверки символов
+	if (mode)
 	{
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
 			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
 			|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
-			|| new_var[i] == '{' || new_var[i] == '}' || new_var[i] == '#') // все невалидные символы
+			|| new_var[i] == '{' || new_var[i] == '}' || new_var[i] == '#')
 			return (1);
-		else if (new_var[i] == '+' && new_var[i + 1] != '=') // кейс с просто + без =
+		else if (new_var[i] == '+' && new_var[i + 1] != '=')
 			return (1);
-		else if (new_var[i] == '+' && new_var[i + 1] == '=') // кейс с +=
+		else if (new_var[i] == '+' && new_var[i + 1] == '=')
 			return (2);
 		else
 			return (0);
 	}
 	else
 	{
-		if (new_var[i] >= '0' && new_var[i] <= '9') // если первый символ - цифра
+		if (new_var[i] >= '0' && new_var[i] <= '9')
 			return (1);
 		else
 			return (0);
