@@ -13,68 +13,46 @@
 #include "lexer.h"
 #include "minishell.h"
 
-int	ft_check_valid_simbol(char *new_var)
+int ft_check_valid_symbol(char *new_var, int i, int mode)
 {
-	int	i;
-
-	i = 0;
-	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
-		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
-		|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
-		|| new_var[i] == '{' || new_var[i] == '}')
-		return (1);
-	else
-		return (0);
-}
-
-int	ft_check_valid_identifier(char *new_v)
-{
-	int	i;
-
-	i = 0;
-	if (new_v[i] >= '0' && new_v[i] <= '9' && new_v[i] != '=')
-		return (1);
-	while (new_v[i] == '=' || new_v[i] == '\0')
+	if (mode) // режим проверки символов
 	{
-		i++;
-		return (1);
-	}
-	while (ft_strchr(new_v, '=') && new_v[i] != '=')
-	{
-		if (new_v[i] == '@' || new_v[i] == '*' || new_v[i] == '#'
-			|| new_v[i] == '?' || new_v[i] == '-' || new_v[i] == '$'
-			|| new_v[i] == '!' || new_v[i] == '^' || new_v[i] == '~'
-			|| (new_v[i] == '+' && new_v[i + 1] != '=')
-			|| new_v[i] == '{' || new_v[i] == '}' || new_v[i] == '.')
+		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
+			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
+			|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
+			|| new_var[i] == '{' || new_var[i] == '}' || new_var[i] == '#') // все невалидные символы
 			return (1);
-		if (new_v[i] == '\0')
+		else if (new_var[i] == '+' && new_var[i + 1] != '=') // кейс с просто + без =
+			return (1);
+		else if (new_var[i] == '+' && new_var[i + 1] == '=') // кейс с +=
+			return (2);
+		else
 			return (0);
-		i++;
-	}
-	if (!ft_strchr(new_v, '='))
-		return (3);
-	return (0);
-}
-
-int	validation_check(t_minishell *minishell, t_cmd *cur, int fd, int *i)
-{
-	if (cur->cmd[*i] == NULL)
-	{
-		declare_env_var(minishell, fd);
-		return (0);
 	}
 	else
 	{
-		while (cur->cmd[*i][0] == '\0')
-		{
-			if (cur->cmd[*i + 1] == NULL)
-			{
-				declare_env_var(minishell, fd);
-				return (0);
-			}
-			(*i)++;
-		}
-		return (1);
+		if (new_var[i] >= '0' && new_var[i] <= '9') // если первый символ - цифра
+			return (1);
+		else
+			return (0);
+	}
+}
+
+void	declare_env_var(t_minishell *minishell, int fd)
+{
+	char	*declare;
+	size_t	env_count;
+	size_t	i;
+
+	env_count = array_len(minishell->env);
+	i = -1;
+	while (++i < env_count)
+	{
+		declare = construct_declare(minishell->env[i]);
+		ft_putstr_fd("declare -x ", fd);
+		ft_putstr_fd(declare, fd);
+		ft_putstr_fd("\n", 1);
+		free(declare);
 	}
 }
 
@@ -86,7 +64,7 @@ char	*construct_declare(char *env_var)
 
 	i = 0;
 	j = 0;
-	new_var = allocate_string(ft_strlen(env_var) + 2, "New_var");
+	new_var = allocate_string(ft_strlen(env_var) + 3, "New_var");
 	while (env_var[i] != '=')
 		new_var[j++] = env_var[i++];
 	new_var[j++] = env_var[i++];
