@@ -13,35 +13,45 @@
 #include "lexer.h"
 #include "minishell.h"
 
-static void	copy_env_var(t_minishell *minishell, char **env, int *i, int *j)
+static void	copy_env_var(t_minishell *minishell, char **env, int *i)
 {
 	if (ft_strncmp(env[*i], "SHLVL=", 6) == 0)
 	{
-		minishell->env[*j] = increment_shlvl(env[*i]);
-		if (minishell->env[*j] == NULL)
+		minishell->env[*i] = increment_shlvl(env[*i]);
+		if (minishell->env[*i] == NULL)
 			exit_fail("Failed to allocate memory for incremented SHLVL");
 	}
 	else
-		minishell->env[*j] = allocate_dup(env[*i], "Env[j] in init_envp");
-	(*j)++;
+		minishell->env[*i] = allocate_dup(env[*i], "Env[j] in init_envp");
 	(*i)++;
 }
 
 void	init_envp(t_minishell *minishell, char **env)
 {
 	int	i;
-	int	j;
 	int	len;
+	int	shlvl;
 
-	len = 0;
-	while (env[len])
+	len = -1;
+	i = -1;
+	shlvl = 0;
+	while (env[++len])
+	{
+		if (ft_strncmp(env[++i], "SHLVL=", 6) == 0)
+			shlvl++;
+	}
+	if (shlvl == 0)
 		len++;
 	minishell->env = allocate_array(len, "Env in init_envp");
 	i = 0;
-	j = 0;
 	while (env[i] != NULL)
-		copy_env_var(minishell, env, &i, &j);
-	minishell->env[j] = NULL;
+		copy_env_var(minishell, env, &i);
+	if (shlvl == 0)
+	{
+		minishell->env[i] = ft_strdup("SHLVL=0");
+		i++;
+	}
+	minishell->env[i] = NULL;
 }
 
 void	init_tmp(t_mem *tmp)

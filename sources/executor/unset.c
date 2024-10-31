@@ -20,7 +20,8 @@ static int	valid_arg(char *new_var)
 	if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
 		|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
 		|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
-		|| new_var[i] == '{' || new_var[i] == '}')
+		|| new_var[i] == '{' || new_var[i] == '}' || new_var[i] == '#'
+		|| new_var[i] == '+' || new_var[i] == '=')
 		return (2);
 	if (new_var[i] >= '0' && new_var[i] <= '9' && new_var[i] != '=')
 		return (1);
@@ -29,7 +30,8 @@ static int	valid_arg(char *new_var)
 		if (new_var[i] == '@' || new_var[i] == '*' || new_var[i] == '^'
 			|| new_var[i] == '?' || new_var[i] == '-' || new_var[i] == '$'
 			|| new_var[i] == '!' || new_var[i] == '~' || new_var[i] == '.'
-			|| new_var[i] == '{' || new_var[i] == '}')
+			|| new_var[i] == '{' || new_var[i] == '}' || new_var[i] == '#'
+			|| new_var[i] == '+' || new_var[i] == '=')
 			return (1);
 		if (new_var[i] == '\0')
 			return (0);
@@ -75,18 +77,16 @@ void	execute_unset(t_minishell *minishell, int fd, t_cmd *cur)
 
 	(void)fd;
 	if (cur->cmd[1] == NULL)
+	{
+		minishell->exit_code = 0;
 		return ;
+	}
 	i = 1;
 	while (cur->cmd[i] != NULL)
 	{
-		if (valid_arg(cur->cmd[i]) == 1)
+		if (valid_arg(cur->cmd[i]) == 1 || valid_arg(cur->cmd[i]) == 2)
 		{
 			not_valid(minishell, cur->cmd[i], 1, 0);
-			return ;
-		}
-		else if (valid_arg(cur->cmd[i]) == 2)
-		{
-			not_valid(minishell, cur->cmd[i], 2, 0);
 			return ;
 		}
 		index = find_env_index(minishell->env, cur->cmd[i]);
