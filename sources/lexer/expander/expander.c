@@ -81,6 +81,7 @@ char	*expand(t_minishell *minishell, char *token, int *comment_flag)
 		delete_comment(token, &current_quote, comment_flag);
 	if (ft_strnstr(token, "$?", ft_strlen(token)))
 		token = expand_question_mark(minishell, token, &current_quote);
+	// if 
 	len = expanded_line_len(minishell, token, &current_quote);
 	expanded_token = allocate_string(len, "Expanded_token in expand");
 	expanded_token = substitute(minishell, token,

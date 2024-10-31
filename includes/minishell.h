@@ -64,6 +64,7 @@ typedef struct s_mem
 typedef struct s_minishell
 {
 	char			**env;
+	char			*home;
 	t_blin			*buildins;
 	t_cmd			*cmd;
 	t_mem			*tmp;

@@ -89,7 +89,7 @@ void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 		return ;
 	}
 	if (minishell->tmp->is_child == 0)
-		ft_putstr_fd("exit\n", 1);
+		ft_putstr_fd("exit\n", 2);
 	if (cur->cmd[1] != NULL)
 	{
 		command = validate_exit_arg(cur->cmd[1]);
