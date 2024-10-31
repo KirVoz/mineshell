@@ -44,24 +44,26 @@ char	*expand_tilda(char *token, char *current_quote)
 {
 	char	*result;
 	int		i;
+	int		j;
 
 	i = 0;
+	j = 0;
 	result = allocate_string(ft_strlen(token) - 1 + 5, "Expand_question");
 	result[0] = '\0';
-	while (*token)
+	while (token[j])
 	{
-		set_current_quote_question(current_quote, *token);
-		if (*token && ((*token == '~' && !*(token + 1)) || ((*token == '~'
-						&& *(token + 1) && *(token + 1) == '/'))
-				|| ((*token == '~' && *(token + 1) && *(token + 1) == ':')))
+		set_current_quote_question(current_quote, token[j]);
+		if (token[j] && ((token[j] == '~' && !token[j] + 1)
+				|| (((token[j] == '~' && token[j] + 1) && token[j] + 1 == '/'))
+				|| ((*token == '~' && token[j] + 1) && token[j] + 1 == ':'))
 			&& *current_quote != '\'')
 		{
 			ft_strlcat(&result[i], "$HOME", 5 + 1);
 			i += 5;
 		}
-		else if (*token)
-			result[i++] = *token;
-		token++;
+		else if (token[j])
+			result[i++] = token[j];
+		j++;
 	}
 	result[i] = '\0';
 	return (result);

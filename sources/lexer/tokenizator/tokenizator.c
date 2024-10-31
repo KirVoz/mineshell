@@ -39,9 +39,7 @@ char	*getting_token(char *start, int len)
 {
 	char	*token;
 
-	token = malloc(len + 1);
-	if (!token)
-		return (NULL);
+	token = allocate_string(len, "Token in getting_token");
 	ft_strlcpy(token, start, len + 1);
 	return (token);
 }

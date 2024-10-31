@@ -23,6 +23,15 @@ static int	check_line(t_minishell minishell)
 	return (0);
 }
 
+static void	process_arguments(int ac, char **av, t_minishell *minishell)
+{
+	if (ac > 1)
+	{
+		handle_incorrect_arguments(minishell, av[1]);
+		exit(1);
+	}
+}
+
 static void	read_and_process_commands(t_minishell *minishell)
 {
 	while (1)
@@ -43,18 +52,37 @@ static void	read_and_process_commands(t_minishell *minishell)
 	}
 }
 
+static void	run_minishell(t_minishell *minishell, char **env)
+{
+	ft_signals();
+	init_minishell(minishell, env);
+	read_and_process_commands(minishell);
+	exit_free(minishell, minishell->exit_code);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_minishell	minishell;
 
-	ft_signals();
-	init_minishell(&minishell, env);
-	if (ac > 1)
+	if (ac >= 3 && !ft_strncmp(av[1], "-c", 3))
 	{
-		handle_incorrect_arguments(&minishell, av[1]);
-		exit_free(&minishell, (&minishell)->exit_code);
+		ft_signals();
+		init_minishell(&minishell, env);
+		minishell.tmp->line = ft_strdup(av[2]);
+		while (1)
+		{
+			if (check_line(minishell))
+				continue ;
+			else if (!lexer_main(&minishell, minishell.tmp->line))
+				exit(minishell.exit_code);
+			execute(&minishell);
+			exit_free(&minishell, minishell.exit_code);
+		}
 	}
-	read_and_process_commands(&minishell);
-	exit_free(&minishell, (&minishell)->exit_code);
+	else
+	{
+		process_arguments(ac, av, &minishell);
+		run_minishell(&minishell, env);
+	}
 	return (0);
 }
