@@ -83,7 +83,7 @@ void	execute_exit(t_minishell *minishell, int fd, t_cmd *cur)
 	char	*command;
 
 	(void)fd;
-	if (cur->cmd[1] && cur->cmd[2])
+	if (cur->cmd[1] && cur->cmd[2] && is_valid_number(cur->cmd[1]))
 	{
 		arg_count_error(minishell, "exit", 'e');
 		return ;

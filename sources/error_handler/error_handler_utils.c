@@ -33,7 +33,7 @@ char	*construct_error(char *arg1, char *arg2, char *arg3, char mode)
 	char	*res;
 
 	res = NULL;
-	if (!(mode == 'm' || mode == 's' || mode == 'e'))
+	if (!(mode == 'm' || mode == 'l' || mode == 'e'))
 		res = allocate_dup("minishell: ", "res in construct_error");
 	else
 		res = allocate_dup("", "res in construct_error");
@@ -41,7 +41,7 @@ char	*construct_error(char *arg1, char *arg2, char *arg3, char mode)
 		res = join_free(res, arg1);
 	if (mode == 'm')
 		res = join_free(res, "/: ");
-	if (mode == 's')
+	if (mode == 's' || mode == 'l')
 		res = join_free(res, ": ");
 	if (arg2)
 		res = join_free(res, arg2);
