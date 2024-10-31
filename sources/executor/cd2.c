@@ -32,7 +32,6 @@ static void	setup_old_pwd(t_minishell *minishell, char **old_pwd)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
-			printf("!getcwd\n");
 			no_file(minishell, "PWD");
 			*old_pwd = NULL;
 			return ;

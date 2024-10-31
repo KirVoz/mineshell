@@ -42,7 +42,7 @@ void	exe_binary_error(t_minishell *minishell, char *path)
 {
 	char	*error;
 
-	error = construct_error(path, path, ": cannot execute binary file\n", 's');
+	error = construct_error(path, path, ": cannot execute binary file\n", 'l');
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = 126;
