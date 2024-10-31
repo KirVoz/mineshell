@@ -48,8 +48,7 @@ char	*expand_tilda(char *token, char *current_quote)
 
 	i = 0;
 	j = 0;
-	result = allocate_string(ft_strlen(token) - 1 + 5, "Expand_question");
-	result[0] = '\0';
+	result = tilda_alloc_init(token);
 	while (token[j])
 	{
 		set_current_quote_question(current_quote, token[j]);
@@ -65,6 +64,7 @@ char	*expand_tilda(char *token, char *current_quote)
 			result[i++] = token[j];
 		j++;
 	}
+	free(token);
 	result[i] = '\0';
 	return (result);
 }
@@ -80,8 +80,9 @@ char	*expand(t_minishell *minishell, char *token, int *comment_flag)
 		delete_comment(token, &current_quote, comment_flag);
 	if (ft_strnstr(token, "$?", ft_strlen(token)))
 		token = expand_question_mark(minishell, token, &current_quote);
-	if (ft_strncmp(token, "~\0", ft_strlen(token)) == 0 || (ft_strnstr(token,
-				"~/", ft_strlen(token)) && check_before_tilde(token, 's'))
+	if (ft_strncmp(token, "~\0", ft_strlen(token)) == 0
+		|| (ft_strnstr(token, "~/", ft_strlen(token))
+			&& check_before_tilde(token, 's'))
 		|| (ft_strnstr(token, "~:", ft_strlen(token))
 			&& check_before_tilde(token, 'd')))
 		token = expand_tilda(token, &current_quote);

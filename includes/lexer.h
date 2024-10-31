@@ -63,6 +63,7 @@ void	set_current_quote_question(char *current_quote, char quote);
 char	*substitute(t_minishell *minishell, char *token,
 			char *exp_token, char *current_quote);
 int		check_before_tilde(const char *token, char mode);
+char	*tilda_alloc_init(char *token);
 void	delete_last_whitespace(t_cmd *cur);
 void	delete_comment(char *token, char *current_quote, int *comment_flag);
 size_t	expanded_line_len(t_minishell *minishell, char *token,

@@ -28,3 +28,12 @@ int	check_before_tilde(const char *token, char mode)
 	}
 	return (0);
 }
+
+char	*tilda_alloc_init(char *token)
+{
+	char	*result;
+
+	result = allocate_string(ft_strlen(token) - 1 + 5, "Tilda_alloc_init");
+	result[0] = '\0';
+	return (result);
+}
