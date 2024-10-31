@@ -95,7 +95,8 @@ void	execute_cd(t_minishell *minishell, int fd, t_cmd *cur)
 		arg_count_error(minishell, "cd", 1);
 		return ;
 	}
-	if (cur->cmd[1] == NULL || (cur->cmd[1][0] == '~' && cur->cmd[1][1] == '\0'))
+	if (cur->cmd[1] == NULL || (cur->cmd[1][0] == '~'
+		&& cur->cmd[1][1] == '\0'))
 		change_to_home_directory(minishell);
 	else if (cur->cmd[1][0] == '-' && cur->cmd[1][1] == '\0')
 	{

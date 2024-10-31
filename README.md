@@ -1,2 +1,0 @@
-# mineshell
-# This is hell

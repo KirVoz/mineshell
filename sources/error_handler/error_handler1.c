@@ -51,11 +51,16 @@ void	no_path_file(t_minishell *minishell, char *filename)
 		exit(minishell->exit_code);
 }
 
-void	not_valid(t_minishell *minishell, char *cmd, int exit_code)
+void	not_valid(t_minishell *minishell, char *cmd, int exit_code, int mode)
 {
 	char	*error;
 
-	error = construct_error("export: `", cmd, "': not a valid identifier\n", 0);
+	if (mode == 1)
+		error = construct_error("export: `",
+				cmd, "': not a valid identifier\n", 0);
+	else
+		error = construct_error("unset: `",
+				cmd, "': not a valid identifier\n", 0);
 	ft_putstr_fd(error, 2);
 	free(error);
 	minishell->exit_code = exit_code;

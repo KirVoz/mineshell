@@ -81,12 +81,12 @@ void	execute_unset(t_minishell *minishell, int fd, t_cmd *cur)
 	{
 		if (valid_arg(cur->cmd[i]) == 1)
 		{
-			not_valid(minishell, cur->cmd[i], 1);
+			not_valid(minishell, cur->cmd[i], 1, 0);
 			return ;
 		}
 		else if (valid_arg(cur->cmd[i]) == 2)
 		{
-			not_valid(minishell, cur->cmd[i], 2);
+			not_valid(minishell, cur->cmd[i], 2, 0);
 			return ;
 		}
 		index = find_env_index(minishell->env, cur->cmd[i]);

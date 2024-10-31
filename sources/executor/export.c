@@ -23,13 +23,13 @@ static int	check_symbols_before_equal(t_minishell *minishell,
 	{
 		if (ft_check_valid_symbol(cmd, j, 1) == 1)
 		{
-			not_valid(minishell, cmd, 1);
+			not_valid(minishell, cmd, 1, 1);
 			*status = 1;
 			return (0);
 		}
 		else if (j == 0 && ft_check_valid_symbol(cmd, j, 0) == 1)
 		{
-			not_valid(minishell, cmd, 2);
+			not_valid(minishell, cmd, 2, 1);
 			*status = 1;
 			return (0);
 		}
@@ -51,7 +51,7 @@ static void	handle_argument_with_equal(t_minishell *minishell,
 	j = 0;
 	if (cmd[j] == '=' || cmd[j] == '+')
 	{
-		not_valid(minishell, cmd, 2);
+		not_valid(minishell, cmd, 2, 1);
 		*status = 1;
 		return ;
 	}
@@ -70,13 +70,13 @@ static void	handle_argument_without_equal(t_minishell *minishell,
 	{
 		if (ft_check_valid_symbol(cmd, j, 1) == 1)
 		{
-			not_valid(minishell, cmd, 1);
+			not_valid(minishell, cmd, 1, 1);
 			*status = 1;
 			return ;
 		}
 		else if (j == 0 && ft_check_valid_symbol(cmd, j, 0) == 1)
 		{
-			not_valid(minishell, cmd, 2);
+			not_valid(minishell, cmd, 2, 1);
 			*status = 1;
 			return ;
 		}
