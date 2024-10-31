@@ -39,7 +39,8 @@ char	*env_var_copy(char **token)
 	token_tmp = *token;
 	(*token)++;
 	while (**token && !(ft_isspace(**token) || **token == '"' || **token == '\''
-			|| **token == '/' || **token == '$' || **token == '='))
+			|| **token == '/' || **token == '$'
+			|| **token == '=' || **token == ':'))
 	{
 		i++;
 		(*token)++;

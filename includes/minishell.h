@@ -162,7 +162,8 @@ int			syntax_error(t_minishell *minishell, char *token);
 void		arg_count_error(t_minishell *minishell, char *command, char mode);
 void		exe_binary_error(t_minishell *minishell, char *path);
 void		is_a_directory(t_minishell *minishell, char *path, char mode);
-void		not_valid(t_minishell *minishell, char *cmd, int exit_code, int mode);
+void		not_valid(t_minishell *minishell, char *cmd,
+				int exit_code, int mode);
 void		permission_denied(t_minishell *minishell,
 				char *path, int redirs_or_file);
 void		numeric_error(t_minishell *minishell, char *cmd, char *arg);

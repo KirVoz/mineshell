@@ -48,7 +48,7 @@ void	init_envp(t_minishell *minishell, char **env)
 		copy_env_var(minishell, env, &i);
 	if (shlvl == 0)
 	{
-		minishell->env[i] = ft_strdup("SHLVL=0");
+		minishell->env[i] = ft_strdup("SHLVL=1");
 		i++;
 	}
 	minishell->env[i] = NULL;

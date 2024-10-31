@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expander_utils.c                                   :+:      :+:    :+:   */
+/*   expander_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kvoznese <kvoznese@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -78,4 +78,34 @@ void	set_current_quote_question(char *current_quote, char quote)
 			*current_quote = 0;
 		}
 	}
+}
+
+char	*substitute(t_minishell *minishell, char *token,
+		char *exp_token, char *current_quote)
+{
+	int		j;
+	int		n;
+	char	*env_value;
+
+	j = 0;
+	n = 0;
+	while (*token)
+	{
+		set_current_quote(current_quote, *token, &token);
+		if (*token == '$' && *(token + 1) && (ft_isalnum(*(token + 1))
+				|| *(token + 1) == '_') && *current_quote != '\'')
+		{
+			env_value = get_env_value(minishell, &token);
+			while (env_value[n])
+				exp_token[j++] = env_value[n++];
+			free(env_value);
+			n = 0;
+		}
+		else if (*token != *current_quote)
+			exp_token[j++] = *(token++);
+		else if (*token && *token == *current_quote)
+			token++;
+	}
+	exp_token[j] = '\0';
+	return (exp_token);
 }
