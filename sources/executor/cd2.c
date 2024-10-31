@@ -49,6 +49,8 @@ static void	change_directory(t_minishell *minishell, char *new_path)
 	char	cwd[1024];
 	char	*old_pwd;
 
+	if (access(new_path, X_OK) != 0 && errno == EACCES)
+		return (permission_denied(minishell, new_path, 1));
 	setup_old_pwd(minishell, &old_pwd);
 	if (old_pwd == NULL)
 		return ;
@@ -68,8 +70,7 @@ static void	change_directory(t_minishell *minishell, char *new_path)
 		update_pwd_vars(minishell, old_pwd, cwd);
 		minishell->exit_code = 0;
 	}
-	if (old_pwd != NULL)
-		free(old_pwd);
+	free(old_pwd);
 }
 
 static void	change_to_home_directory(t_minishell *minishell)
@@ -94,7 +95,7 @@ void	execute_cd(t_minishell *minishell, int fd, t_cmd *cur)
 		arg_count_error(minishell, "cd", 1);
 		return ;
 	}
-	if (cur->cmd[1] == NULL)
+	if (cur->cmd[1] == NULL || (cur->cmd[1][0] == '~' && cur->cmd[1][1] == '\0'))
 		change_to_home_directory(minishell);
 	else if (cur->cmd[1][0] == '-' && cur->cmd[1][1] == '\0')
 	{
@@ -108,6 +109,8 @@ void	execute_cd(t_minishell *minishell, int fd, t_cmd *cur)
 			change_directory(minishell, minishell->env
 			[find_string_in_array(minishell->env, "OLDPWD=", 7)] + 7);
 	}
+	else if (cur->cmd[1][0] == '\0')
+		return ;
 	else
 		change_directory(minishell, cur->cmd[1]);
 }
